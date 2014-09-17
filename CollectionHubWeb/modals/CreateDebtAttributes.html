@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Remote file for Bootstrap Modal</title>  
+</head>
+    <body>
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Confirm Action</h4>
+        </div>
+        <div class="modal-body">
+            <p>Are you sure you want to create this recovery group?</p>
+            <br />
+            <div style="width:75%;margin-left:75px">
+                <div class="form-group">
+                    <label>Recovery Cycle</label>
+                    <select id="debtAttributes" class="form-control"></select>
+                </div>
+                <div class="form-group">
+                    <label>Start Date</label>
+                    <input type="text" id="datepicker" class="date-picker form-control">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" onclick="">Create Group</button>
+        </div>
+        <script>
+            alert('loading');
+            loadAttributesList();
+            alert('complete');
+        </script>
+    </body>
+</html>
