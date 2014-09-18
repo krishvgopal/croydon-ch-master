@@ -17,6 +17,16 @@ public partial class DataService : System.Web.UI.Page
     // 
 
     [WebMethod]
+    public static bool CreateDebtAttribute(int debtId, int userId, int attributeId, bool isCurrent, string attributeValue)
+    {
+        var returnData = false;
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.CreateDebtAttribute(debtId, userId, attributeId, isCurrent, attributeValue);
+
+        return returnData;
+    }
+    [WebMethod]
     public static List<AttributeItem> GetAttributeList(bool listDebtAttributes, bool listPersonAttributes)
     {
         var returnData = new List<AttributeItem>();

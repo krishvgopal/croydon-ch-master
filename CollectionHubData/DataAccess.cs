@@ -10,10 +10,10 @@ namespace CollectionHubData
     public class DataAccess
     {
         //private const string CONNECTION_STRING = "Data Source=192.168.1.13;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=sa;Password=Croydon#";
-        private const string CONNECTION_STRING = "Data Source=192.168.2.159;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=sa;Password=Croydon#";
-        //private const string CONNECTION_STRING = "Data Source=192.168.1.66;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=sa;Password=Croydon#";
+        //private const string CONNECTION_STRING = "Data Source=192.168.2.158;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=sa;Password=Croydon#";
+        private const string CONNECTION_STRING = "Data Source=192.168.1.66;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=sa;Password=Croydon#";
 
-        public List<DebtItem>           GetDebts(string sourceRef, string source)
+        public List<DebtItem> GetDebts(string sourceRef, string source)
         {
             var returnValue = new List<DebtItem>();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
@@ -42,7 +42,7 @@ namespace CollectionHubData
 
             return returnValue;
         }
-        public DebtAddress              GetAddressForDebt(string sourceRef, string source)
+        public DebtAddress GetAddressForDebt(string sourceRef, string source)
         {
             var returnValue = new DebtAddress();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
@@ -107,7 +107,7 @@ namespace CollectionHubData
 
             return returnValue;
         }
-        public List<SampleData>         GetSampleData(string fixedValue, int count)
+        public List<SampleData> GetSampleData(string fixedValue, int count)
         {
             List<SampleData> returnValue = new List<SampleData>();
 
@@ -118,7 +118,8 @@ namespace CollectionHubData
 
             return returnValue;
         }
-        public UserData                 AuthenticateUser(string loginName, string passwordHash) 
+        
+        public UserData AuthenticateUser(string loginName, string passwordHash) 
         {
             UserData returnValue = null;
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
@@ -145,7 +146,8 @@ namespace CollectionHubData
 
             return returnValue;
         }
-        public List<RecoveryCycleItem>  GetRecoveryCycleHistory(int debtId)
+
+        public List<RecoveryCycleItem> GetRecoveryCycleHistory(int debtId)
         {
             List<RecoveryCycleItem> returnValue = new List<RecoveryCycleItem>();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
@@ -171,7 +173,7 @@ namespace CollectionHubData
 
             return returnValue;
         }
-        public List<RecoveryCycle>      GetRecoveryCycles()
+        public List<RecoveryCycle> GetRecoveryCycles()
         {
             List<RecoveryCycle> returnValue = new List<RecoveryCycle>();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
@@ -196,7 +198,7 @@ namespace CollectionHubData
 
             return returnValue;
         }
-        public Boolean                  SetRecoveryCycle(int debtId, int recoveryCycleId, int userId, DateTime recoveryDateTime)
+        public Boolean SetRecoveryCycle(int debtId, int recoveryCycleId, int userId, DateTime recoveryDateTime)
         {
             bool returnvalue = false;
             using (SqlConnection sqlDataConnection = new SqlConnection(CONNECTION_STRING))
@@ -218,7 +220,8 @@ namespace CollectionHubData
             }
             return returnvalue;
         }
-        public List<Payment>            GetPaymentsByDebtId(int debtId)
+        
+        public List<Payment> GetPaymentsByDebtId(int debtId)
         {
             List<Payment> returnValue = new List<Payment>();
             using (SqlConnection sqlDataConnection = new SqlConnection(CONNECTION_STRING))
@@ -243,6 +246,7 @@ namespace CollectionHubData
             }
             return returnValue;
         }
+        
         public bool CreateDebtGroup(string debtIdString, int userId, int partyPin, string source)
         {
             bool returnvalue = false;
@@ -286,6 +290,7 @@ namespace CollectionHubData
             }
             return returnvalue;
         }
+
         public List<DebtNote> GetDebtNotes(int debtId)
         {
             List<DebtNote> returnValue = new List<DebtNote>();
@@ -332,6 +337,7 @@ namespace CollectionHubData
             }
             return returnvalue;
         }
+
         public List<AttributeItem> GetAttributeList(bool listDebtAttributes, bool listPersonAttributes)
         {
             List<AttributeItem> returnValue = new List<AttributeItem>();
@@ -358,5 +364,80 @@ namespace CollectionHubData
             }
             return returnValue;
         }
+        public bool CreateDebtAttribute(int debtId, int userId, int attributeId, bool isCurrent, string attributeValue)
+        {
+            bool returnvalue = false;
+            using (SqlConnection sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            {
+                sqlDataConnection.Open();
+                using (SqlCommand sqlCommand = new SqlCommand("CH_DEBT_ATTRIBUTE_CREATE", sqlDataConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add(new SqlParameter("debtId", debtId));
+                    sqlCommand.Parameters.Add(new SqlParameter("userId", userId));
+                    sqlCommand.Parameters.Add(new SqlParameter("AttributeId", attributeId));
+                    sqlCommand.Parameters.Add(new SqlParameter("AttributeValue", attributeValue));
+                    sqlCommand.Parameters.Add(new SqlParameter("IsCurrent", isCurrent));
+
+                    var count = sqlCommand.ExecuteNonQuery();
+
+                    if (count > 0) { returnvalue = true; }
+                }
+                sqlDataConnection.Close();
+            }
+            return returnvalue;
+        }
+        public bool CreatePersonAttribute(int sourceRef, int userId, int attributeId, bool isCurrent, string attributeValue)
+        {
+            bool returnvalue = false;
+            using (SqlConnection sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            {
+                sqlDataConnection.Open();
+                using (SqlCommand sqlCommand = new SqlCommand("CH_PERSON_ATTRIBUTE_CREATE", sqlDataConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add(new SqlParameter("sourceRef", sourceRef));
+                    sqlCommand.Parameters.Add(new SqlParameter("userId", userId));
+                    sqlCommand.Parameters.Add(new SqlParameter("AttributeId", attributeId));
+                    sqlCommand.Parameters.Add(new SqlParameter("AttributeValue", attributeValue));
+                    sqlCommand.Parameters.Add(new SqlParameter("IsCurrent", isCurrent));
+
+                    var count = sqlCommand.ExecuteNonQuery();
+
+                    if (count > 0) { returnvalue = true; }
+                }
+                sqlDataConnection.Close();
+            }
+            return returnvalue;
+        }
+
+        public List<AttributeItem> GetDebtAttribute(int debtId)
+        {
+            List<AttributeItem> returnValue = new List<AttributeItem>();
+            using (SqlConnection sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            {
+                sqlDataConnection.Open();
+                using (SqlCommand sqlCommand = new SqlCommand("CH_DEBT_ATTRIBUTES_LIST", sqlDataConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add(new SqlParameter("debtId", debtId));
+
+                    var dataReader = sqlCommand.ExecuteReader();
+
+                    if (dataReader.HasRows)
+                    {
+                        while (dataReader.Read())
+                        {
+                            returnValue.Add(new AttributeItem(dataReader));
+                        }
+                    }
+                }
+                sqlDataConnection.Close();
+            }
+            return returnValue;
+        }
+
+        // CH_PERSON_ATTRIBUTE_CREATE
+
     }
 }

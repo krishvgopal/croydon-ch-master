@@ -18,7 +18,6 @@ public partial class Search : System.Web.UI.Page
         pageFullAddress.Text        = debtAddress.FullAddress;
         pageTotalDebt.Text          = debtAddress.TotalDebt.ToString();
         pageDebtOutstanding.Text    = debtAddress.DebtOS.ToString();
-
         sourceValue.Value           = Request["source"].ToString();
         sourceRefValue.Value        = Request["source_ref"].ToString();
     }

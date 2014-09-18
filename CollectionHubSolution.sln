@@ -7,6 +7,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "CollectionHubWeb", "http://
 	ProjectSection(WebsiteProperties) = preProject
 		UseIISExpress = "true"
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		ProjectReferences = "{9ae08894-a39e-4369-8266-ada5bb403bb2}|CollectionHubData.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_60954"
 		Debug.AspNetCompiler.PhysicalPath = "CollectionHubWeb\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_60954\"

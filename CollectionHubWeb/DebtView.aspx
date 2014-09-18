@@ -82,7 +82,10 @@
                     </thead>
                 </table>
                 <a data-toggle="modal" href="modals/page.html" data-target="#myModal">Create Group</a>
+                &nbsp;|&nbsp;
                 <a data-toggle="modal" href="modals/CreateDebtAttributes.html" data-target="#myModal">Create Debt Attribute</a>
+                &nbsp;|&nbsp;
+                <a data-toggle="modal" href="modals/CreateDebtAttributes.html" data-target="#myModal">Create Person Attribute</a>
             </div>
             <div style="clear:both"><br /></div>
             <ul class="nav nav-tabs">

@@ -160,6 +160,7 @@ function loadRecoveryCycleList() {
 }
 
 function loadAttributesList() {
+    $('#debtAttributes').val('');
     $.ajax({
         type: "POST",
         url: "DataService.aspx/GetAttributeList",
@@ -169,12 +170,12 @@ function loadAttributesList() {
         success: function (result) {
             $.each(result.d, function (i, item) {
                 alert(item.AttributeText)
-                //if (item.IsDebtAttribute) {
+                if (item.IsDebtAttribute) {
                     $('#debtAttributes').append($('<option>', {
                         value: item.AttributeId,
                         text: item.AttributeText
                     }));
-                //}
+                }
             });
         }
     });
@@ -237,9 +238,7 @@ function refreshNotes() { }
 function createNote() { }
 function refreshRecoveryCycles() { }
 function setRecoveryCycle() {
-
-    alert('debtId:' + $("#selectedDebtId").val() + ', cycleId:' + $('#recoveryCycles').val() + ', userId:' + $('#UserSessionToken').val() + ', recoveryDateTime:' + $('#datepicker').val());
-
+    //alert('debtId:' + $("#selectedDebtId").val() + ', cycleId:' + $('#recoveryCycles').val() + ', userId:' + $('#UserSessionToken').val() + ', recoveryDateTime:' + $('#datepicker').val());
     $.ajax({
         type: "POST",
         url: "DataService.aspx/SetRecoveryCycle",
@@ -250,7 +249,14 @@ function setRecoveryCycle() {
             alert(result);
         }
     });
-
     alert('Done');
-
 }
+function createDebtAttribute() {
+    alert("Debt {'debtId':'" + $("#selectedDebtId").val() + "','userId':'" + $('#UserSessionToken').val() + "','AttributeId':'" + $('#debtAttributes').val() + "','debtAttributesValue':'" + $('#debtAttributesValue').val() + "'");
+}
+
+function createPersonAttribute() {
+    alert("Person {'debtId':'" + $("#selectedDebtId").val() + "','userId':'" + $('#UserSessionToken').val() + "','AttributeId':'" + $('#personAttributes').val() + "','debtAttributesValue':'" + $('#debtAttributesValue').val() + "'");
+}
+
+// 
