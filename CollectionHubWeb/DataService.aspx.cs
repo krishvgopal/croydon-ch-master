@@ -14,7 +14,29 @@ public partial class DataService : System.Web.UI.Page
         Response.Redirect("~/Dashboard.aspx");
     }
 
-    // GetDebtAttribute
+    // SetPersonAttributeCurrent
+
+    [WebMethod]
+    public static bool SetPersonAttributeCurrent(int personAttributeId)
+    {
+        var returnData = false;
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.SetPersonAttributeCurrent(personAttributeId);
+
+        return returnData;
+    }
+
+    [WebMethod]
+    public static List<PersonAttribute> GetCurrentAttribute(int partyPin)
+    {
+        var returnData = new List<PersonAttribute>();
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.GetCurrentAttribute(partyPin);
+
+        return returnData;
+    }
     [WebMethod]
     public static List<PersonAttribute> GetPersonAttribute(int sourcePin)
     {
@@ -42,6 +64,16 @@ public partial class DataService : System.Web.UI.Page
         var dataAccess = new CollectionHubData.DataAccess();
 
         returnData = dataAccess.CreateDebtAttribute(debtId, userId, attributeId, isCurrent, attributeValue);
+
+        return returnData;
+    }
+    [WebMethod]
+    public static bool CreatePersonAttribute(int sourceRef, int userId, int attributeId, bool isCurrent, string attributeValue)
+    {
+        var returnData = false;
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.CreatePersonAttribute(sourceRef, userId, attributeId, isCurrent, attributeValue);
 
         return returnData;
     }
@@ -122,6 +154,16 @@ public partial class DataService : System.Web.UI.Page
         var dataAccess = new CollectionHubData.DataAccess();
 
         returnData = dataAccess.GetRecoveryCycles();
+
+        return returnData;
+    }
+    [WebMethod]
+    public static List<RecoveryCycleItem> GetRecoveryCycleHistory(int debtId)
+    {
+        var returnData = new List<RecoveryCycleItem>();
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.GetRecoveryCycleHistory(debtId);
 
         return returnData;
     }

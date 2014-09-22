@@ -78,6 +78,7 @@ function selectRow(idValue) {
     refreshPaymentHistory(idValue);
     refreshDebtAttributes(idValue);
     refreshPersonAttributes(sourcePin);
+    refreshCurrentAttributes(sourcePin);
     refreshNotes(idValue);
 }
 
@@ -91,13 +92,21 @@ function loadAttributesList() {
         dataType: "json",
         success: function (result) {
             $.each(result.d, function (i, item) {
-                alert(item.AttributeText)
+
                 if (item.IsDebtAttribute) {
                     $('#debtAttributes').append($('<option>', {
                         value: item.AttributeId,
                         text: item.AttributeText
                     }));
                 }
+
+                if (item.IsPersonAttribute) {
+                    $('#personAttributes').append($('<option>', {
+                        value: item.AttributeId,
+                        text: item.AttributeText
+                    }));
+                }
+
             });
         }
     });
@@ -122,7 +131,7 @@ function loadRecoveryCycleList() {
 function refreshRecoveryCycles(debtId) {
     $.ajax({
         type: "POST",
-        url: "DataService.aspx/GetRecoveryCycles",
+        url: "DataService.aspx/GetRecoveryCycleHistory",
         data: "{'debtId':'" + debtId + "'}",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -186,9 +195,11 @@ function refreshDebtAttributes(debtId) {
                 "destroy": true,
                 "aaData": result,
                 aoColumns: [
-                    { mData: 'Type' },
-                    { mData: 'Information' }
-                ]
+                    { mData: 'AttributeText' },
+                    { mData: 'AttributeValue' }],
+                "columnDefs": [
+                    { "width": "200px", "targets": 0 },
+                    { "width": "*%", "targets": 1 }]
             });
         }
     });
@@ -206,9 +217,28 @@ function refreshPersonAttributes(sourcePin) {
                 "destroy": true,
                 "aaData": result,
                 aoColumns: [
-                    { mData: 'Type' },
-                    { mData: 'Information' },
-                    { mData: 'Current' }]
+                    { mData: 'AttributeText' },
+                    { mData: 'AttributeValue' },
+                    { mData: 'IsCurrent' },
+                    { mData: 'PersonAttributeId' }],
+                "aoColumnDefs": [{
+                    "sTitle": "Current Attribute"
+                    , "aTargets": ["set_current"]
+                    , "mRender": function (value, type, full) {
+                        if (value == true) {
+                            return 'Current'
+                        }
+                        else {
+                            return '<a href="#" onclick="setCurrent(\'' + full.PersonAttributeId + '\');">Set Current</a>';
+                        }
+                    }
+                },
+                {
+                        "aTargets": ["person_attribute_id"]
+                    ,   "bVisible": false},
+                { "width": "200px", "targets": 0 },
+                { "width": "*%", "targets": 1 },
+                { "width": "150px", "targets": 2 }]
             });
         }
     });
@@ -234,11 +264,11 @@ function refreshNotes(debtId) {
         }
     });
 }
-function refreshCurrentAttributes(debtId) {
+function refreshCurrentAttributes(partyPin) {
     $.ajax({
         type: "POST",
         url: "DataService.aspx/GetCurrentAttribute",
-        data: "{'debtId':'" + debtId + "'}",
+        data: "{'partyPin':'" + partyPin + "'}",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
@@ -247,21 +277,90 @@ function refreshCurrentAttributes(debtId) {
                 "destroy": true,
                 "aaData": result,
                 aoColumns: [
+                    { mData: 'AttributeText' },
+                    { mData: 'AttributeValue' },
                     { mData: 'CreatedDate' },
-                    { mData: 'User' },
-                    { mData: 'Note' },
-                    { mData: 'NoteId' }]
+                    { mData: 'IsCurrent' }],
+                "aoColumnDefs": [
+                     {
+                         "sTitle": "Created Date"
+                        , "aTargets": ["created_date"]
+                        , "mRender": function (value, type, full) {
+                            var dtStart = new Date(parseInt(value.substr(6)));
+                            var dtStartWrapper = moment(dtStart);
+                            return dtStartWrapper.format('DD/MM/YYYY');
+                        }
+                     },
+                     {  "sTitle": "Status"
+                        , "aTargets": ["status"]
+                        , "mRender": function (value, type, full) {
+                            if (value == true) {
+                                return 'Current'
+                            }
+                            else {
+                                return 'Not Current';
+                            }
+                        }
+                    },
+                    { "width": "200px", "targets": 0},
+                    { "width": "*%", "targets": 1 },
+                    { "width": "150px", "targets": 2 },
+                    { "width": "150px", "targets": 3 }]
             });
         }
     });
 }
 function createNote() { }
+
+
+
+
+
 function createDebtAttribute() {
-    alert("Debt {'debtId':'" + $("#selectedDebtId").val() + "','userId':'" + $('#UserSessionToken').val() + "','AttributeId':'" + $('#debtAttributes').val() + "','debtAttributesValue':'" + $('#debtAttributesValue').val() + "'");
+    $.ajax({
+        type: "POST",
+        url: "DataService.aspx/CreateDebtAttribute",
+        data: "{'debtId':'" + $("#selectedDebtId").val() + "','userId':'" + $('#UserSessionToken').val() + "','attributeId':'" + $('#debtAttributes').val() + "','isCurrent':'true','attributeValue':'" + $('#debtAttributesValue').val() + "'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            if (result.d != true) {
+                alert('error: CreateDebtAttribute returned FALSE');
+            } else {
+                $("#debtAttributesValue").val("");
+                refreshDebtAttributes($("#selectedDebtId").val());
+            }
+            $('#debtAttributeModal').modal('hide');
+        },
+        failure: function (error) {
+            alert(error);
+            $('#debtAttributeModal').modal('hide');
+        }
+    });
 }
 function createPersonAttribute() {
-    alert("Person {'debtId':'" + $("#selectedDebtId").val() + "','userId':'" + $('#UserSessionToken').val() + "','AttributeId':'" + $('#personAttributes').val() + "','debtAttributesValue':'" + $('#debtAttributesValue').val() + "'");
+    $.ajax({
+        type: "POST",
+        url: "DataService.aspx/CreatePersonAttribute",
+        data: "{'sourceRef':'" + $("#sourceRefValue").val() + "','userId':'" + $('#UserSessionToken').val() + "','attributeId':'" + $('#personAttributes').val() + "','isCurrent':'true','attributeValue':'" + $('#personAttributesValue').val() + "'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            if (result.d != true) {
+                alert('error: CreatePersonAttribute returned FALSE');
+            } else {
+                $("#personAttributesValue").val("");
+                refreshPersonAttributes($("#sourceRefValue").val());
+            }
+            $('#personAttributeModal').modal('hide');
+        },
+        failure: function (error) {
+            alert(error);
+            $('#personAttributeModal').modal('hide');
+        }
+    });
 }
+
 function setRecoveryCycle() {
     $.ajax({
         type: "POST",
@@ -274,7 +373,22 @@ function setRecoveryCycle() {
         }
     });
 }
-
+function setCurrent(id) {
+    $.ajax({
+        type: "POST",
+        url: "DataService.aspx/SetPersonAttributeCurrent",
+        data: "{'personAttributeId':'" + id + "'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+                refreshCurrentAttributes($("#sourceRefValue").val());
+                refreshPersonAttributes($("#sourceRefValue").val());
+        },
+        failure: function (error) {
+            alert(error.message);
+        }
+    });
+}
 
 function ajh() {
     alert('Save');

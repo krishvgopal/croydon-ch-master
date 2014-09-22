@@ -83,9 +83,9 @@
                 </table>
                 <a data-toggle="modal" href="modals/page.html" data-target="#myModal">Create Group</a>
                 &nbsp;|&nbsp;
-                <a data-toggle="modal" href="modals/CreateDebtAttributes.html" data-target="#myModal">Create Debt Attribute</a>
+                <a data-toggle="modal" href="modals/CreateDebtAttributes.html" data-target="#debtAttributeModal">Create Debt Attribute</a>
                 &nbsp;|&nbsp;
-                <a data-toggle="modal" href="modals/CreateDebtAttributes.html" data-target="#myModal">Create Person Attribute</a>
+                <a data-toggle="modal" href="modals/CreatePersonAttributes.html" data-target="#personAttributeModal">Create Person Attribute</a>
             </div>
             <div style="clear:both"><br /></div>
             <ul class="nav nav-tabs">
@@ -118,32 +118,32 @@
                         </table>
                     </div>
                     <div>
-                            <br />
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    Create New Recovery Cycle
+                        <br />
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Create New Recovery Cycle
+                            </div>
+                            <div class="panel-body">
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label>Recovery Cycle</label>
+                                        <select id="recoveryCycles" class="form-control"></select>
+                                    </div>
                                 </div>
-                                <div class="panel-body">
-                                    <div class="col-lg-3">
-                                        <div class="form-group">
-                                            <label>Recovery Cycle</label>
-                                            <select id="recoveryCycles" class="form-control"></select>
-                                        </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label>Start Date</label>
+                                        <input type="text" id="datepicker" class="date-picker form-control">
                                     </div>
-                                    <div class="col-lg-3">
-                                        <div class="form-group">
-                                            <label>Start Date</label>
-                                            <input type="text" id="datepicker" class="date-picker form-control">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3">
-                                        <div class="form-group">
-                                            <br />
-                                            <a data-toggle="modal" href="modals/ConfirmCreateRecoveryCycle.html" data-target="#myModal2" class="btn btn-default">Create Cycle</a>
-                                        </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <br />
+                                        <a data-toggle="modal" href="modals/ConfirmCreateRecoveryCycle.html" data-target="#myModal2" class="btn btn-default">Create Cycle</a>
                                     </div>
                                 </div>
                             </div>
+                        </div>
                     </div>
 
                 </div>
@@ -222,7 +222,8 @@
                                 <tr>
                                     <th>Type</th>
                                     <th>Information</th>
-                                    <th>Current</th>
+                                    <th class="set_current">Current</th>
+                                    <th class="person_attribute_id"></th>
                                 </tr>
                             </thead>
                         </table>
@@ -252,11 +253,10 @@
                         <table class="table table-striped table-bordered table-hover" id="tableCurrent">
                             <thead>
                                 <tr>
-                                    <th>Recovery Cycle</th>
-                                    <th>Stage</th>
-                                    <th>Method</th>
-                                    <th>Status</th>
-                                    <th>Complete</th>
+                                    <th>Type</th>
+                                    <th>Information</th>
+                                    <th class="created_date">Created Date</th>
+                                    <th class="status">Status</th>
                                 </tr>
                             </thead>
                         </table>
@@ -272,14 +272,14 @@
             </div>
         </div>
 
-        <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
+        <div class="modal fade" id="debtAttributeModal" tabindex="-1" role="dialog" aria-labelledby="debtAttributeModal" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                 </div>
             </div>
         </div>
 
-        <div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel3" aria-hidden="true">
+        <div class="modal fade" id="personAttributeModal" tabindex="-1" role="dialog" aria-labelledby="personAttributeModal" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                 </div>
