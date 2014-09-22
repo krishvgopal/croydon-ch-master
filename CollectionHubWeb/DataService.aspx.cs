@@ -14,8 +14,27 @@ public partial class DataService : System.Web.UI.Page
         Response.Redirect("~/Dashboard.aspx");
     }
 
-    // 
+    // GetDebtAttribute
+    [WebMethod]
+    public static List<PersonAttribute> GetPersonAttribute(int sourcePin)
+    {
+        var returnData = new List<PersonAttribute>();
+        var dataAccess = new CollectionHubData.DataAccess();
 
+        returnData = dataAccess.GetPersonAttribute(sourcePin);
+
+        return returnData;
+    }
+    [WebMethod]
+    public static List<DebtAttribute> GetDebtAttribute(int debtId)
+    {
+        var returnData = new List<DebtAttribute>();
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.GetDebtAttribute(debtId);
+
+        return returnData;
+    }
     [WebMethod]
     public static bool CreateDebtAttribute(int debtId, int userId, int attributeId, bool isCurrent, string attributeValue)
     {

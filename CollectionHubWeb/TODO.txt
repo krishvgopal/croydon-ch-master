@@ -12,6 +12,13 @@
 - AJH - Remove debt group
 - - - - - - - - - - - - -
 
+
+	Debt Attributes Add
+	Debt Attributes List
+	
+
+
+
   AJH - Debt Attributes Table
   AJH - Debt Attributes Procedures
   AJH - Debt Attributes UI Load Grid

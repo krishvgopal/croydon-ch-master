@@ -118,7 +118,6 @@ namespace CollectionHubData
 
             return returnValue;
         }
-        
         public UserData AuthenticateUser(string loginName, string passwordHash) 
         {
             UserData returnValue = null;
@@ -146,7 +145,6 @@ namespace CollectionHubData
 
             return returnValue;
         }
-
         public List<RecoveryCycleItem> GetRecoveryCycleHistory(int debtId)
         {
             List<RecoveryCycleItem> returnValue = new List<RecoveryCycleItem>();
@@ -220,7 +218,6 @@ namespace CollectionHubData
             }
             return returnvalue;
         }
-        
         public List<Payment> GetPaymentsByDebtId(int debtId)
         {
             List<Payment> returnValue = new List<Payment>();
@@ -246,7 +243,6 @@ namespace CollectionHubData
             }
             return returnValue;
         }
-        
         public bool CreateDebtGroup(string debtIdString, int userId, int partyPin, string source)
         {
             bool returnvalue = false;
@@ -290,7 +286,6 @@ namespace CollectionHubData
             }
             return returnvalue;
         }
-
         public List<DebtNote> GetDebtNotes(int debtId)
         {
             List<DebtNote> returnValue = new List<DebtNote>();
@@ -337,7 +332,6 @@ namespace CollectionHubData
             }
             return returnvalue;
         }
-
         public List<AttributeItem> GetAttributeList(bool listDebtAttributes, bool listPersonAttributes)
         {
             List<AttributeItem> returnValue = new List<AttributeItem>();
@@ -396,8 +390,8 @@ namespace CollectionHubData
                 using (SqlCommand sqlCommand = new SqlCommand("CH_PERSON_ATTRIBUTE_CREATE", sqlDataConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                    sqlCommand.Parameters.Add(new SqlParameter("sourceRef", sourceRef));
-                    sqlCommand.Parameters.Add(new SqlParameter("userId", userId));
+                    sqlCommand.Parameters.Add(new SqlParameter("SourceRef", sourceRef));
+                    sqlCommand.Parameters.Add(new SqlParameter("UserId", userId));
                     sqlCommand.Parameters.Add(new SqlParameter("AttributeId", attributeId));
                     sqlCommand.Parameters.Add(new SqlParameter("AttributeValue", attributeValue));
                     sqlCommand.Parameters.Add(new SqlParameter("IsCurrent", isCurrent));
@@ -410,10 +404,9 @@ namespace CollectionHubData
             }
             return returnvalue;
         }
-
-        public List<AttributeItem> GetDebtAttribute(int debtId)
+        public List<DebtAttribute> GetDebtAttribute(int debtId)
         {
-            List<AttributeItem> returnValue = new List<AttributeItem>();
+            List<DebtAttribute> returnValue = new List<DebtAttribute>();
             using (SqlConnection sqlDataConnection = new SqlConnection(CONNECTION_STRING))
             {
                 sqlDataConnection.Open();
@@ -428,7 +421,7 @@ namespace CollectionHubData
                     {
                         while (dataReader.Read())
                         {
-                            returnValue.Add(new AttributeItem(dataReader));
+                            returnValue.Add(new DebtAttribute(dataReader));
                         }
                     }
                 }
@@ -436,8 +429,55 @@ namespace CollectionHubData
             }
             return returnValue;
         }
+        public List<PersonAttribute> GetPersonAttribute(int partyPin)
+        {
+            List<PersonAttribute> returnValue = new List<PersonAttribute>();
+            using (SqlConnection sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            {
+                sqlDataConnection.Open();
+                using (SqlCommand sqlCommand = new SqlCommand("CH_PERSON_ATTRIBUTES_LIST", sqlDataConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add(new SqlParameter("partyPin", partyPin));
 
-        // CH_PERSON_ATTRIBUTE_CREATE
+                    var dataReader = sqlCommand.ExecuteReader();
 
+                    if (dataReader.HasRows)
+                    {
+                        while (dataReader.Read())
+                        {
+                            returnValue.Add(new PersonAttribute(dataReader));
+                        }
+                    }
+                }
+                sqlDataConnection.Close();
+            }
+            return returnValue;
+        }
+        public List<PersonAttribute> GetCurrentAttribute(int partyPin)
+        {
+            List<PersonAttribute> returnValue = new List<PersonAttribute>();
+            using (SqlConnection sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            {
+                sqlDataConnection.Open();
+                using (SqlCommand sqlCommand = new SqlCommand("CH_PERSON_ATTRIBUTES_LIST", sqlDataConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add(new SqlParameter("partyPin", partyPin));
+
+                    var dataReader = sqlCommand.ExecuteReader();
+
+                    if (dataReader.HasRows)
+                    {
+                        while (dataReader.Read())
+                        {
+                            returnValue.Add(new PersonAttribute(dataReader));
+                        }
+                    }
+                }
+                sqlDataConnection.Close();
+            }
+            return returnValue;
+        }
     }
 }

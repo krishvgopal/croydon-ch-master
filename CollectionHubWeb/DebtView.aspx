@@ -206,11 +206,8 @@
                         <table class="table table-striped table-bordered table-hover" id="tableDebt">
                             <thead>
                                 <tr>
-                                    <th>Recovery Cycle</th>
-                                    <th>Stage</th>
-                                    <th>Method</th>
-                                    <th>Status</th>
-                                    <th>Complete</th>
+                                    <th>Type</th>
+                                    <th>Information</th>
                                 </tr>
                             </thead>
                         </table>
@@ -223,11 +220,9 @@
                         <table class="table table-striped table-bordered table-hover" id="tablePerson">
                             <thead>
                                 <tr>
-                                    <th>Recovery Cycle</th>
-                                    <th>Stage</th>
-                                    <th>Method</th>
-                                    <th>Status</th>
-                                    <th>Complete</th>
+                                    <th>Type</th>
+                                    <th>Information</th>
+                                    <th>Current</th>
                                 </tr>
                             </thead>
                         </table>

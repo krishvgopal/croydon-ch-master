@@ -71,24 +71,54 @@ function loadDebtsView(result) {
 
 function selectRow(idValue) {
 
-    // Set hidden control to store selected debtid.
     $("#selectedDebtId").val(idValue);
+    var sourcePin = $("#sourceRefValue").val();
 
-    // Refresh recovery history grid
     refreshRecoveryCycles(idValue);
     refreshPaymentHistory(idValue);
-
-
-    //loadSampleTable("tableRecovery", idValue + "-REC");
-    //loadSampleTable("tablePayments", idValue + "-PAY");
-    //loadSampleTable("tableArrangements", idValue + "-ARR");
-    //loadSampleTable("tableParties", idValue + "-PRT");
-    //loadSampleTable("tableDebt", idValue + "-DBT");
-    //loadSampleTable("tablePerson", idValue + "-PSN");
-    //loadSampleTable("tableNotes", idValue + "-NOT");
-    //loadSampleTable("tableCurrent", idValue + "-CUR");
+    refreshDebtAttributes(idValue);
+    refreshPersonAttributes(sourcePin);
+    refreshNotes(idValue);
 }
 
+function loadAttributesList() {
+    $('#debtAttributes').val('');
+    $.ajax({
+        type: "POST",
+        url: "DataService.aspx/GetAttributeList",
+        data: "{'listDebtAttributes':'true','listPersonAttributes':'true'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            $.each(result.d, function (i, item) {
+                alert(item.AttributeText)
+                if (item.IsDebtAttribute) {
+                    $('#debtAttributes').append($('<option>', {
+                        value: item.AttributeId,
+                        text: item.AttributeText
+                    }));
+                }
+            });
+        }
+    });
+}
+function loadRecoveryCycleList() {
+    $.ajax({
+        type: "POST",
+        url: "DataService.aspx/GetRecoveryCycles",
+        data: "{}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            $.each(result.d, function (i, item) {
+                $('#recoveryCycles').append($('<option>', {
+                    value: item.RecoveryCycleId,
+                    text: item.RecoveryCycleName
+                }));
+            });
+        }
+    });
+}
 function refreshRecoveryCycles(debtId) {
     $.ajax({
         type: "POST",
@@ -113,7 +143,6 @@ function refreshRecoveryCycles(debtId) {
         }
     });
 }
-
 function refreshPaymentHistory(debtId) {
     $.ajax({
         type: "POST",
@@ -140,105 +169,100 @@ function refreshPaymentHistory(debtId) {
         }
     });
 }
-
-function loadRecoveryCycleList() {
+// TO COMPLETE -------------------------------------
+function refreshParties(debtId) { }
+function refreshArrangements(debtId) { }
+// -------------------------------------------------
+function refreshDebtAttributes(debtId) {
     $.ajax({
         type: "POST",
-        url: "DataService.aspx/GetRecoveryCycles",
-        data: "{}",
+        url: "DataService.aspx/GetDebtAttribute",
+        data: "{'debtId':'" + debtId + "'}",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
-            $.each(result.d, function (i, item) {
-                $('#recoveryCycles').append($('<option>', {
-                    value: item.RecoveryCycleId,
-                    text: item.RecoveryCycleName
-                }));
-            });
-        }
-    });
-}
-
-function loadAttributesList() {
-    $('#debtAttributes').val('');
-    $.ajax({
-        type: "POST",
-        url: "DataService.aspx/GetAttributeList",
-        data: "{'listDebtAttributes':'true','listPersonAttributes':'true'}",
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (result) {
-            $.each(result.d, function (i, item) {
-                alert(item.AttributeText)
-                if (item.IsDebtAttribute) {
-                    $('#debtAttributes').append($('<option>', {
-                        value: item.AttributeId,
-                        text: item.AttributeText
-                    }));
-                }
-            });
-        }
-    });
-}
-
-
-// GetAttributeList
-function loadSampleTable(tableName, fixedValue) {
-    $.ajax({
-        type: "POST",
-        url: "DataService.aspx/GetSampleData",
-        data: "{'fixedValue':'" + fixedValue + "','count':'100'}",
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (result) {
-
             if (result.hasOwnProperty("d")) { result = result.d; }
-
-            $("#" + tableName).dataTable({
+            $("#tableDebt").dataTable({
                 "destroy": true,
                 "aaData": result,
                 aoColumns: [
-                    { mData: 'FixedValue' },
-                    { mData: 'ColumnA' },
-                    { mData: 'ColumnB' },
-                    { mData: 'ColumnC' },
-                    { mData: 'ColumnD' }
+                    { mData: 'Type' },
+                    { mData: 'Information' }
                 ]
-                ,
-                "aoColumnDefs": [{
-                    "sTitle": "Debt ID"
-                    , "aTargets": ["debt_id"]
-                    , "mRender": function (value, type, full) {
-                        return '<a href="#">' + value + '</a>';
-                    }
-                }]
             });
         }
     });
 }
-
-function ajh() {
-    alert('Save');
-    $('#myModal').modal('hide');
-}
-
-function groupDebts() {
-
-    var checkedInvoiceLineIds = [];
-
-    $(".debtGroupItems:checked").each(function () {
-        checkedInvoiceLineIds.push($(this).data("debtGroupDebtId"));
+function refreshPersonAttributes(sourcePin) {
+    $.ajax({
+        type: "POST",
+        url: "DataService.aspx/GetPersonAttribute",
+        data: "{'sourcePin':'" + sourcePin + "'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            if (result.hasOwnProperty("d")) { result = result.d; }
+            $("#tablePerson").dataTable({
+                "destroy": true,
+                "aaData": result,
+                aoColumns: [
+                    { mData: 'Type' },
+                    { mData: 'Information' },
+                    { mData: 'Current' }]
+            });
+        }
     });
-
-    
-    $('#myModal').modal('hide');
 }
-
-function refreshNotes() { }
+function refreshNotes(debtId) {
+    $.ajax({
+        type: "POST",
+        url: "DataService.aspx/GetDebtNotes",
+        data: "{'debtId':'" + debtId + "'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            if (result.hasOwnProperty("d")) { result = result.d; }
+            $("#tableNotes").dataTable({
+                "destroy": true,
+                "aaData": result,
+                aoColumns: [
+                    { mData: 'CreatedDate' },
+                    { mData: 'User' },
+                    { mData: 'Note' },
+                    { mData: 'NoteId' }]
+            });
+        }
+    });
+}
+function refreshCurrentAttributes(debtId) {
+    $.ajax({
+        type: "POST",
+        url: "DataService.aspx/GetCurrentAttribute",
+        data: "{'debtId':'" + debtId + "'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            if (result.hasOwnProperty("d")) { result = result.d; }
+            $("#tableCurrent").dataTable({
+                "destroy": true,
+                "aaData": result,
+                aoColumns: [
+                    { mData: 'CreatedDate' },
+                    { mData: 'User' },
+                    { mData: 'Note' },
+                    { mData: 'NoteId' }]
+            });
+        }
+    });
+}
 function createNote() { }
-function refreshRecoveryCycles() { }
+function createDebtAttribute() {
+    alert("Debt {'debtId':'" + $("#selectedDebtId").val() + "','userId':'" + $('#UserSessionToken').val() + "','AttributeId':'" + $('#debtAttributes').val() + "','debtAttributesValue':'" + $('#debtAttributesValue').val() + "'");
+}
+function createPersonAttribute() {
+    alert("Person {'debtId':'" + $("#selectedDebtId").val() + "','userId':'" + $('#UserSessionToken').val() + "','AttributeId':'" + $('#personAttributes').val() + "','debtAttributesValue':'" + $('#debtAttributesValue').val() + "'");
+}
 function setRecoveryCycle() {
-    //alert('debtId:' + $("#selectedDebtId").val() + ', cycleId:' + $('#recoveryCycles').val() + ', userId:' + $('#UserSessionToken').val() + ', recoveryDateTime:' + $('#datepicker').val());
     $.ajax({
         type: "POST",
         url: "DataService.aspx/SetRecoveryCycle",
@@ -249,14 +273,56 @@ function setRecoveryCycle() {
             alert(result);
         }
     });
-    alert('Done');
-}
-function createDebtAttribute() {
-    alert("Debt {'debtId':'" + $("#selectedDebtId").val() + "','userId':'" + $('#UserSessionToken').val() + "','AttributeId':'" + $('#debtAttributes').val() + "','debtAttributesValue':'" + $('#debtAttributesValue').val() + "'");
 }
 
-function createPersonAttribute() {
-    alert("Person {'debtId':'" + $("#selectedDebtId").val() + "','userId':'" + $('#UserSessionToken').val() + "','AttributeId':'" + $('#personAttributes').val() + "','debtAttributesValue':'" + $('#debtAttributesValue').val() + "'");
+
+function ajh() {
+    alert('Save');
+    $('#myModal').modal('hide');
 }
 
-// 
+function groupDebts() {
+    var checkedInvoiceLineIds = [];
+    $(".debtGroupItems:checked").each(function () {
+        checkedInvoiceLineIds.push($(this).data("debtGroupDebtId"));
+    });
+    $('#myModal').modal('hide');
+}
+
+
+
+
+
+//function loadSampleTable(tableName, fixedValue) {
+//    $.ajax({
+//        type: "POST",
+//        url: "DataService.aspx/GetSampleData",
+//        data: "{'fixedValue':'" + fixedValue + "','count':'100'}",
+//        contentType: "application/json; charset=utf-8",
+//        dataType: "json",
+//        success: function (result) {
+
+//            if (result.hasOwnProperty("d")) { result = result.d; }
+
+//            $("#" + tableName).dataTable({
+//                "destroy": true,
+//                "aaData": result,
+//                aoColumns: [
+//                    { mData: 'FixedValue' },
+//                    { mData: 'ColumnA' },
+//                    { mData: 'ColumnB' },
+//                    { mData: 'ColumnC' },
+//                    { mData: 'ColumnD' }
+//                ]
+//                ,
+//                "aoColumnDefs": [{
+//                    "sTitle": "Debt ID"
+//                    , "aTargets": ["debt_id"]
+//                    , "mRender": function (value, type, full) {
+//                        return '<a href="#">' + value + '</a>';
+//                    }
+//                }]
+//            });
+//        }
+//    });
+//}
