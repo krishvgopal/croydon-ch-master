@@ -88,12 +88,12 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
-    public static bool CreateDebtNote(int debtId, int userId, string noteText)
+    public static bool CreateNote(int debtId, int userId, string noteText)
     {
         var returnData = false;
         var dataAccess = new CollectionHubData.DataAccess();
 
-        returnData = dataAccess.CreateDebtNote(debtId, userId, noteText);
+        returnData = dataAccess.CreateNote(debtId, userId, noteText);
 
         return returnData;
     }

@@ -1,6 +1,5 @@
 ﻿$("#loadingImage").hide();
 $("#searchResults").hide();
-
 function doSearch() {
     $("#loadingImage").toggle();
     $.ajax({

@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Create Debt Note</title>  
+</head>
+    <body>
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Confirm Action</h4>
+        </div>
+        <div class="modal-body">
+            <p>Enter in the fields below to create a new note.</p>
+            <br />
+            <div style="width:75%;margin-left:75px">
+                <div class="form-group">
+                    <label>Note Text</label>
+                    <textarea id="noteText" rows="8" class="date-picker form-control"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" onclick="createNote();">Create Note</button>
+        </div>
+    </body>
+</html>

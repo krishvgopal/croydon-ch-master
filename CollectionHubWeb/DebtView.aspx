@@ -86,6 +86,8 @@
                 <a data-toggle="modal" href="modals/CreateDebtAttributes.html" data-target="#debtAttributeModal">Create Debt Attribute</a>
                 &nbsp;|&nbsp;
                 <a data-toggle="modal" href="modals/CreatePersonAttributes.html" data-target="#personAttributeModal">Create Person Attribute</a>
+                &nbsp;|&nbsp;
+                <a data-toggle="modal" href="modals/CreateDebtNote.html" data-target="#noteModal">Create Note</a>
             </div>
             <div style="clear:both"><br /></div>
             <ul class="nav nav-tabs">
@@ -99,7 +101,6 @@
                 <li><a href="#current"      data-toggle="tab">Current Attributes</a>
                 </li>
             </ul>
-
             <div class="tab-content">
                 <div class="tab-pane fade in active" id="recovery">
                     <br />
@@ -145,9 +146,7 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
-
                 <div class="tab-pane fade" id="payments">
                     <br />
                     <div class="table-responsive">
@@ -199,7 +198,6 @@
                         </table>
                     </div>
                 </div>
-
                 <div class="tab-pane fade" id="debt">
                     <br/>
                     <div class="table-responsive">
@@ -213,7 +211,6 @@
                         </table>
                     </div>
                 </div>
-
                 <div class="tab-pane fade" id="person">
                     <br />
                     <div class="table-responsive">
@@ -229,24 +226,21 @@
                         </table>
                     </div>
                 </div>
-
                 <div class="tab-pane fade" id="notes">
                     <br />
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered table-hover" id="tableNotes">
                             <thead>
                                 <tr>
-                                    <th>Recovery Cycle</th>
-                                    <th>Stage</th>
-                                    <th>Method</th>
-                                    <th>Status</th>
-                                    <th>Complete</th>
+                                    <th class="created_date">Created Date</th>
+                                    <th>Created By</th>
+                                    <th>Note</th>
+                                    <th class="note_id"></th>
                                 </tr>
                             </thead>
                         </table>
                     </div>
                 </div>
-
                 <div class="tab-pane fade" id="current">
                     <br />
                     <div class="table-responsive">
@@ -264,29 +258,31 @@
                 </div> 
             </div>
         </div>
-
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                 </div>
             </div>
         </div>
-
         <div class="modal fade" id="debtAttributeModal" tabindex="-1" role="dialog" aria-labelledby="debtAttributeModal" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                 </div>
             </div>
         </div>
-
         <div class="modal fade" id="personAttributeModal" tabindex="-1" role="dialog" aria-labelledby="personAttributeModal" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                 </div>
             </div>
         </div>
-
-</div>
-<script type="text/javascript" charset="utf8" src="js/DebtView.js"></script>
+        <div class="modal fade" id="noteModal" tabindex="-1" role="dialog" aria-labelledby="noteModal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" charset="utf8" src="js/DebtView.js"></script>
 </asp:Content>
 
