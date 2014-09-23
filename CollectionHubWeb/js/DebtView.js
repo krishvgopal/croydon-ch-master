@@ -1,8 +1,5 @@
 ﻿$(function () {
     var sourcePin = $("#sourceRefValue").val();
-    $("#datepicker").datepicker();
-
-    loadRecoveryCycleList();
     refreshPersonAttributes(sourcePin);
     refreshCurrentAttributes(sourcePin);
 });
@@ -40,26 +37,25 @@ function loadDebtsView(result) {
         "aaData": result,
         aoColumns: [
             { mData: 'DebtId' },
-            { mData: 'DebtId' },
+            //{ mData: 'DebtId' },
             { mData: 'DebtSource' },
             { mData: 'DebtAccRef' },
             { mData: 'DebtReference' },
             { mData: 'DebtTotal' },
             { mData: 'DebtOutstanding' },
-            { mData: 'PartyPin' },
-            { mData: 'PropertyReference' },
+            //{ mData: 'PartyPin' },
+            //{ mData: 'PropertyReference' },
             { mData: 'RecoveryCycle' },
             { mData: 'Status' },
             { mData: 'Type' }
         ],
         "aoColumnDefs": [
             {
-                "sTitle": "Debt ID"
+              "sTitle": "Debt ID"
             , "aTargets": ["debt_id"]
             , "mRender": function (value, type, full) {
-                return '<a href="#" onclick="selectRow(' + value + ')">' + value + '</a>';
-            }
-            },
+                return '<a href="#" onclick="selectRow(' + value + ')">' + value + '</a>';}
+                },
             {
                 "sTitle": "<input id=\"debtGroupAll\" type=\"checkbox\" class=\"debtGroupAll\">"
             , "bSortable": false
@@ -73,7 +69,15 @@ function loadDebtsView(result) {
             $("#debtGroupAll").click(function () {
                 $(".debtGroupItems").prop('checked', $(this).prop('checked'));
             });
-            $('#dataTableMain tbody').on('click', 'tr', function () {
+            $('#dataTableMain tbody').on('click', 'tr', function (ee) {
+
+                var selectedRowHtml     = $(ee.currentTarget.cells[0]);
+                var selectedRowValue    = selectedRowHtml.find('input:checkbox');
+
+                console.log('rowId:' + selectedRowValue.attr('debtGroupDebtId'));
+
+                selectRow(selectedRowValue.attr('debtGroupDebtId'));
+
                 vDataMainTable.$('tr.selected').removeClass('active');
                 if ($(this).hasClass('active')) {
                     $(this).removeClass('active');
@@ -151,8 +155,13 @@ function refreshRecoveryCycles(debtId) {
                     { mData: 'StageType' },
                     { mData: 'Status' },
                     { mData: 'Days' },
-                    { mData: 'TargetDate' }
-                ]
+                    { mData: 'TargetDateFormatted' }],
+                "aoColumnDefs": [
+               { "width": "200px", "targets": 0 },
+               { "width": "*%", "targets": 1 },
+               { "width": "*%", "targets": 2 },
+               { "width": "75px", "targets": 4 },
+               { "width": "100px", "targets": 5 }]
             });
         }
     });
@@ -183,8 +192,10 @@ function refreshPaymentHistory(debtId) {
         }
     });
 }
+
 function refreshParties(debtId) { }
 function refreshArrangements(debtId) { }
+
 function refreshDebtAttributes(debtId) {
     $.ajax({
         type: "POST",
@@ -396,8 +407,7 @@ function createPersonAttribute() {
         }
     });
 }
-
-function setRecoveryCycle() {
+function createRecoveryCycle() {
     $.ajax({
         type: "POST",
         url: "DataService.aspx/SetRecoveryCycle",
@@ -405,7 +415,7 @@ function setRecoveryCycle() {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
-            alert(result);
+            alert(result.d);
         }
     });
 }

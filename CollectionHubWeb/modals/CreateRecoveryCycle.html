@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Create Debt Attribute</title>  
+</head>
+    <body>
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Confirm Action</h4>
+        </div>
+        <div class="modal-body">
+            <p>Enter in the fields below to create a new debt attribute. Attributes can be used to refine search results.</p>
+            <br />
+            <div style="width:75%;margin-left:75px">
+                <div class="form-group">
+                    <label>Recovery Cycle</label>
+                    <select id="recoveryCycles" class="form-control"></select>
+                </div>
+                <div class="form-group">
+                    <label>Start Date</label>
+                    <input type="text" id="datepicker" class="date-picker form-control">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" onclick="createRecoveryCycle();">Create Recovery Cycle</button>
+        </div>
+        <script>
+            $("#datepicker").datepicker();
+            loadRecoveryCycleList();
+        </script>
+    </body>
+</html>

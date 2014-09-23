@@ -14,8 +14,6 @@ public partial class DataService : System.Web.UI.Page
         Response.Redirect("~/Dashboard.aspx");
     }
 
-    // SetPersonAttributeCurrent
-
     [WebMethod]
     public static bool SetPersonAttributeCurrent(int personAttributeId)
     {
@@ -26,7 +24,6 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-
     [WebMethod]
     public static List<PersonAttribute> GetCurrentAttribute(int partyPin)
     {

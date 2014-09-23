@@ -67,14 +67,11 @@
                     <thead>
                         <tr>
                             <th class="select_id">Select</th>
-                            <th class="debt_id">Debt Id</th>
                             <th>Debt Source</th>
                             <th>Debt Acc Ref</th>
                             <th>Debt Reference</th>
                             <th>Debt Total</th>
                             <th>Debt Outstanding</th>
-                            <th>Party PIN</th>
-                            <th>Property Reference</th>
                             <th>Recovery Cycle</th>
                             <th>Status</th>
                             <th>Type</th>
@@ -82,12 +79,6 @@
                     </thead>
                 </table>
                 <a data-toggle="modal" href="modals/page.html" data-target="#myModal">Create Group</a>
-                &nbsp;|&nbsp;
-                <a data-toggle="modal" href="modals/CreateDebtAttributes.html" data-target="#debtAttributeModal">Create Debt Attribute</a>
-                &nbsp;|&nbsp;
-                <a data-toggle="modal" href="modals/CreatePersonAttributes.html" data-target="#personAttributeModal">Create Person Attribute</a>
-                &nbsp;|&nbsp;
-                <a data-toggle="modal" href="modals/CreateDebtNote.html" data-target="#noteModal">Create Note</a>
             </div>
             <div style="clear:both"><br /></div>
             <ul class="nav nav-tabs">
@@ -118,34 +109,7 @@
                             </thead>
                         </table>
                     </div>
-                    <div>
-                        <br />
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                Create New Recovery Cycle
-                            </div>
-                            <div class="panel-body">
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label>Recovery Cycle</label>
-                                        <select id="recoveryCycles" class="form-control"></select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label>Start Date</label>
-                                        <input type="text" id="datepicker" class="date-picker form-control">
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <br />
-                                        <a data-toggle="modal" href="modals/ConfirmCreateRecoveryCycle.html" data-target="#myModal2" class="btn btn-default">Create Cycle</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <a data-toggle="modal" href="modals/CreateRecoveryCycle.html" data-target="#createRecoveryCycleModal" class="btn btn-outline btn-primary">Create Recovery Cycle</a>
                 </div>
                 <div class="tab-pane fade" id="payments">
                     <br />
@@ -210,6 +174,7 @@
                             </thead>
                         </table>
                     </div>
+                    <a data-toggle="modal" href="modals/CreateDebtAttributes.html" data-target="#debtAttributeModal" class="btn btn-outline btn-primary">Create Debt Attribute</a>
                 </div>
                 <div class="tab-pane fade" id="person">
                     <br />
@@ -225,6 +190,7 @@
                             </thead>
                         </table>
                     </div>
+                    <a data-toggle="modal" href="modals/CreatePersonAttributes.html" data-target="#personAttributeModal" class="btn btn-outline btn-primary">Create Person Attribute</a>
                 </div>
                 <div class="tab-pane fade" id="notes">
                     <br />
@@ -240,6 +206,7 @@
                             </thead>
                         </table>
                     </div>
+                    <a data-toggle="modal" href="modals/CreateDebtNote.html" data-target="#noteModal" class="btn btn-outline btn-primary">Create Note</a>
                 </div>
                 <div class="tab-pane fade" id="current">
                     <br />
@@ -259,6 +226,12 @@
             </div>
         </div>
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="createRecoveryCycleModal" tabindex="-1" role="dialog" aria-labelledby="createRecoveryCycleModal" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                 </div>

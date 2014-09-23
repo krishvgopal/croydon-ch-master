@@ -9,8 +9,9 @@ namespace CollectionHubData
 {
     public class DataAccess
     {
-        //private const string CONNECTION_STRING = "Data Source=192.168.1.13;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=sa;Password=Croydon#";
-        private const string CONNECTION_STRING = "Data Source=192.168.2.158;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=sa;Password=Croydon#";
+        //private const string CONNECTION_STRING = "Data Source=192.168.1.19;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=sa;Password=Croydon#";
+        private const string CONNECTION_STRING = "Data Source=192.168.1.17;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=HubAdmin;Password=Croydon#";
+        //private const string CONNECTION_STRING = "Data Source=192.168.2.160;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=sa;Password=Croydon#";
         //private const string CONNECTION_STRING = "Data Source=192.168.1.66;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=sa;Password=Croydon#";
 
         public DebtAddress GetAddressForDebt(string sourceRef, string source)
@@ -69,7 +70,7 @@ namespace CollectionHubData
 
             return returnValue;
         }
-        public Boolean SetRecoveryCycle(int debtId, int recoveryCycleId, int userId, DateTime recoveryDateTime)
+        public bool SetRecoveryCycle(int debtId, int recoveryCycleId, int userId, DateTime recoveryDateTime)
         {
             bool returnvalue = false;
             using (SqlConnection sqlDataConnection = new SqlConnection(CONNECTION_STRING))
@@ -81,7 +82,7 @@ namespace CollectionHubData
                     sqlCommand.Parameters.Add(new SqlParameter("DebtId",    debtId));
                     sqlCommand.Parameters.Add(new SqlParameter("CycleId",   recoveryCycleId));
                     sqlCommand.Parameters.Add(new SqlParameter("UserId",    userId));
-                    sqlCommand.Parameters.Add(new SqlParameter("StartDate", recoveryDateTime.ToString("dd MMM yyyy")));
+                    sqlCommand.Parameters.Add(new SqlParameter("StartDate", recoveryDateTime.ToString("yyyy/MM/dd")));
 
                     var count = sqlCommand.ExecuteNonQuery();
 
@@ -91,7 +92,6 @@ namespace CollectionHubData
             }
             return returnvalue;
         }
-        
         public bool CreateDebtGroup(string debtIdString, int userId, int partyPin, string source)
         {
             bool returnvalue = false;
@@ -315,9 +315,7 @@ namespace CollectionHubData
                     }
                 }
             }
-
             sqlDataConnection.Close();
-
             return returnValue;
         }
         public List<RecoveryCycle> GetRecoveryCycles()
@@ -500,6 +498,5 @@ namespace CollectionHubData
             }
             return returnValue;
         }
-
     }
 }
