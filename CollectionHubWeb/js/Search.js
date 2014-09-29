@@ -18,18 +18,23 @@ function doSearch() {
                     { mData: 'FullAddress' },
                     { mData: 'DebtOutstanding' },
                     { mData: 'Pin' },
-                    { mData: 'Source' }
+                    { mData: 'Source' },
+                    { mData: 'CN_Pin' },
                 ],
                 "aoColumnDefs": [{
                       "aTargets": ["record_selector"]
                     , "mRender": function (value, type, full) {
-                        return '<a href="DebtView.aspx?source_ref=' + full.Pin + '&source=' + full.Source + '" target=\"_blank\" ">' + value + '</a>';
+                        //return '<a href="DebtView.aspx?source_ref=' + full.Pin + '&source=' + full.Source + '" target=\"_blank\" ">' + value + '</a>';
+                        return '<a href="DebtView.aspx?cn_pin=' + full.CN_Pin + '" target=\"_blank\" ">' + value + '</a>';
                     }
                 },{
                     "aTargets": ["source"]
                     , "bVisible": false
                 },{
                     "aTargets": ["pin_id"]
+                    , "bVisible": false
+                }, {
+                    "aTargets": ["cn_pin"]
                     , "bVisible": false
                 }
                 ]

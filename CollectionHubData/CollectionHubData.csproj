@@ -44,6 +44,7 @@
     <Compile Include="AttributesItem.cs" />
     <Compile Include="CurrentAttributes.cs" />
     <Compile Include="DataAccess.cs" />
+    <Compile Include="DataReaderExtensionMethods.cs" />
     <Compile Include="DebtAddress.cs" />
     <Compile Include="DebtAttribute.cs" />
     <Compile Include="DebtItem.cs" />
@@ -52,6 +53,7 @@
     <Compile Include="DebtSearchResult.cs" />
     <Compile Include="DebtSearchResultItem.cs" />
     <Compile Include="FullnameFullAddressSearchResults.cs" />
+    <Compile Include="JavaScriptSerializer.cs" />
     <Compile Include="LinkedAddress.cs" />
     <Compile Include="Payment.cs" />
     <Compile Include="PersonAttribute.cs" />

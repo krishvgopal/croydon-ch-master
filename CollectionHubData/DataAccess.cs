@@ -12,18 +12,47 @@ namespace CollectionHubData
         //private const string CONNECTION_STRING = "Data Source=192.168.2.160;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=sa;Password=Croydon#";
         //private const string CONNECTION_STRING = "Data Source=192.168.1.66;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=sa;Password=Croydon#";
 
-        public DebtAddress GetAddressForDebt(string sourceRef, string source)
+        //public DebtAddress GetAddressForDebt(string sourceRef, string source)
+        //{
+        //    var returnValue = new DebtAddress();
+        //    var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+        //    sqlDataConnection.Open();
+        //    using (var sqlCommand = new SqlCommand("CHP_GetNameAddress", sqlDataConnection))
+        //    {
+        //        sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+        //        sqlCommand.Parameters.Add(new SqlParameter("source_ref", sourceRef));
+        //        sqlCommand.Parameters.Add(new SqlParameter("source", source));
+
+        //        var dataReader = sqlCommand.ExecuteReader();
+
+        //        if (dataReader.HasRows)
+        //        {
+        //            while (dataReader.Read())
+        //            {
+        //                var newResult = new DebtAddress(dataReader);
+        //                returnValue = newResult;
+        //            }
+        //        }
+        //    }
+
+        //    sqlDataConnection.Close();
+
+        //    return returnValue;
+        //}
+
+        public DebtAddress GetAddressForDebt(string pin)
         {
             var returnValue = new DebtAddress();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
 
             sqlDataConnection.Open();
-            using (var sqlCommand = new SqlCommand("CHP_GetNameAddress", sqlDataConnection))
+            using (var sqlCommand = new SqlCommand("CHP_GetNameAddress_byPIN", sqlDataConnection))
             {
                 sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
 
-                sqlCommand.Parameters.Add(new SqlParameter("source_ref", sourceRef));
-                sqlCommand.Parameters.Add(new SqlParameter("source", source));
+                sqlCommand.Parameters.Add(new SqlParameter("pin", pin));
 
                 var dataReader = sqlCommand.ExecuteReader();
 
@@ -220,6 +249,195 @@ namespace CollectionHubData
             return returnvalue;
         }
 
+        public bool CreateArrangement(int agm_pin, int agm_cd_id, DateTime? agm_start_date, int agm_frequency,
+                                      int agm_day_of_month, int agm_day_of_week, decimal agm_start_amount,
+                                      decimal agm_installment_amount, int agm_number_installment, int agm_payment_method,
+                                      decimal agm_agreed_amount, decimal agm_totaldebt_amount, decimal agm_last_amount, int agm_Created_By)
+        {
+
+            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            {
+                sqlDataConnection.Open();
+                using (var sqlCommand = new SqlCommand("[CHP_Arrangement_INSERT]", sqlDataConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add(new SqlParameter("agm_pin",                   agm_pin));
+                    sqlCommand.Parameters.Add(new SqlParameter("agm_cd_id",                 agm_cd_id));
+                    sqlCommand.Parameters.Add(new SqlParameter("agm_start_date",            agm_start_date));          // DatePicker
+                    sqlCommand.Parameters.Add(new SqlParameter("agm_frequency",             agm_frequency));           // Procedure
+                    sqlCommand.Parameters.Add(new SqlParameter("agm_day_of_month",          agm_day_of_month));        // Dropdown 1..31
+                    sqlCommand.Parameters.Add(new SqlParameter("agm_day_of_week",           agm_day_of_week));         // 1..7
+                    sqlCommand.Parameters.Add(new SqlParameter("agm_start_amount",          agm_start_amount));        // figure
+                    sqlCommand.Parameters.Add(new SqlParameter("agm_installment_amount",    agm_installment_amount));  // calced
+                    sqlCommand.Parameters.Add(new SqlParameter("agm_number_installments",   agm_number_installment )); // calced
+                    sqlCommand.Parameters.Add(new SqlParameter("agm_payment_method",        agm_payment_method ));     // procedure
+                    sqlCommand.Parameters.Add(new SqlParameter("agm_agreed_amount",         agm_agreed_amount ));      // same as total debt amount - max value total debt amount - can be less
+                    sqlCommand.Parameters.Add(new SqlParameter("agm_totaldebt_amount",      agm_totaldebt_amount));    // populate with main debt outstanding balance
+                    sqlCommand.Parameters.Add(new SqlParameter("agm_last_amount",           agm_last_amount));         // remainder
+                    sqlCommand.Parameters.Add(new SqlParameter("agm_Created_By",            agm_Created_By));          // user id of creater
+                    
+                    
+                    // @ERROR_MESSAGE			
+                    var count = sqlCommand.ExecuteNonQuery();
+
+                    //if (count > 0) { returnvalue = true; }
+                }
+                sqlDataConnection.Close();
+            }
+
+            return false;
+            
+            //agm_pin, agm_cd_id, agm_start_date, agm_frequency, agm_day_of_month, agm_day_of_week, agm_start_amount, agm_installment_amount, agm_number_installment, agm_payment_method, agm_agreed_amount, agm_totaldebt_amount, agm_last_amount, agm_Created_By            
+            //ERROR_MESSAGE			
+            //@agm_pin				
+            //@agm_cd_id				
+            //@agm_start_date			
+            //@agm_frequency			
+            //@agm_day_of_month		
+            //@agm_day_of_week		
+            //@agm_start_amount		
+            //@agm_installment_amount	
+            //@agm_number_installments
+            //@agm_payment_method		
+            //@agm_agreed_amount		
+            //@agm_totaldebt_amount	
+            //@agm_last_amount		
+            //@agm_Created_By			
+            //@ERROR_MESSAGE			
+        }
+
+        public string GetDashboardDataPercentByYear(int sourceId, int historic)
+        {
+            var returnValue = "";
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CH_DASHBOARD_PERCENT_BY_FYEAR", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                sqlCommand.Parameters.Add(new SqlParameter("SOURCE", sourceId));
+                sqlCommand.Parameters.Add(new SqlParameter("HISTORY", historic));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        // Example data format >> { y: '2006', a: 100, b: 90 },
+                        string newLine = "{ \"y\": \"" + dataReader["FYear"] + "\", " +
+                                           "\"a\": \"" + cleanValue(dataReader["CTAX"]) + "\", " +
+                                           "\"b\": \"" + cleanValue(dataReader["HSG"]) + "\", " +
+                                           "\"c\": \"" + cleanValue(dataReader["BEN"]) + "\", " +
+                                           "\"d\": \"" + cleanValue(dataReader["PR"]) + "\"}," + Environment.NewLine;
+
+                        returnValue += newLine;
+                    }
+                    returnValue = returnValue.Substring(0, returnValue.Length - 3);
+                    returnValue = "[" + returnValue + "]";
+                }
+            }
+            sqlDataConnection.Close();
+
+        
+
+            return returnValue;
+        }
+
+        public string GetDashboardDataAmountByYear(int sourceId, int historic)
+        {
+            var returnValue = "";
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CH_DASHBOARD_AMOUNT_BY_FYEAR", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                sqlCommand.Parameters.Add(new SqlParameter("SOURCE", sourceId));
+                sqlCommand.Parameters.Add(new SqlParameter("HISTORY", historic));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    var marker = new decimal(0.0);
+                    while (dataReader.Read())
+                    {
+                        // GET THE LARGEST NUMBER OF THE DATA ROW (NEEDED FOR CHART MAX VALUES)
+                        var thisMarker = getMarker(dataReader);
+                        // CARRY OVER THIS MARKER IF HIGHER THAN PREVIOUS
+                        if (thisMarker > marker) {marker = thisMarker;}
+                        // EXAMPLE DATA FORMAT >> { "y": "2006", "a": "100", "b": "90" }
+                        string newLine = "{ \"y\": \"" + dataReader["FYear"] + "\", " +
+                                           "\"a\": \"" + cleanValue(dataReader["CTAX"]) + "\", " +
+                                           "\"b\": \"" + cleanValue(dataReader["HSG"]) + "\", " +
+                                           "\"c\": \"" + cleanValue(dataReader["BEN"]) + "\", " +
+                                           "\"d\": \"" + cleanValue(dataReader["PR"]) + "\"}," + Environment.NewLine;
+
+                        returnValue += newLine;
+                    }
+                    returnValue = returnValue.Substring(0, returnValue.Length - 3);
+                    returnValue = "[" + returnValue + "]";
+                }
+            }
+            sqlDataConnection.Close();
+
+
+
+            return returnValue;
+        }
+
+        private decimal getMarker(SqlDataReader dataReader)
+        {
+            decimal marker = 0;
+            for (int i = 0; i < dataReader.FieldCount; i++)
+            {
+                if (dataReader.GetFieldType(i) == Type.GetType("System.Int16") ||
+                    dataReader.GetFieldType(i) == Type.GetType("System.Int32") ||
+                    dataReader.GetFieldType(i) == Type.GetType("System.Int64") ||
+                    dataReader.GetFieldType(i) == Type.GetType("System.Double") ||
+                    dataReader.GetFieldType(i) == Type.GetType("System.Decimal") ||
+                    dataReader.GetFieldType(i) == Type.GetType("System.Byte"))
+                {
+                    if (marker < Convert.ToDecimal(dataReader[i]))
+                    {
+                        marker = Convert.ToDecimal(dataReader[i]);
+                    }
+                }
+            }
+
+            return marker;
+        }
+
+        private string cleanValue(object value)
+        {
+            if (value != null)
+            {
+                if (value.ToString().Length > 0)
+                {
+                    decimal returnValue = Convert.ToDecimal(value);
+                    if (returnValue == 0)
+                    {
+                        return "0";
+                    }
+                    else
+                    {
+                        return returnValue.ToString("#.##");    
+                    }
+                }
+                else
+                {
+                    return "0";   
+                }
+            }
+            else
+            {
+                return "0";
+            }
+        }
+
         public List<DebtNote> GetDebtNotes(int debtId)
         {
             var returnValue = new List<DebtNote>();
@@ -341,18 +559,46 @@ namespace CollectionHubData
 
             return returnValue;
         }
-        public List<DebtItem> GetDebts(string sourceRef, string source)
+        //public List<DebtItem> GetDebts(string sourceRef, string source)
+        //{
+        //    var returnValue = new List<DebtItem>();
+        //    var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+        //    sqlDataConnection.Open();
+        //    using (var sqlCommand = new SqlCommand("CHP_GETPERSONDEBTS", sqlDataConnection))
+        //    {
+        //        sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+        //        sqlCommand.Parameters.Add(new SqlParameter("source_ref", sourceRef));
+        //        sqlCommand.Parameters.Add(new SqlParameter("source", source));
+
+        //        var dataReader = sqlCommand.ExecuteReader();
+
+        //        if (dataReader.HasRows)
+        //        {
+        //            while (dataReader.Read())
+        //            {
+        //                var newResult = new DebtItem(dataReader);
+        //                returnValue.Add(newResult);
+        //            }
+        //        }
+        //    }
+
+        //    sqlDataConnection.Close();
+
+        //    return returnValue;
+        //}
+        public List<DebtItem> GetDebts(int pin)
         {
             var returnValue = new List<DebtItem>();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
 
             sqlDataConnection.Open();
-            using (var sqlCommand = new SqlCommand("CHP_GETPERSONDEBTS", sqlDataConnection))
+            using (var sqlCommand = new SqlCommand("CHP_GETPERSONDEBTS_byPIN", sqlDataConnection))
             {
                 sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
 
-                sqlCommand.Parameters.Add(new SqlParameter("source_ref", sourceRef));
-                sqlCommand.Parameters.Add(new SqlParameter("source", source));
+                sqlCommand.Parameters.Add(new SqlParameter("pin", pin));
 
                 var dataReader = sqlCommand.ExecuteReader();
 
@@ -546,7 +792,6 @@ namespace CollectionHubData
             }
             return returnValue;   
         }
-
         public List<Arrangement> GetArrangements(int debtId)
         {
             var returnValue = new List<Arrangement>();

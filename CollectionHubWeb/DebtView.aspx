@@ -8,6 +8,7 @@
     <asp:HiddenField ID="sourceValue" runat="server" ClientIDMode="Static" />
     <asp:HiddenField ID="sourceRefValue" runat="server" ClientIDMode="Static" />
     <asp:HiddenField ID="selectedDebtId" runat="server" ClientIDMode="Static" />
+    <asp:HiddenField ID="cnpin" runat="server" ClientIDMode="Static" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="headInfo" Runat="Server">
     <am:ActionMenu ID="pageActionMenu" runat="server" />
@@ -149,15 +150,18 @@
                         <table class="table table-striped table-bordered table-hover" id="tableArrangements">
                             <thead>
                                 <tr>
-                                    <th>Recovery Cycle</th>
-                                    <th>Stage</th>
-                                    <th>Method</th>
-                                    <th>Status</th>
-                                    <th>Complete</th>
+                                    <th>Created Date</th>
+                                    <th>Aggreed Amount</th>
+                                    <th>Frequency</th>
+                                    <th>Frequency Description</th>
+                                    <th>Installment Amount</th>
+                                    <th>No. Installments</th>
+                                    <th>Agm Status</th>
                                 </tr>
                             </thead>
                         </table>
                     </div>
+                    <a data-toggle="modal" href="modals/CreateArrangement.html" data-target="#tableArrangementsModal" class="btn btn-outline btn-primary">Create Arrangement</a>
                 </div>
                 <div class="tab-pane fade" id="debt">
                     <br/>
@@ -262,6 +266,12 @@
             </div>
         </div>
         <div class="modal fade" id="noteModal" tabindex="-1" role="dialog" aria-labelledby="noteModal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="tableArrangementsModal" tabindex="-1" role="dialog" aria-labelledby="tableArrangementsModal" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                 </div>

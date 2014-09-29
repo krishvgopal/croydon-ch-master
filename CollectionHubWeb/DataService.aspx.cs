@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Web.Script.Serialization;
+using System.Web.Script.Services;
 using CollectionHubData;
 using System.Web.Services;
 
@@ -100,13 +102,23 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
+    //[WebMethod]
+    //public static List<DebtItem> GetDebts(string source, string sourceRef)
+    //{
+    //    var returnData = new List<DebtItem>();
+    //    var dataAccess = new CollectionHubData.DataAccess();
+
+    //    returnData = dataAccess.GetDebts(sourceRef, source);
+
+    //    return returnData;
+    //}
     [WebMethod]
-    public static List<DebtItem> GetDebts(string source, string sourceRef)
+    public static List<DebtItem> GetDebts(int pin)
     {
         var returnData = new List<DebtItem>();
         var dataAccess = new CollectionHubData.DataAccess();
 
-        returnData = dataAccess.GetDebts(sourceRef, source);
+        returnData = dataAccess.GetDebts(pin);
 
         return returnData;
     }
@@ -148,7 +160,6 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-
     [WebMethod]
     public static List<Arrangement> GetArrangements(int debtId)
     {
@@ -159,7 +170,15 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
+    [WebMethod]
+    [ScriptMethod(UseHttpGet = false, ResponseFormat = ResponseFormat.Json)] 
+    public static String GetDashboardDataPercentByYear(int sourceId, int historic)
+    {
+        var dataAccess = new DataAccess();
+        var returnData = dataAccess.GetDashboardDataPercentByYear(sourceId, historic);
 
+        return returnData;
+    }
     [WebMethod]
     public static bool CreateDebtAttribute(int debtId, int userId, int attributeId, bool isCurrent, string attributeValue)
     {

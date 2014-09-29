@@ -26,6 +26,7 @@ namespace CollectionHubData
         public float TotalDebt          { get; set; }
         public float DebtOutstanding    { get; set; }
         public string ResponsibleOfficer { get; set; }
+        public string CN_Pin            { get; set; }      
 
         public FullNameFullAddressSearchResults() { }
         public FullNameFullAddressSearchResults(SqlDataReader value)
@@ -38,6 +39,7 @@ namespace CollectionHubData
             DebtOutstanding = Convert.ToInt32(value["DEBTOS"]);
             ResponsibleOfficer = value["RESPOFFICER"].ToString();
             LastName = value["LASTNAME"].ToString();
+            CN_Pin = value["CN_PIN"].ToString();
         }
     }
 }

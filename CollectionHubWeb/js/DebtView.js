@@ -8,14 +8,21 @@ var vDataMainTable = null;
 $.ajax({
     type: "POST",
     url: "DataService.aspx/GetDebts",
-    data: "{'source':'" + $("#sourceValue").val() + "','sourceRef':'" + $("#sourceRefValue").val() + "'}",
+    //data: "{'source':'" + $("#sourceValue").val() + "','sourceRef':'" + $("#sourceRefValue").val() + "'}",
+    data: "{'pin':'" + $("#cnpin").val() + "'}",
     contentType: "application/json; charset=utf-8",
     dataType: "json",
     success: function (data) {
+
         loadDebtsView(data);
 
-        var sourcePin = $("#sourceRefValue").val();
-        alert(sourcePin);
+        //var sourcePin = $("#sourceRefValue").val();
+        var sourcePin = $("#cnpin").val();
+
+        console.log(sourcePin);
+
+        refreshPersonAttributes(sourcePin);
+        refreshCurrentAttributes(sourcePin);
         refreshAddresses(sourcePin);
     }
 });
@@ -23,16 +30,14 @@ $.ajax({
 function selectRow(idValue) {
 
     $("#selectedDebtId").val(idValue);
-    var sourcePin = $("#sourceRefValue").val();
+    //var sourcePin = $("#sourceRefValue").val();
+    //var sourcePin = $("#cnpin").val();
 
     refreshRecoveryCycles(idValue);
     refreshPaymentHistory(idValue);
     refreshParties(idValue);
     refreshDebtAttributes(idValue);
-    refreshPersonAttributes(sourcePin);
-    refreshCurrentAttributes(sourcePin);
     refreshNotes(idValue);
-    refreshAddresses(sourcePin);
     refreshArrangements(idValue);
 }
 

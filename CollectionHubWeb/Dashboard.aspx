@@ -8,9 +8,13 @@
             <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="index.html">Collection Hub v1.1</a>
-                 <script src="js/demo/dashboard-demo.js"></script>
+     
+
+       <%--     <script src="js/demo/dashboard-demo.js"></script>--%>
             <script src="js/plugins/morris/raphael-2.1.0.min.js"></script>
             <script src="js/plugins/morris/morris.js"></script>
+     
+
     </asp:Content>
 
     <asp:Content ID="Content2" ContentPlaceHolderID="headInfo" Runat="Server">
@@ -253,11 +257,12 @@
     </asp:Content>
 
     <asp:Content ID="Content4" ContentPlaceHolderID="pageTitle" Runat="Server">
-        <div class="row">
+       <%-- <div class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">Dashboard</h2>
             </div>
-        </div>
+        </div>--%>
+        <br/>
     </asp:Content>
 
     <asp:Content ID="Content5" ContentPlaceHolderID="pageBody" Runat="Server">
@@ -265,30 +270,135 @@
 
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <i class="fa fa-bar-chart-o fa-fw"></i> Area Chart Example
+                            
+                            Recovery Overview
+
                             <div class="pull-right">
+                                
                                 <div class="btn-group">
+                                    
                                     <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                                         Actions
                                         <span class="caret"></span>
                                     </button>
+
                                     <ul class="dropdown-menu pull-right" role="menu">
-                                        <li><a href="#">Action</a>
-                                        </li>
-                                        <li><a href="#">Another action</a>
-                                        </li>
-                                        <li><a href="#">Something else here</a>
-                                        </li>
+                                        <li><a href="#">Show Percentage</a></li>
+                                        <li><a href="#">Show Amounts</a></li>
+                                        <li><a href="#">Something else here</a></li>
                                         <li class="divider"></li>
-                                        <li><a href="#">Separated link</a>
-                                        </li>
+                                        <li><a href="#">Separated link</a></li>
                                     </ul>
+
                                 </div>
+
                             </div>
+                            
+
+                           
+
                         </div>
-                        <div class="panel-body">
+                        
+                        
+                          <div class="panel-body">
                             <div id="morris-area-chart"></div>
                         </div>
+                       
+                        
+                      <script>
+                          
+                          var chart = Morris.Bar({ element: 'morris-area-chart',
+                                                    data: "[0,0]",
+                                                    xkey: 'y',
+                                                    ykeys: ['a', 'b', 'c', 'd'],
+                                                    labels: ['Council Tax', 'Housing Arrears', 'Housing Benifits', 'Parking'],
+                                                    ymin: 0.0,
+                                                    ymax: 100.0});
+
+                          displayPercentageReport();
+
+                          
+
+                          function displayPercentageReport() {
+                              $.ajax({
+                                  type: "POST",
+                                  url: "DataService.aspx/GetDashboardDataPercentByYear",
+                                  data: "{'sourceId':'0','historic':'1'}",
+                                  contentType: "application/json; charset=utf-8",
+                                  dataType: "json",
+                                  success: function(result) {
+                                      var jsonValue = jQuery.parseJSON(result.d);
+                                      chart.setData(jsonValue);
+                                  }
+                              });
+                          }
+
+                          function displayAmountReport() {
+                              $.ajax({
+                                  type: "POST",
+                                  url: "DataService.aspx/GetDashboardDataAmountByYear",
+                                  data: "{'sourceId':'0','historic':'1'}",
+                                  contentType: "application/json; charset=utf-8",
+                                  dataType: "json",
+                                  success: function (result) {
+                                      var jsonValue = jQuery.parseJSON(result.d);
+                                      chart.setData(jsonValue);
+                                      chart.ymax = 10000000;
+                                  }
+                              });
+                          }
+
+                          function displayDebtsReport() {
+                              $.ajax({
+                                  type: "POST",
+                                  url: "DataService.aspx/GetDashboardDataDebtsByYear",
+                                  data: "{'sourceId':'0','historic':'1'}",
+                                  contentType: "application/json; charset=utf-8",
+                                  dataType: "json",
+                                  success: function (result) {
+                                      var jsonValue = jQuery.parseJSON(result.d);
+                                      chart.setData(jsonValue);
+                                      chart.ymax = 10000000;
+                                  }
+                              });
+                          }
+
+                          function displayBalanceReport() {
+                              $.ajax({
+                                  type: "POST",
+                                  url: "DataService.aspx/GetDashboardDataBalanceByYear",
+                                  data: "{'sourceId':'0','historic':'1'}",
+                                  contentType: "application/json; charset=utf-8",
+                                  dataType: "json",
+                                  success: function (result) {
+                                      var jsonValue = jQuery.parseJSON(result.d);
+                                      chart.setData(jsonValue);
+                                      chart.ymax = 10000000;
+                                  }
+                              });
+                          }
+
+                          function displayAverageDebtValueReport() {
+                              $.ajax({
+                                  type: "POST",
+                                  url: "DataService.aspx/GetDashboardDataBalanceByYear",
+                                  data: "{'sourceId':'0','historic':'1'}",
+                                  contentType: "application/json; charset=utf-8",
+                                  dataType: "json",
+                                  success: function (result) {
+                                      var jsonValue = jQuery.parseJSON(result.d);
+                                      chart.setData(jsonValue);
+                                      chart.ymax = 10000000;
+                                  }
+                              });
+                          }
+
+                          
+
+
+                      </script>
+
+
                     </div>
                 </div>
                 <div class="col-lg-4">
@@ -302,5 +412,7 @@
                         </div>
                     </div>
                 </div>
+        
+
 </asp:Content>
 

@@ -33,10 +33,24 @@
                         <input class="form-control" id="amountTo" name="lastName">
                     </div>
                 </div>
+                
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Stream Count</label>
+                        <select class="form-control" id="debtStreamCount">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                        </select>
+                    </div>
+                </div>
+                
+
                 <div style="clear: both;"></div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <label>Debt Streem</label>
+                        <label>Includes Debt Streem</label>
                         <select class="form-control" id="debtStreamCode">
                             <option value="1">Council Tax</option>
                             <option value="2">Housing Benifit</option>
@@ -66,7 +80,7 @@
                             <option value="3">Within Last Quarter</option>
                             <option value="4">Within Last Year</option>
                             <option value="5">Within Last Two Years</option>
-                            <option value="6">Within Last Six Yeasr</option>
+                            <option value="6">Within Last Six Years</option>
                             <option value="7">Six Years Of Greater</option>
                         </select>
                     </div>
@@ -88,7 +102,7 @@
                     <table class="table table-striped table-bordered table-hover" id="searchTable">
                         <thead> 
                             <tr>
-                                <th class="lastname">Last Name</th>
+                                <th class="full_name">Full Name</th>
                                 <th>Full Address</th>
                                 <th>Debt Stream</th>
                                 <th>No. Debts</th>

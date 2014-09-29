@@ -85,6 +85,7 @@
                                 <th>Total Debt</th>
                                 <th class="source"></th>
                                 <th class="pin_id"></th>
+                                <th class="cn_pin"></th>
                             </tr>
                         </thead>
                     </table>

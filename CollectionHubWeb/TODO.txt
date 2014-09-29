@@ -26,13 +26,19 @@
 ✔ AJH - Set recovery period & refresh recovery grid
 ✔ AJH - Show Address Grid
 
+	AJH - Show all three charts on dashboard
 	AJH - Show Arrangements Grid
 	AJH - Code to add new arrangement
+	AJH - Display schedule
 	AJH - Code to edit an arrangemwent
+
 	AJH - Dashboard Screens 
+
 	AJH - Show debt search results in two stages
 	AJH - Export to csv the debt search results
 	AJH - Set party as primary party
+	AJH - Lookup table for payment methods
+
 
   AJH - Create Interfaces for all Poco's
   AJH - New Recovery Cycle Date Validation

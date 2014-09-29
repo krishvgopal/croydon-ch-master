@@ -9,7 +9,7 @@ function doSearch() {
     $.ajax({
         type: "POST",
         url: "DataService.aspx/SearchDebts",
-        data: "{'amountFrom':'" + $("#amountFrom").val() + "', 'amountTo':'" + $("#amountTo").val() + "', 'debtStreamCount':'1', 'includesStreamCode':'" + $("#debtStreamCode").val() + "', 'lastPaymentCode':'" + $("#lastPayment").val() + "', 'debtAgeCode':'" + $("#debtAge").val() + "'}",
+        data: "{'amountFrom':'" + $("#amountFrom").val() + "', 'amountTo':'" + $("#amountTo").val() + "', 'debtStreamCount':'" + $("#debtStreamCount").val() + "', 'includesStreamCode':'" + $("#debtStreamCode").val() + "', 'lastPaymentCode':'" + $("#lastPayment").val() + "', 'debtAgeCode':'" + $("#debtAge").val() + "'}",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
@@ -19,7 +19,7 @@ function doSearch() {
                 "aaData": result.Results,
                 aoColumns: [
                     
-                    { mData: 'LastName' },
+                    { mData: 'FullName' },
                     { mData: 'FullAddress' },
                     { mData: 'DebtStream'},
                     { mData: 'NumberOfDebts' },
@@ -32,14 +32,14 @@ function doSearch() {
                 ]
                 ,
                 "aoColumnDefs": [{
-                      "aTargets": ["lastname"]
+                      "aTargets": ["full_name"]
                     , "mRender": function (value, type, full) {
-                        return '<a href="DebtView.aspx?source_ref=' + full.Pin + '&source=' + full.Source + '" target=\"_blank\" ">' + full.LastName + '</a>';
+                        return '<a href="DebtView.aspx?cn_pin=' + full.Pin + '" target=\"_blank\" ">' + full.FullName + '</a>';
                     }
                 },
                 {
                     "aTargets": ["source"]
-                    , "bVisible": false
+                    , "bVisible": true
                 },{
                     "aTargets": ["pin"]
                     , "bVisible": false
