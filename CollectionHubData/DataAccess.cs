@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 
 namespace CollectionHubData
@@ -17,7 +18,7 @@ namespace CollectionHubData
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
 
             sqlDataConnection.Open();
-            using (SqlCommand sqlCommand = new SqlCommand("CHP_GetNameAddress", sqlDataConnection))
+            using (var sqlCommand = new SqlCommand("CHP_GetNameAddress", sqlDataConnection))
             {
                 sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
 
@@ -46,7 +47,7 @@ namespace CollectionHubData
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
 
             sqlDataConnection.Open();
-            using (SqlCommand sqlCommand = new SqlCommand("CH_AUTHENTICATE_USER", sqlDataConnection))
+            using (var sqlCommand = new SqlCommand("CH_AUTHENTICATE_USER", sqlDataConnection))
             {
                 sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                 sqlCommand.Parameters.Add(new SqlParameter("LoginName", loginName));
@@ -69,11 +70,11 @@ namespace CollectionHubData
         }
         public bool SetRecoveryCycle(int debtId, int recoveryCycleId, int userId, DateTime recoveryDateTime)
         {
-            bool returnvalue = false;
-            using (SqlConnection sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            var returnvalue = false;
+            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
             {
                 sqlDataConnection.Open();
-                using (SqlCommand sqlCommand = new SqlCommand("CHP_RECOVERY_HISTORY_CREATE", sqlDataConnection))
+                using (var sqlCommand = new SqlCommand("CHP_RECOVERY_HISTORY_CREATE", sqlDataConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add(new SqlParameter("DebtId",    debtId));
@@ -91,11 +92,11 @@ namespace CollectionHubData
         }
         public bool CreateDebtGroup(string debtIdString, int userId, int partyPin, string source)
         {
-            bool returnvalue = false;
-            using (SqlConnection sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            var returnvalue = false;
+            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
             {
                 sqlDataConnection.Open();
-                using (SqlCommand sqlCommand = new SqlCommand("[CHP_DEBTGROUP_CREATE]", sqlDataConnection))
+                using (var sqlCommand = new SqlCommand("[CHP_DEBTGROUP_CREATE]", sqlDataConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add(new SqlParameter("DebtIdList", debtIdString));
@@ -113,11 +114,11 @@ namespace CollectionHubData
         }
         public bool RemoveDebtFromGroup(int debtId)
         {
-            bool returnvalue = false;
-            using (SqlConnection sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            var returnvalue = false;
+            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
             {
                 sqlDataConnection.Open();
-                using (SqlCommand sqlCommand = new SqlCommand("[CHP_DEBTGROUP_CREATE]", sqlDataConnection))
+                using (var sqlCommand = new SqlCommand("[CHP_DEBTGROUP_CREATE]", sqlDataConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add(new SqlParameter("DebtId", debtId));
@@ -134,11 +135,11 @@ namespace CollectionHubData
         }
         public bool CreateNote(int debtId, int userId, string noteText)
         {
-            bool returnvalue = false;
-            using (SqlConnection sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            var returnvalue = false;
+            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
             {
                 sqlDataConnection.Open();
-                using (SqlCommand sqlCommand = new SqlCommand("CH_DEBT_NOTE_CREATE", sqlDataConnection))
+                using (var sqlCommand = new SqlCommand("CH_DEBT_NOTE_CREATE", sqlDataConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add(new SqlParameter("debtId", debtId));
@@ -155,11 +156,11 @@ namespace CollectionHubData
         }
         public bool CreateDebtAttribute(int debtId, int userId, int attributeId, bool isCurrent, string attributeValue)
         {
-            bool returnvalue = false;
-            using (SqlConnection sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            var returnvalue = false;
+            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
             {
                 sqlDataConnection.Open();
-                using (SqlCommand sqlCommand = new SqlCommand("CH_DEBT_ATTRIBUTE_CREATE", sqlDataConnection))
+                using (var sqlCommand = new SqlCommand("CH_DEBT_ATTRIBUTE_CREATE", sqlDataConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add(new SqlParameter("debtId", debtId));
@@ -178,11 +179,11 @@ namespace CollectionHubData
         }
         public bool CreatePersonAttribute(int sourceRef, int userId, int attributeId, bool isCurrent, string attributeValue)
         {
-            bool returnvalue = false;
-            using (SqlConnection sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            var returnvalue = false;
+            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
             {
                 sqlDataConnection.Open();
-                using (SqlCommand sqlCommand = new SqlCommand("CH_PERSON_ATTRIBUTE_CREATE", sqlDataConnection))
+                using (var sqlCommand = new SqlCommand("CH_PERSON_ATTRIBUTE_CREATE", sqlDataConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add(new SqlParameter("SourcePin", sourceRef));
@@ -201,11 +202,11 @@ namespace CollectionHubData
         }
         public bool SetPersonAttributeCurrent(int personAttributeId)
         {
-            bool returnvalue = false;
-            using (SqlConnection sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            var returnvalue = false;
+            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
             {
                 sqlDataConnection.Open();
-                using (SqlCommand sqlCommand = new SqlCommand("CH_SET_PERSON_ATTRIBUTE_CURRENT", sqlDataConnection))
+                using (var sqlCommand = new SqlCommand("CH_SET_PERSON_ATTRIBUTE_CURRENT", sqlDataConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add(new SqlParameter("personAttributeId", personAttributeId));
@@ -221,11 +222,11 @@ namespace CollectionHubData
 
         public List<DebtNote> GetDebtNotes(int debtId)
         {
-            List<DebtNote> returnValue = new List<DebtNote>();
-            using (SqlConnection sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            var returnValue = new List<DebtNote>();
+            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
             {
                 sqlDataConnection.Open();
-                using (SqlCommand sqlCommand = new SqlCommand("CH_DEBT_NOTES_LIST", sqlDataConnection))
+                using (var sqlCommand = new SqlCommand("CH_DEBT_NOTES_LIST", sqlDataConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add(new SqlParameter("DebtId", debtId));
@@ -250,7 +251,7 @@ namespace CollectionHubData
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
 
             sqlDataConnection.Open();
-            using (SqlCommand sqlCommand = new SqlCommand("FULLNAME_FULLADDRESS_SEARCH", sqlDataConnection))
+            using (var sqlCommand = new SqlCommand("FULLNAME_FULLADDRESS_SEARCH", sqlDataConnection))
             {
                 sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
 
@@ -282,9 +283,9 @@ namespace CollectionHubData
         }
         public List<SampleData> GetSampleData(string fixedValue, int count)
         {
-            List<SampleData> returnValue = new List<SampleData>();
+            var returnValue = new List<SampleData>();
 
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
                 returnValue.Add(new SampleData(fixedValue + "-" + i.ToString()));
             }
@@ -293,11 +294,11 @@ namespace CollectionHubData
         }
         public List<RecoveryCycleItem> GetRecoveryCycleHistory(int debtId)
         {
-            List<RecoveryCycleItem> returnValue = new List<RecoveryCycleItem>();
+            var returnValue = new List<RecoveryCycleItem>();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
 
             sqlDataConnection.Open();
-            using (SqlCommand sqlCommand = new SqlCommand("CHP_RECOVERY_HISTORY_SELECT", sqlDataConnection))
+            using (var sqlCommand = new SqlCommand("CHP_RECOVERY_HISTORY_SELECT", sqlDataConnection))
             {
                 sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                 sqlCommand.Parameters.Add(new SqlParameter("DebtId", debtId));
@@ -317,11 +318,11 @@ namespace CollectionHubData
         }
         public List<RecoveryCycle> GetRecoveryCycles()
         {
-            List<RecoveryCycle> returnValue = new List<RecoveryCycle>();
+            var returnValue = new List<RecoveryCycle>();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
 
             sqlDataConnection.Open();
-            using (SqlCommand sqlCommand = new SqlCommand("CHP_RECOVERY_CYCLE_LIST", sqlDataConnection))
+            using (var sqlCommand = new SqlCommand("CHP_RECOVERY_CYCLE_LIST", sqlDataConnection))
             {
                 sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
 
@@ -346,7 +347,7 @@ namespace CollectionHubData
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
 
             sqlDataConnection.Open();
-            using (SqlCommand sqlCommand = new SqlCommand("CHP_GETPERSONDEBTS", sqlDataConnection))
+            using (var sqlCommand = new SqlCommand("CHP_GETPERSONDEBTS", sqlDataConnection))
             {
                 sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
 
@@ -371,11 +372,11 @@ namespace CollectionHubData
         }
         public List<DebtAttribute> GetDebtAttribute(int debtId)
         {
-            List<DebtAttribute> returnValue = new List<DebtAttribute>();
-            using (SqlConnection sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            var returnValue = new List<DebtAttribute>();
+            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
             {
                 sqlDataConnection.Open();
-                using (SqlCommand sqlCommand = new SqlCommand("CH_DEBT_ATTRIBUTES_LIST", sqlDataConnection))
+                using (var sqlCommand = new SqlCommand("CH_DEBT_ATTRIBUTES_LIST", sqlDataConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add(new SqlParameter("debtId", debtId));
@@ -396,11 +397,11 @@ namespace CollectionHubData
         }
         public List<PersonAttribute> GetPersonAttribute(int partyPin)
         {
-            List<PersonAttribute> returnValue = new List<PersonAttribute>();
-            using (SqlConnection sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            var returnValue = new List<PersonAttribute>();
+            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
             {
                 sqlDataConnection.Open();
-                using (SqlCommand sqlCommand = new SqlCommand("CH_PERSON_ATTRIBUTES_LIST", sqlDataConnection))
+                using (var sqlCommand = new SqlCommand("CH_PERSON_ATTRIBUTES_LIST", sqlDataConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add(new SqlParameter("partyPin", partyPin));
@@ -421,11 +422,11 @@ namespace CollectionHubData
         }
         public List<PersonAttribute> GetCurrentAttribute(int partyPin)
         {
-            List<PersonAttribute> returnValue = new List<PersonAttribute>();
-            using (SqlConnection sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            var returnValue = new List<PersonAttribute>();
+            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
             {
                 sqlDataConnection.Open();
-                using (SqlCommand sqlCommand = new SqlCommand("CH_CURRENT_ATTRIBUTES_LIST", sqlDataConnection))
+                using (var sqlCommand = new SqlCommand("CH_CURRENT_ATTRIBUTES_LIST", sqlDataConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add(new SqlParameter("partyPin", partyPin));
@@ -446,11 +447,11 @@ namespace CollectionHubData
         }
         public List<AttributeItem> GetAttributeList(bool listDebtAttributes, bool listPersonAttributes)
         {
-            List<AttributeItem> returnValue = new List<AttributeItem>();
-            using (SqlConnection sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            var returnValue = new List<AttributeItem>();
+            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
             {
                 sqlDataConnection.Open();
-                using (SqlCommand sqlCommand = new SqlCommand("CH_GET_ATTRIBUTES", sqlDataConnection))
+                using (var sqlCommand = new SqlCommand("CH_GET_ATTRIBUTES", sqlDataConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add(new SqlParameter("listDebtAttributes", listDebtAttributes));
@@ -472,11 +473,11 @@ namespace CollectionHubData
         }
         public List<Payment> GetPaymentsByDebtId(int debtId)
         {
-            List<Payment> returnValue = new List<Payment>();
-            using (SqlConnection sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            var returnValue = new List<Payment>();
+            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
             {
                 sqlDataConnection.Open();
-                using (SqlCommand sqlCommand = new SqlCommand("CHP_PAYMENTS_byDebtId", sqlDataConnection))
+                using (var sqlCommand = new SqlCommand("CHP_PAYMENTS_byDebtId", sqlDataConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add(new SqlParameter("DebtId", debtId));
@@ -495,5 +496,136 @@ namespace CollectionHubData
             }
             return returnValue;
         }
+        public List<DebtParties> GetPartiesByDebtId(int debtId)
+        {
+            var returnValue = new List<DebtParties>();
+            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            {
+                sqlDataConnection.Open();
+                using (var sqlCommand = new SqlCommand("CHP_PARTIES_ByDebt", sqlDataConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add(new SqlParameter("DebtId", debtId));
+
+                    var dataReader = sqlCommand.ExecuteReader();
+
+                    if (dataReader.HasRows)
+                    {
+                        while (dataReader.Read())
+                        {
+                            returnValue.Add(new DebtParties(dataReader));
+                        }
+                    }
+                }
+                sqlDataConnection.Close();
+            }
+            return returnValue;
+        }
+        public List<LinkedAddress> GetLinkedAddresses(int partyPin)
+        {
+            var returnValue = new List<LinkedAddress>();
+            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            {
+                sqlDataConnection.Open();
+                using (var sqlCommand = new SqlCommand("[CH_ADDRESS_LIST]", sqlDataConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add(new SqlParameter("Pin", partyPin));
+
+                    var dataReader = sqlCommand.ExecuteReader();
+
+                    if (dataReader.HasRows)
+                    {
+                        while (dataReader.Read())
+                        {
+                            returnValue.Add(new LinkedAddress(dataReader));
+                        }
+                    }
+                }
+                sqlDataConnection.Close();
+            }
+            return returnValue;   
+        }
+
+        public List<Arrangement> GetArrangements(int debtId)
+        {
+            var returnValue = new List<Arrangement>();
+            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            {
+                sqlDataConnection.Open();
+                using (var sqlCommand = new SqlCommand("CHP_ARRANGEMENTS_BY_DEBTID", sqlDataConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add(new SqlParameter("DebtId", debtId));
+
+                    var dataReader = sqlCommand.ExecuteReader();
+
+                    if (dataReader.HasRows)
+                    {
+                        while (dataReader.Read())
+                        {
+                            returnValue.Add(new Arrangement(dataReader));
+                        }
+                    }
+                }
+                sqlDataConnection.Close();
+            }
+            return returnValue;
+        }
+
+        public DebtSearchResult DebtSearch(decimal amountFrom, decimal amountTo, int debtStreamCount, int includesStreamCode, int lastPaymentCode, int debtAgeCode)
+        {
+            var returnValue = new DebtSearchResult();
+            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            {
+                sqlDataConnection.Open();
+                using (var sqlCommand = new SqlCommand("CH_TOTALS_COUNT", sqlDataConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add(new SqlParameter("AmountFrom", amountFrom));
+                    sqlCommand.Parameters.Add(new SqlParameter("AmountTo", amountTo));
+                    sqlCommand.Parameters.Add(new SqlParameter("DebtStreamCount", debtStreamCount));
+                    sqlCommand.Parameters.Add(new SqlParameter("IncludesStreamCode", includesStreamCode));
+                    sqlCommand.Parameters.Add(new SqlParameter("LastPaymentCode", lastPaymentCode));
+                    sqlCommand.Parameters.Add(new SqlParameter("DebtAgeCode", debtAgeCode));
+                    sqlCommand.Parameters.Add(new SqlParameter("List", 1));
+
+                    sqlCommand.Parameters.Add(new SqlParameter("Records", SqlDbType.Int));
+                    sqlCommand.Parameters["Records"].Direction = ParameterDirection.Output;
+                    
+                    sqlCommand.Parameters.Add(new SqlParameter("Amount",  SqlDbType.Float));
+                    sqlCommand.Parameters["Amount"].Direction  = ParameterDirection.Output;
+
+                    var dataReader = sqlCommand.ExecuteReader();
+
+                    if (dataReader.HasRows)
+                    {
+                        while (dataReader.Read())
+                        {
+                            returnValue.RecordCount = Convert.ToInt32(dataReader[0].ToString());
+                            returnValue.TotalValue = Convert.ToDecimal(dataReader[1].ToString());
+                        }
+                    }
+
+                    dataReader.NextResult();
+
+                    if (dataReader.HasRows)
+                    {
+                        var results = new List<DebtSearchResultItem>();
+                        
+                        while (dataReader.Read())
+                        {
+                            results.Add(new DebtSearchResultItem(dataReader));
+                        }
+
+                        returnValue.Results = results;
+                    }
+                }
+                sqlDataConnection.Close();
+            }
+            return returnValue;
+        }
+
+
     }
 }

@@ -15,8 +15,8 @@ namespace CollectionHubData
         public string   Status { get; set; }
         public string   Type { get; set; }
         public string   RecoveryCycle { get; set; }
-        public Nullable<DateTime> DebtDate { get; set; }
-        public Nullable<DateTime> LastActionDate { get; set; }
+        public DateTime? DebtDate { get; set; }
+        public DateTime? LastActionDate { get; set; }
 
         public DebtItem() { }
         public DebtItem(System.Data.SqlClient.SqlDataReader value)

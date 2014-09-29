@@ -68,10 +68,10 @@
                         <tr>
                             <th class="select_id">Select</th>
                             <th>Debt Source</th>
-                            <th>Debt Acc Ref</th>
+                            <th>Acc Ref</th>
                             <th>Debt Reference</th>
-                            <th>Debt Total</th>
-                            <th>Debt Outstanding</th>
+                            <th>Initial Debt</th>
+                            <th>Outstanding</th>
                             <th>Recovery Cycle</th>
                             <th>Status</th>
                             <th>Type</th>
@@ -90,6 +90,7 @@
                 <li><a href="#person"       data-toggle="tab">Person Attributes</a></li>
                 <li><a href="#notes"        data-toggle="tab">Notes</a></li>
                 <li><a href="#current"      data-toggle="tab">Current Attributes</a>
+                <li><a href="#addresses"    data-toggle="tab">Related Addresses</a>
                 </li>
             </ul>
             <div class="tab-content">
@@ -120,11 +121,9 @@
                                     <th>Payment Id</th>
                                     <th>Source</th>
                                     <th>Acc. Reference</th>
-                                    <th>Debt Ref.</th>
-                                    <th>Party Pin</th>
+                                    <th>Payment Ref.</th>
                                     <th>Amount</th>
                                     <th>Date</th>
-                                    <th>Created Date</th>
                                 </tr>
                             </thead>
                         </table>
@@ -136,11 +135,9 @@
                         <table class="table table-striped table-bordered table-hover" id="tableParties">
                             <thead>
                                 <tr>
-                                    <th>Recovery Cycle</th>
-                                    <th>Stage</th>
-                                    <th>Method</th>
-                                    <th>Status</th>
-                                    <th>Complete</th>
+                                    <th>PartyType</th>
+                                    <th>PartyFullName</th>
+                                    <th>PrimaryFlag</th>
                                 </tr>
                             </thead>
                         </table>
@@ -222,6 +219,21 @@
                             </thead>
                         </table>
                     </div>
+                </div>
+                <div class="tab-pane fade" id="addresses">
+                    <br />
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover" id="tableAddress">
+                            <thead>
+                                <tr>
+                                    <th class="address">Full Address</th>
+                                    <th class="from_date">From Date</th>
+                                    <th class="until_date">Until Date</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <%--<a data-toggle="modal" href="modals/CreateNewAddress.html" data-target="#addressModal" class="btn btn-outline btn-primary">Create New Address</a>--%>
                 </div> 
             </div>
         </div>

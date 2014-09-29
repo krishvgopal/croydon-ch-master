@@ -9,15 +9,17 @@ public partial class Index : System.Web.UI.Page
     }
     protected void submitForm_Click(object sender, EventArgs e)
     {
-        DataAccess da   = new DataAccess();
-        UserData ud     = da.AuthenticateUser(authLoginName.Text, authPassword.Text);
+        var da = new DataAccess();
+        var ud = da.AuthenticateUser(authLoginName.Text, authPassword.Text);
 
         if (ud != null)
         {
             Session["USERDATA"] = ud;
             Response.Redirect("~/Dashboard.aspx");
         }
-
-        badAuth.Visible = true;
+        else
+        {
+            badAuth.Visible = true;
+        }
     }
 }

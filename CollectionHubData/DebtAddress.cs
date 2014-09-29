@@ -4,9 +4,9 @@ namespace CollectionHubData
 {
     public class DebtAddress
     {
-        public string Source    { get; set; }
-        public string Pin       { get; set; }
-        public string UPRN      { get; set; }
+        public string Source        { get; set; }
+        public string Pin           { get; set; }
+        public string UPRN          { get; set; }
         public string FullAddress   { get; set; }
         public string FullName      { get; set; }
         public string RespOfficer   { get; set; }

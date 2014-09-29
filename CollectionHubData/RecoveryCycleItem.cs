@@ -4,7 +4,7 @@ namespace CollectionHubData
 {
     public class RecoveryCycleItem
     {
-        public int RecoveryCycleItemId { get; set; }
+        public int    RecoveryCycleItemId { get; set; }
         public string RecoveryCycle { get; set; }
         public string Stage { get; set; }
         public string StageType { get; set; }

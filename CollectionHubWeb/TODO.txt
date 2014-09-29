@@ -1,44 +1,38 @@
-﻿✹ AJH - Changed [FULLNAME_FULLADDRESS_SEARCH] to add lastname into search result
-
+﻿✔ AJH - Changed [FULLNAME_FULLADDRESS_SEARCH] to add lastname into search result
 ✔ AJH - Show the debts grid using datatables
 ✔ AJH - Why does the datagrid only show the one source, should it not be everything?
-
 ✔ AJH - Recovery Grid
 ✔ AJH - Set Recovery Cycle
 ✔ AJH - Payments Grid UI Load Grid
+✔ AJH - Create debt group
+✔ AJH - Remove debt group
+✔ AJH - Debt Attributes Add
+✔ AJH - Debt Attributes List
+✔ AJH - Debt Attributes Table
+✔ AJH - Debt Attributes Procedures
+✔ AJH - Debt Attributes UI Load Grid
+✔ AJH - Debt Attributes UI Create New
+✔ AJH - Person Attributes Table
+✔ AJH - Person Attributes Procedures
+✔ AJH - Person Attributes UI Load Grid
+✔ AJH - Person Attributes UI Create New
+✔ AJH - Notes Table
+✔ AJH - Notes Procedures
+✔ AJH - Notes UI Load Grid
+✔ AJH - Notes UI Create New
+✔ AJH - Add Note & Refresh
+✔ AJH - Current Attributes Procedure
+✔ AJH - Current Attributes UI
+✔ AJH - Set recovery period & refresh recovery grid
+✔ AJH - Show Address Grid
 
-- - - - - - - - - - - - -
-- AJH - Create debt group
-- AJH - Remove debt group
-- - - - - - - - - - - - -
+	AJH - Show Arrangements Grid
+	AJH - Code to add new arrangement
+	AJH - Code to edit an arrangemwent
+	AJH - Dashboard Screens 
+	AJH - Show debt search results in two stages
+	AJH - Export to csv the debt search results
+	AJH - Set party as primary party
 
-
-	Debt Attributes Add
-	Debt Attributes List
-	
-
-
-
-  AJH - Debt Attributes Table
-  AJH - Debt Attributes Procedures
-  AJH - Debt Attributes UI Load Grid
-  AJH - Debt Attributes UI Create New
-
-  AJH - Person Attributes Table
-  AJH - Person Attributes Procedures
-  AJH - Person Attributes UI Load Grid
-  AJH - Person Attributes UI Create New
-
-  AJH - Notes Table
-  AJH - Notes Procedures
-  AJH - Notes UI Load Grid
-  AJH - Notes UI Create New
-  AJH - Add Note & Refresh
-
-  AJH - Current Attributes Procedure
-  AJH - Current Attributes UI
-
-  AJH - New Recovery Cycle Date Validation
-  
-- AJH - Set recovery period & refresh recovery grid
   AJH - Create Interfaces for all Poco's
+  AJH - New Recovery Cycle Date Validation

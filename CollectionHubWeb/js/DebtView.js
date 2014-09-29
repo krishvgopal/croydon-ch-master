@@ -13,6 +13,10 @@ $.ajax({
     dataType: "json",
     success: function (data) {
         loadDebtsView(data);
+
+        var sourcePin = $("#sourceRefValue").val();
+        alert(sourcePin);
+        refreshAddresses(sourcePin);
     }
 });
 
@@ -23,10 +27,13 @@ function selectRow(idValue) {
 
     refreshRecoveryCycles(idValue);
     refreshPaymentHistory(idValue);
+    refreshParties(idValue);
     refreshDebtAttributes(idValue);
     refreshPersonAttributes(sourcePin);
     refreshCurrentAttributes(sourcePin);
     refreshNotes(idValue);
+    refreshAddresses(sourcePin);
+    refreshArrangements(idValue);
 }
 
 function loadDebtsView(result) {
@@ -37,14 +44,11 @@ function loadDebtsView(result) {
         "aaData": result,
         aoColumns: [
             { mData: 'DebtId' },
-            //{ mData: 'DebtId' },
             { mData: 'DebtSource' },
             { mData: 'DebtAccRef' },
             { mData: 'DebtReference' },
             { mData: 'DebtTotal' },
             { mData: 'DebtOutstanding' },
-            //{ mData: 'PartyPin' },
-            //{ mData: 'PropertyReference' },
             { mData: 'RecoveryCycle' },
             { mData: 'Status' },
             { mData: 'Type' }
@@ -55,20 +59,20 @@ function loadDebtsView(result) {
             , "aTargets": ["debt_id"]
             , "mRender": function (value, type, full) {
                 return '<a href="#" onclick="selectRow(' + value + ')">' + value + '</a>';}
+            }, {
+                  "sTitle": "<input id=\"debtGroupAll\" type=\"checkbox\" class=\"debtGroupAll\">"
+                , "bSortable": false
+                , "bSearchable": false
+                , "aTargets": ["select_id"]
+                , "mRender": function (value, type, full) {
+                    return '<input type="checkbox" class="debtGroupItems" debtGroupDebtId="' + value + '">';
                 },
-            {
-                "sTitle": "<input id=\"debtGroupAll\" type=\"checkbox\" class=\"debtGroupAll\">"
-            , "bSortable": false
-            , "bSearchable": false
-            , "aTargets": ["select_id"]
-            , "mRender": function (value, type, full) {
-                return '<input type="checkbox" class="debtGroupItems" debtGroupDebtId="' + value + '">';
-            },
             }],
-        "initComplete": function (settings, json) {
+            "initComplete": function (settings, json) {
             $("#debtGroupAll").click(function () {
                 $(".debtGroupItems").prop('checked', $(this).prop('checked'));
             });
+
             $('#dataTableMain tbody').on('click', 'tr', function (ee) {
 
                 var selectedRowHtml     = $(ee.currentTarget.cells[0]);
@@ -183,19 +187,96 @@ function refreshPaymentHistory(debtId) {
                     { mData: 'PaymentSource' },
                     { mData: 'PaymentSourceAccountReference' },
                     { mData: 'PaymentDebtReference' },
-                    { mData: 'PaymentPartyPin' },
                     { mData: 'PaymentAmount' },
-                    { mData: 'PaymentDate' },
-                    { mData: 'PaymentCreatedDate' }
+                    { mData: 'PaymentDate' }
                 ]
             });
         }
     });
 }
+function refreshParties(debtId) {
+    $.ajax({
+        type: "POST",
+        url: "DataService.aspx/GetPartiesByDebt",
+        data: "{'debtId':'" + debtId + "'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            if (result.hasOwnProperty("d")) { result = result.d; }
 
-function refreshParties(debtId) { }
-function refreshArrangements(debtId) { }
+            $("#tableParties").dataTable({
+                "destroy": true,
+                "aaData": result,
+                aoColumns: [
+                    { mData: 'PartyType' },
+                    { mData: 'PartyFullName' },
+                    { mData: 'PrimaryFlag' }
+                ],
+                //"columnDefs": [
+                //    { "width": "200px", "targets": 0 },
+                //    { "width": "*%", "targets": 1 }]
+            });
 
+        }
+    });
+}
+function refreshArrangements(debtId) {
+    $.ajax({
+        type: "POST",
+        url: "DataService.aspx/GetArrangements",
+        data: "{'debtId':'" + debtId + "'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            if (result.hasOwnProperty("d")) { result = result.d; }
+            console.log(result);
+            $("#tableArrangements").dataTable({
+                "destroy": true,
+                "aaData": result,
+                aoColumns: [
+                    { mData: 'CreatedDate' },
+                    { mData: 'AggreedAmount' },
+                    { mData: 'Frequency' },
+                    { mData: 'FrequencyDescription' },
+                    { mData: 'InstallmentAmount' },
+                    { mData: 'NumberOfInstallments' },
+                    { mData: 'AgmStatus' }]
+                //, "aoColumnDefs": [
+                //     {
+                //         "sTitle": "Address"
+                //        , "aTargets": ["address"]
+                //        , "mRender": function (value, type, full) {
+                //            return value;
+                //        }
+                //     }, {
+                //         "sTitle": "From Date"
+                //        , "aTargets": ["from_date"]
+                //        , "mRender": function (value, type, full) {
+                //            if (value != null) {
+                //                var dtStart = new Date(parseInt(value.substr(6)));
+                //                var dtStartWrapper = moment(dtStart);
+                //                return dtStartWrapper.format('DD/MM/YYYY');
+                //            } else { return ''; }
+                //        }
+                //     }, {
+                //         "sTitle": "Until Date"
+                //        , "aTargets": ["until_date"]
+                //        , "mRender": function (value, type, full) {
+                //            if (value != null) {
+                //                var dtStart = new Date(parseInt(value.substr(6)));
+                //                var dtStartWrapper = moment(dtStart);
+                //                return dtStartWrapper.format('DD/MM/YYYY');
+                //            } else { return ''; }
+                //        }
+                //     },
+                //    { "width": "*%", "targets": 0 },
+                //    { "width": "150px", "targets": 1 },
+                //    { "width": "150px", "targets": 2 }
+                //]
+            });
+        }
+    });
+}
 function refreshDebtAttributes(debtId) {
     $.ajax({
         type: "POST",
@@ -340,6 +421,58 @@ function refreshCurrentAttributes(partyPin) {
         }
     });
 }
+function refreshAddresses(partyPin) {
+    $.ajax({
+        type: "POST",
+        url: "DataService.aspx/GetLinkedAddress",
+        data: "{'sourcePin':'" + partyPin + "'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            if (result.hasOwnProperty("d")) { result = result.d; }
+            console.log(result);
+            $("#tableAddress").dataTable({
+                "destroy": true,
+                "aaData": result,
+                aoColumns: [
+                    { mData: 'Address' },
+                    { mData: 'FromDate' },
+                    { mData: 'UntilDate' }],
+                "aoColumnDefs": [
+                     {
+                         "sTitle": "Address"
+                        , "aTargets": ["address"]
+                        , "mRender": function (value, type, full) {
+                             return value;
+                         }
+                     },{
+                         "sTitle": "From Date"
+                        , "aTargets": ["from_date"]
+                        , "mRender": function (value, type, full) {
+                             if (value != null) {
+                                 var dtStart = new Date(parseInt(value.substr(6)));
+                                 var dtStartWrapper = moment(dtStart);
+                                 return dtStartWrapper.format('DD/MM/YYYY');
+                             } else {return '';}
+                         }
+                     },{
+                         "sTitle": "Until Date"
+                        , "aTargets": ["until_date"]
+                        , "mRender": function (value, type, full) {
+                             if (value != null) {
+                                 var dtStart = new Date(parseInt(value.substr(6)));
+                                 var dtStartWrapper = moment(dtStart);
+                                 return dtStartWrapper.format('DD/MM/YYYY');
+                             } else {return '';}
+                         }
+                     },
+                    { "width": "*%",    "targets": 0 },
+                    { "width": "150px", "targets": 1 },
+                    { "width": "150px", "targets": 2 }]
+            });
+        }
+    });
+}
 
 function createNote() {
     $.ajax({
@@ -416,6 +549,9 @@ function createRecoveryCycle() {
         dataType: "json",
         success: function (result) {
             alert(result.d);
+        },
+        failure: function (error) {
+            alert(error.message);
         }
     });
 }

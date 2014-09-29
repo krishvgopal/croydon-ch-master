@@ -14,21 +14,24 @@ function doSearch() {
                 "destroy": true,
                 "aaData": result,
                 aoColumns: [
-                    { mData: 'Pin' },
                     { mData: 'FullName' },
                     { mData: 'FullAddress' },
                     { mData: 'DebtOutstanding' },
+                    { mData: 'Pin' },
                     { mData: 'Source' }
                 ],
                 "aoColumnDefs": [{
-                    "sTitle": "PIN ID"
-                    , "aTargets": ["pin_id"]
+                      "aTargets": ["record_selector"]
                     , "mRender": function (value, type, full) {
-                        return '<a href="DebtView.aspx?source_ref=' + value + '&source=' + full.Source + '" target=\"_blank\" ">' + value + '</a>';
+                        return '<a href="DebtView.aspx?source_ref=' + full.Pin + '&source=' + full.Source + '" target=\"_blank\" ">' + value + '</a>';
                     }
                 },{
                     "aTargets": ["source"]
-                    , "bVisible": false}
+                    , "bVisible": false
+                },{
+                    "aTargets": ["pin_id"]
+                    , "bVisible": false
+                }
                 ]
             });
             $("#searchResults").show();

@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Arrangement.cs" />
     <Compile Include="AttributesItem.cs" />
     <Compile Include="CurrentAttributes.cs" />
     <Compile Include="DataAccess.cs" />
@@ -47,7 +48,11 @@
     <Compile Include="DebtAttribute.cs" />
     <Compile Include="DebtItem.cs" />
     <Compile Include="DebtNote.cs" />
+    <Compile Include="DebtParties.cs" />
+    <Compile Include="DebtSearchResult.cs" />
+    <Compile Include="DebtSearchResultItem.cs" />
     <Compile Include="FullnameFullAddressSearchResults.cs" />
+    <Compile Include="LinkedAddress.cs" />
     <Compile Include="Payment.cs" />
     <Compile Include="PersonAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

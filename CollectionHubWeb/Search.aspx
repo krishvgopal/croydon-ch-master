@@ -68,7 +68,7 @@
                     <div class="form-group">
                         <br />
                         <button type="button" class="btn btn-default" onclick="doSearch();">Search</button>
-                        <img id="loadingImage" src="img/gif-load.gif" />
+                        <img id="loadingImage" src="img/gif-load.gif" alt="Loading Image" />
                     </div>
                 </div>
             </div>                
@@ -80,11 +80,11 @@
                     <table class="table table-striped table-bordered table-hover" id="searchTable">
                         <thead> 
                             <tr>
-                                <th class="pin_id">PIN</th>  
-                                <th>Debtor Name</th>  
+                                <th class="record_selector">Debtor Name</th>  
                                 <th>Address</th>  
                                 <th>Total Debt</th>
-                                <th class="source"></th>  
+                                <th class="source"></th>
+                                <th class="pin_id"></th>
                             </tr>
                         </thead>
                     </table>

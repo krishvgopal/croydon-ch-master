@@ -4,7 +4,7 @@ namespace CollectionHubData
 {
     public class SampleData
     {
-
+        public SampleData() { }
         public SampleData(string fixedValue)
         {
             FixedValue = fixedValue;
@@ -12,11 +12,6 @@ namespace CollectionHubData
             ColumnB = Guid.NewGuid().ToString().Substring(1, 10);
             ColumnC = Guid.NewGuid().ToString().Substring(1, 15);
             ColumnD = Guid.NewGuid().ToString().Substring(1, 5);
-        }
-
-        public SampleData()
-        {
-
         }
 
         public string FixedValue { get; set; }
