@@ -9,6 +9,7 @@
     <asp:HiddenField ID="sourceRefValue" runat="server" ClientIDMode="Static" />
     <asp:HiddenField ID="selectedDebtId" runat="server" ClientIDMode="Static" />
     <asp:HiddenField ID="cnpin" runat="server" ClientIDMode="Static" />
+    <asp:HiddenField ID="debtRowTotalValue" runat="server" ClientIDMode="Static" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="headInfo" Runat="Server">
     <am:ActionMenu ID="pageActionMenu" runat="server" />

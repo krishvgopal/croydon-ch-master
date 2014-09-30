@@ -266,142 +266,111 @@
     </asp:Content>
 
     <asp:Content ID="Content5" ContentPlaceHolderID="pageBody" Runat="Server">
-        <div class="col-lg-8">
+        
 
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            
-                            Recovery Overview
+        <div class="col-lg-12">
 
-                            <div class="pull-right">
-                                
-                                <div class="btn-group">
-                                    
-                                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                        Actions
-                                        <span class="caret"></span>
-                                    </button>
-
-                                    <ul class="dropdown-menu pull-right" role="menu">
-                                        <li><a href="#">Show Percentage</a></li>
-                                        <li><a href="#">Show Amounts</a></li>
-                                        <li><a href="#">Something else here</a></li>
-                                        <li class="divider"></li>
-                                        <li><a href="#">Separated link</a></li>
-                                    </ul>
-
-                                </div>
-
-                            </div>
-                            
-
-                           
-
+            <div class="panel panel-default">
+                
+                <div class="panel-heading">
+                    Recovery Overview
+                    <div class="pull-right">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                Actions
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu pull-right" role="menu">
+                                <li><a href="#" onclick="displayPercentageReport();">Show Percentage</a></li>
+                                <li><a href="#" onclick="displayAmountReport();">Show Amounts</a></li>
+                            </ul>
                         </div>
-                        
-                        
-                          <div class="panel-body">
-                            <div id="morris-area-chart"></div>
-                        </div>
-                       
-                        
-                      <script>
-                          
-                          var chart = Morris.Bar({ element: 'morris-area-chart',
-                                                    data: "[0,0]",
-                                                    xkey: 'y',
-                                                    ykeys: ['a', 'b', 'c', 'd'],
-                                                    labels: ['Council Tax', 'Housing Arrears', 'Housing Benifits', 'Parking'],
-                                                    ymin: 0.0,
-                                                    ymax: 100.0});
-
-                          displayPercentageReport();
-
-                          
-
-                          function displayPercentageReport() {
-                              $.ajax({
-                                  type: "POST",
-                                  url: "DataService.aspx/GetDashboardDataPercentByYear",
-                                  data: "{'sourceId':'0','historic':'1'}",
-                                  contentType: "application/json; charset=utf-8",
-                                  dataType: "json",
-                                  success: function(result) {
-                                      var jsonValue = jQuery.parseJSON(result.d);
-                                      chart.setData(jsonValue);
-                                  }
-                              });
-                          }
-
-                          function displayAmountReport() {
-                              $.ajax({
-                                  type: "POST",
-                                  url: "DataService.aspx/GetDashboardDataAmountByYear",
-                                  data: "{'sourceId':'0','historic':'1'}",
-                                  contentType: "application/json; charset=utf-8",
-                                  dataType: "json",
-                                  success: function (result) {
-                                      var jsonValue = jQuery.parseJSON(result.d);
-                                      chart.setData(jsonValue);
-                                      chart.ymax = 10000000;
-                                  }
-                              });
-                          }
-
-                          function displayDebtsReport() {
-                              $.ajax({
-                                  type: "POST",
-                                  url: "DataService.aspx/GetDashboardDataDebtsByYear",
-                                  data: "{'sourceId':'0','historic':'1'}",
-                                  contentType: "application/json; charset=utf-8",
-                                  dataType: "json",
-                                  success: function (result) {
-                                      var jsonValue = jQuery.parseJSON(result.d);
-                                      chart.setData(jsonValue);
-                                      chart.ymax = 10000000;
-                                  }
-                              });
-                          }
-
-                          function displayBalanceReport() {
-                              $.ajax({
-                                  type: "POST",
-                                  url: "DataService.aspx/GetDashboardDataBalanceByYear",
-                                  data: "{'sourceId':'0','historic':'1'}",
-                                  contentType: "application/json; charset=utf-8",
-                                  dataType: "json",
-                                  success: function (result) {
-                                      var jsonValue = jQuery.parseJSON(result.d);
-                                      chart.setData(jsonValue);
-                                      chart.ymax = 10000000;
-                                  }
-                              });
-                          }
-
-                          function displayAverageDebtValueReport() {
-                              $.ajax({
-                                  type: "POST",
-                                  url: "DataService.aspx/GetDashboardDataBalanceByYear",
-                                  data: "{'sourceId':'0','historic':'1'}",
-                                  contentType: "application/json; charset=utf-8",
-                                  dataType: "json",
-                                  success: function (result) {
-                                      var jsonValue = jQuery.parseJSON(result.d);
-                                      chart.setData(jsonValue);
-                                      chart.ymax = 10000000;
-                                  }
-                              });
-                          }
-
-                          
-
-
-                      </script>
-
-
                     </div>
                 </div>
-                <div class="col-lg-4">
+                        
+                <div class="panel-body">
+                    <div id="morris-area-chart"></div>
+                </div>
+                       
+                        
+                <script>
+                          
+                    var chart = Morris.Bar({ element: 'morris-area-chart',
+                                            data: "[0,0]",
+                                            xkey: 'y',
+                                            ykeys: ['a', 'b', 'c', 'd'],
+                                            labels: ['Council Tax', 'Housing Arrears', 'Housing Benifits', 'Parking'],
+                                            ymin: 0.0,
+                                            ymax: 100 });
+
+                    displayPercentageReport();
+                    //displayAmountReport();
+
+                    function displayPercentageReport() {
+                        $.ajax({
+                            type: "POST",
+                            url: "DataService.aspx/GetDashboardDataPercentByYear",
+                            data: "{'sourceId':'0','historic':'1'}",
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function(result) {
+                                var jsonValue = jQuery.parseJSON(result.d);
+                                chart.setData(jsonValue);
+                            }
+                        });
+                    }
+                    function displayAmountReport() {
+                        console.log('displayAmountReport');
+
+                        $.ajax({
+                            type: "POST",
+                            url: "DataService.aspx/GetDashboardDataAmountByYear",
+                            data: "{'sourceId':'0','historic':'1'}",
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (result) {
+                                var jsonValue = jQuery.parseJSON(result.d);
+                                chart.ymax = 10000000;
+                                chart.setData(jsonValue);
+                            }
+                        });
+                    }
+                    function displayDebtsReport() {
+                        $.ajax({
+                            type: "POST",
+                            url: "DataService.aspx/GetDashboardDataDebtsByYear",
+                            data: "{'sourceId':'0','historic':'1'}",
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (result) {
+                                var jsonValue = jQuery.parseJSON(result.d);
+                                chart.setData(jsonValue);
+                                chart.ymax = 10000000;
+                            }
+                        });
+                    }
+                    function displayBalanceReport() {
+                        $.ajax({
+                            type: "POST",
+                            url: "DataService.aspx/GetDashboardDataBalanceByYear",
+                            data: "{'sourceId':'0','historic':'1'}",
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (result) {
+                                var jsonValue = jQuery.parseJSON(result.d);
+                                chart.setData(jsonValue);
+                                chart.ymax = 10000000;
+                            }
+                        });
+                    }
+
+                </script>
+
+
+                </div>
+            </div>
+
+               <%-- <div class="col-lg-6">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <i class="fa fa-bar-chart-o fa-fw"></i> Donut Chart Example
@@ -411,7 +380,7 @@
                             <a href="#" class="btn btn-default btn-block">View Details</a>
                         </div>
                     </div>
-                </div>
+                </div>--%>
         
 
 </asp:Content>

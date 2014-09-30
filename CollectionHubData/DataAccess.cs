@@ -9,7 +9,7 @@ namespace CollectionHubData
     {
         //private const string CONNECTION_STRING = "Data Source=192.168.1.19;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=sa;Password=Croydon#";
         private const string CONNECTION_STRING = "Data Source=192.168.1.17;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=HubAdmin;Password=Croydon#";
-        //private const string CONNECTION_STRING = "Data Source=192.168.2.160;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=sa;Password=Croydon#";
+        ///private const string CONNECTION_STRING = "Data Source=HIT-DEV-02\\SQL14;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=sa;Password=bakeryCakes1";
         //private const string CONNECTION_STRING = "Data Source=192.168.1.66;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=sa;Password=Croydon#";
 
         //public DebtAddress GetAddressForDebt(string sourceRef, string source)
@@ -252,7 +252,8 @@ namespace CollectionHubData
         public bool CreateArrangement(int agm_pin, int agm_cd_id, DateTime? agm_start_date, int agm_frequency,
                                       int agm_day_of_month, int agm_day_of_week, decimal agm_start_amount,
                                       decimal agm_installment_amount, int agm_number_installment, int agm_payment_method,
-                                      decimal agm_agreed_amount, decimal agm_totaldebt_amount, decimal agm_last_amount, int agm_Created_By)
+                                      decimal agm_agreed_amount, decimal agm_totaldebt_amount, decimal agm_last_amount,
+                                      int agm_Created_By, DateTime? agm_agreement_date, DateTime? agm_payment_date, DateTime? agm_starting_from_date)
         {
 
             using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
@@ -275,11 +276,12 @@ namespace CollectionHubData
                     sqlCommand.Parameters.Add(new SqlParameter("agm_totaldebt_amount",      agm_totaldebt_amount));    // populate with main debt outstanding balance
                     sqlCommand.Parameters.Add(new SqlParameter("agm_last_amount",           agm_last_amount));         // remainder
                     sqlCommand.Parameters.Add(new SqlParameter("agm_Created_By",            agm_Created_By));          // user id of creater
-                    
+                    sqlCommand.Parameters.Add(new SqlParameter("agm_agreement_date",        agm_agreement_date));
+                    sqlCommand.Parameters.Add(new SqlParameter("agm_payment_date",          agm_payment_date));
+                    sqlCommand.Parameters.Add(new SqlParameter("agm_starting_from_date",    agm_starting_from_date)); 
                     
                     // @ERROR_MESSAGE			
                     var count = sqlCommand.ExecuteNonQuery();
-
                     //if (count > 0) { returnvalue = true; }
                 }
                 sqlDataConnection.Close();
@@ -384,58 +386,128 @@ namespace CollectionHubData
             }
             sqlDataConnection.Close();
 
+            return returnValue;
+        }
 
+        public string GetDashboardDataBalanceByYear(int sourceId, int historic)
+        {
+            var returnValue = "";
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CH_DASHBOARD_BALANCE_BY_FYEAR", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                sqlCommand.Parameters.Add(new SqlParameter("SOURCE", sourceId));
+                sqlCommand.Parameters.Add(new SqlParameter("HISTORY", historic));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    var marker = new decimal(0.0);
+                    while (dataReader.Read())
+                    {
+                        // GET THE LARGEST NUMBER OF THE DATA ROW (NEEDED FOR CHART MAX VALUES)
+                        var thisMarker = getMarker(dataReader);
+                        // CARRY OVER THIS MARKER IF HIGHER THAN PREVIOUS
+                        if (thisMarker > marker) { marker = thisMarker; }
+                        // EXAMPLE DATA FORMAT >> { "y": "2006", "a": "100", "b": "90" }
+                        string newLine = "{ \"y\": \"" + dataReader["FYear"] + "\", " +
+                                           "\"a\": \"" + cleanValue(dataReader["CTAX"]) + "\", " +
+                                           "\"b\": \"" + cleanValue(dataReader["HSG"]) + "\", " +
+                                           "\"c\": \"" + cleanValue(dataReader["BEN"]) + "\", " +
+                                           "\"d\": \"" + cleanValue(dataReader["PR"]) + "\"}," + Environment.NewLine;
+
+                        returnValue += newLine;
+                    }
+                    returnValue = returnValue.Substring(0, returnValue.Length - 3);
+                    returnValue = "[" + returnValue + "]";
+                }
+            }
+            sqlDataConnection.Close();
 
             return returnValue;
         }
 
-        private decimal getMarker(SqlDataReader dataReader)
+        public List<ArrangementFrequencyItem> GetFrequencyList()
         {
-            decimal marker = 0;
-            for (int i = 0; i < dataReader.FieldCount; i++)
+            var returnValue = new List<ArrangementFrequencyItem>();
+            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
             {
-                if (dataReader.GetFieldType(i) == Type.GetType("System.Int16") ||
-                    dataReader.GetFieldType(i) == Type.GetType("System.Int32") ||
-                    dataReader.GetFieldType(i) == Type.GetType("System.Int64") ||
-                    dataReader.GetFieldType(i) == Type.GetType("System.Double") ||
-                    dataReader.GetFieldType(i) == Type.GetType("System.Decimal") ||
-                    dataReader.GetFieldType(i) == Type.GetType("System.Byte"))
+                sqlDataConnection.Open();
+                using (var sqlCommand = new SqlCommand("CHP_PAYMENT_FREQ_LIST", sqlDataConnection))
                 {
-                    if (marker < Convert.ToDecimal(dataReader[i]))
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    
+                    var dataReader = sqlCommand.ExecuteReader();
+
+                    if (dataReader.HasRows)
                     {
-                        marker = Convert.ToDecimal(dataReader[i]);
+                        while (dataReader.Read())
+                        {
+                            returnValue.Add(new ArrangementFrequencyItem(dataReader));
+                        }
                     }
                 }
+                sqlDataConnection.Close();
             }
-
-            return marker;
+            return returnValue;
         }
 
-        private string cleanValue(object value)
+        public List<DebtItem> GetDebts(int pin)
         {
-            if (value != null)
+            var returnValue = new List<DebtItem>();
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CHP_GETPERSONDEBTS_byPIN", sqlDataConnection))
             {
-                if (value.ToString().Length > 0)
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                sqlCommand.Parameters.Add(new SqlParameter("pin", pin));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
                 {
-                    decimal returnValue = Convert.ToDecimal(value);
-                    if (returnValue == 0)
+                    while (dataReader.Read())
                     {
-                        return "0";
-                    }
-                    else
-                    {
-                        return returnValue.ToString("#.##");    
+                        var newResult = new DebtItem(dataReader);
+                        returnValue.Add(newResult);
                     }
                 }
-                else
-                {
-                    return "0";   
-                }
             }
-            else
+
+            sqlDataConnection.Close();
+
+            return returnValue;
+        }
+
+        public List<ArrangementPaymentMethods> GetPaymenyMethodList()
+        {
+            var returnValue = new List<ArrangementPaymentMethods>();
+            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
             {
-                return "0";
+                sqlDataConnection.Open();
+                using (var sqlCommand = new SqlCommand("CHP_PAYMENT_METHODS_LIST", sqlDataConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    var dataReader = sqlCommand.ExecuteReader();
+
+                    if (dataReader.HasRows)
+                    {
+                        while (dataReader.Read())
+                        {
+                            returnValue.Add(new ArrangementPaymentMethods(dataReader));
+                        }
+                    }
+                }
+                sqlDataConnection.Close();
             }
+            return returnValue;
         }
 
         public List<DebtNote> GetDebtNotes(int debtId)
@@ -588,7 +660,7 @@ namespace CollectionHubData
 
         //    return returnValue;
         //}
-        public List<DebtItem> GetDebts(int pin)
+        public List<DebtItem> GetFrequencyListGetDebts(int pin)
         {
             var returnValue = new List<DebtItem>();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
@@ -817,7 +889,6 @@ namespace CollectionHubData
             }
             return returnValue;
         }
-
         public DebtSearchResult DebtSearch(decimal amountFrom, decimal amountTo, int debtStreamCount, int includesStreamCode, int lastPaymentCode, int debtAgeCode)
         {
             var returnValue = new DebtSearchResult();
@@ -847,8 +918,14 @@ namespace CollectionHubData
                     {
                         while (dataReader.Read())
                         {
-                            returnValue.RecordCount = Convert.ToInt32(dataReader[0].ToString());
-                            returnValue.TotalValue = Convert.ToDecimal(dataReader[1].ToString());
+                            if (dataReader[0] != DBNull.Value)
+                            {
+                                returnValue.RecordCount = Convert.ToInt32(dataReader[0].ToString());
+                            }
+                            if (dataReader[1] != DBNull.Value)
+                            {
+                                returnValue.TotalValue = Convert.ToDecimal(dataReader[1].ToString());
+                            }
                         }
                     }
 
@@ -870,7 +947,56 @@ namespace CollectionHubData
             }
             return returnValue;
         }
+        
+        private decimal getMarker(SqlDataReader dataReader)
+        {
+            decimal marker = 0;
+            for (int i = 0; i < dataReader.FieldCount; i++)
+            {
+                if (dataReader.GetFieldType(i) == Type.GetType("System.Int16") ||
+                    dataReader.GetFieldType(i) == Type.GetType("System.Int32") ||
+                    dataReader.GetFieldType(i) == Type.GetType("System.Int64") ||
+                    dataReader.GetFieldType(i) == Type.GetType("System.Double") ||
+                    dataReader.GetFieldType(i) == Type.GetType("System.Decimal") ||
+                    dataReader.GetFieldType(i) == Type.GetType("System.Byte"))
+                {
+                    if (dataReader[i] != DBNull.Value)
+                    {
+                        if (marker < Convert.ToDecimal(dataReader[i]))
+                        {
+                            marker = Convert.ToDecimal(dataReader[i]);
+                        }
+                    }
+                }
+            }
 
-
+            return marker;
+        }
+        private string cleanValue(object value)
+        {
+            if (value != null)
+            {
+                if (value.ToString().Length > 0)
+                {
+                    decimal returnValue = Convert.ToDecimal(value);
+                    if (returnValue == 0)
+                    {
+                        return "0";
+                    }
+                    else
+                    {
+                        return returnValue.ToString("#.##");
+                    }
+                }
+                else
+                {
+                    return "0";
+                }
+            }
+            else
+            {
+                return "0";
+            }
+        }
     }
 }

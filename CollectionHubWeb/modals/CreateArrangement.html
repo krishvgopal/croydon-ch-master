@@ -2,33 +2,262 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>Create Debt Attribute</title>  
+    <title>Create Arrangement</title>  
 </head>
     <body>
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title">Confirm Action</h4>
+            <h4 class="modal-title">Create Arrangement</h4>
         </div>
-        <div class="modal-body">
-            <p>Enter in the fields below to create a new debt attribute. Attributes can be used to refine search results.</p>
+        <div class="modal-body" style="height:550px;">
+            <p>Fill in the below to create a new arrangement</p>
             <br />
-            <div style="width:75%;margin-left:75px">
+            <div style="width:35%;margin-left:35px;float:left;height:auto">
                 <div class="form-group">
-                    <label>Attribute</label>
-                    <select id="debtAttributes" class="form-control"></select>
+                    <label>Agreement Date</label>
+                    <input type="text" id="agmAgreementDate" class="date-picker form-control" />
                 </div>
                 <div class="form-group">
-                    <label>Attribute Value</label>
-                    <input type="text" id="debtAttributesValue" class="date-picker form-control">
+                    <label>Frequency</label>
+                    <select id="agmFrequency" class="form-control" onchange="refreshForm();"></select>
+                </div>
+                <div class="form-group">
+                    <label>Starting Date</label>
+                    <input type="text" id="agmStartDate" class="date-picker form-control" />
+                </div>
+                <div class="form-group" id="fgAgreedAmount">
+                    <label>Agreed Amount</label>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">
+                            <i class="fa fa-gbp"></i>
+                        </span>
+                        <input type="text" id="agmAgreedAmount" class="form-control" onchange="updateAgreedAmount();"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Installment Amount</label>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">
+                            <i class="fa fa-gbp"></i>
+                        </span>
+                        <input type="text" id="agmInstallmentAmount" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Initial Downpayment Amount</label>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">
+                            <i class="fa fa-gbp"></i>
+                        </span>
+                        <input type="text" id="agmStartAmount" class="form-control">
+                    </div>
                 </div>
             </div>
+
+            <div style="width:220px;margin-right:35px;float:right;height:auto">
+                <div class="form-group">
+                    <label>Total Debt Amount</label>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">
+                            <i class="fa fa-gbp"></i>
+                        </span>
+                        <input type="text" class="form-control" id="agmTotalDebtAmount" class="form-control" disabled>
+                    </div>
+                </div>
+                <div id="fcyWeekly" style="display: inline-block">
+                    <div class="form-group">
+                        <label>Day of week</label>
+                        <select id="agmDayOfWeek" class="form-control">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="fcyMonthly" style="display: none">
+                    <div class="form-group">
+                        <label>Day of month</label>
+                        <select id="agmDayOfMonth" class="form-control">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                            <option value="24">24</option>
+                            <option value="25">25</option>
+                            <option value="26">26</option>
+                            <option value="27">27</option>
+                            <option value="28">28</option>
+                            <option value="29">29</option>
+                            <option value="30">30</option>
+                            <option value="31">31</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="fcyOneOff" style="display: none">
+                    <div class="form-group">
+                        <label>Payment Date</label>
+                        <input type="text" id="agmPaymentDate" class="date-picker form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Payment Start Date</label>
+                    <input type="text" id="agmPaymentStartDate" class="date-picker form-control" />
+                </div>
+                <div class="form-group">
+                    <label>Payment Method</label>
+                    <select id="agmPaymentMethod" class="form-control"></select>
+                </div>
+                <div class="form-group">
+                    <label>No. of installments</label>
+                    <input type="text" id="agmNumberOfInstallments" class="form-control" onchange="updateCalculation(3);" />
+                </div>
+                <div class="form-group" style="visibility: hidden;">
+                    <label>Last Payment Amount</label>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">
+                            <i class="fa fa-gbp"></i>
+                        </span>
+                        <input type="text" id="agmLastAmount" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="width:100%;clear:both;">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="createDebtAttribute();" id="formCreate">Create Arrangement</button>
+            </div>
         </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-primary" onclick="createDebtAttribute();">Create Attribute</button>
-        </div>
+
         <script>
-            //loadAttributesList();
+            console.log('RowDebtValue: ' + $('#debtRowTotalValue').val());
+
+            $('#agmTotalDebtAmount').val($('#debtRowTotalValue').val());
+            $('#agmAgreedAmount').val($('#debtRowTotalValue').val());
+            $("agmStartAmount").val(0);
+
+            function updateCalculation(callingId) {
+
+                var agreedAmount = $("#agmAgreedAmount").val();
+                var installmentAmount = $("#agmInstallmentAmount").val();
+                var installmentCount = $("#agmNumberOfInstallments").val();
+                var startAmount = $("agmStartAmount").val();
+                var lastAmount = $("agmLastAmount").val();
+
+                console.log("[agreedAmount:" + agreedAmount + ", installmentAmount:" + installmentAmount + ", installmentCount:" + installmentCount + ", startAmount:" + startAmount + ", lastAmount:" + lastAmount + "]");
+
+                if (callingId == 1) {
+                    console.log('?');
+                }
+
+                if (callingId == 2) {
+                    console.log('?');
+                }
+
+                if (callingId == 3) {
+                    console.log('Installments');
+
+                    var newFigure = installmentAmount / installmentCount;
+                    var newRemainder = agreedAmount - newFigure;
+
+                    console.log("[newFigure:" + newFigure + ", newRemainder:" + newRemainder + "]");
+
+
+                    // END FIGURE
+                    $("#agmInstallmentAmount").val(newFigure);
+                }
+
+                // agmAgreedAmount
+                // agmLastAmount
+                // agmStartAmount
+                // agmLastAmount
+                // agmNumberOfInstallments
+            }
+
+            function updateAgreedAmount() {
+                var agreedAmount = $('#agmAgreedAmount').val();
+                var totalAmount = $('#agmTotalDebtAmount').val();
+                if (agreedAmount > totalAmount) {
+                    $('#fgAgreedAmount').addClass('has-error');
+                    $("#formCreate").prop('disabled', true);
+                } else {
+                    $('#fgAgreedAmount').removeClass('has-error');
+                    $("#formCreate").prop('disabled', false);
+                }
+            }
+
+            var currentDate = formatDate();
+
+            $("#agmAgreementDate").datepicker();
+            $("#agmStartDate").datepicker();
+            $("#agmPaymentStartDate").datepicker();
+            $("#agmPaymentDate").datepicker();
+
+            $("#agmStartDate").val(currentDate);
+            $("#agmPaymentStartDate").val(currentDate);
+            $("#agmPaymentDate").val(currentDate);
+            $("#agmAgreementDate").val(currentDate);
+            
+            loadArrangementFrequenciesList();
+            loadArrangementPaymentMethodList();
+
+            function formatDate() {
+                var today = new Date();
+                var dd = today.getDate();
+                var mm = today.getMonth() + 1;
+                var yyyy = today.getFullYear();
+
+                if (dd < 10) {
+                    dd = '0' + dd;
+                }
+                if (mm < 10) {
+                    mm = '0' + mm;
+                }
+
+                return dd + '/' + mm + '/' + yyyy;
+            }
+            function refreshForm() {
+                var selectedIndex = $("#agmFrequency").val();
+                if (selectedIndex == 1) {
+                    $("#fcyWeekly").show();
+                    $("#fcyMonthly").hide();
+                    $("#fcyOneOff").hide();
+                }
+                if (selectedIndex == 2) {
+                    $("#fcyWeekly").hide();
+                    $("#fcyMonthly").show();
+                    $("#fcyOneOff").hide();
+                }
+                if (selectedIndex == 3) {
+                    $("#fcyWeekly").hide();
+                    $("#fcyMonthly").hide();
+                    $("#fcyOneOff").show();
+                }
+            }
+
         </script>
+
     </body>
+
 </html>

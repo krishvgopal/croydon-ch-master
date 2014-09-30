@@ -1,5 +1,5 @@
 ﻿$(function () {
-    var sourcePin = $("#sourceRefValue").val();
+    var sourcePin = $("#cnpin").val();
     refreshPersonAttributes(sourcePin);
     refreshCurrentAttributes(sourcePin);
 });
@@ -8,19 +8,13 @@ var vDataMainTable = null;
 $.ajax({
     type: "POST",
     url: "DataService.aspx/GetDebts",
-    //data: "{'source':'" + $("#sourceValue").val() + "','sourceRef':'" + $("#sourceRefValue").val() + "'}",
     data: "{'pin':'" + $("#cnpin").val() + "'}",
     contentType: "application/json; charset=utf-8",
     dataType: "json",
     success: function (data) {
-
         loadDebtsView(data);
-
-        //var sourcePin = $("#sourceRefValue").val();
         var sourcePin = $("#cnpin").val();
-
         console.log(sourcePin);
-
         refreshPersonAttributes(sourcePin);
         refreshCurrentAttributes(sourcePin);
         refreshAddresses(sourcePin);
@@ -28,11 +22,7 @@ $.ajax({
 });
 
 function selectRow(idValue) {
-
     $("#selectedDebtId").val(idValue);
-    //var sourcePin = $("#sourceRefValue").val();
-    //var sourcePin = $("#cnpin").val();
-
     refreshRecoveryCycles(idValue);
     refreshPaymentHistory(idValue);
     refreshParties(idValue);
@@ -70,7 +60,7 @@ function loadDebtsView(result) {
                 , "bSearchable": false
                 , "aTargets": ["select_id"]
                 , "mRender": function (value, type, full) {
-                    return '<input type="checkbox" class="debtGroupItems" debtGroupDebtId="' + value + '">';
+                    return '<input type="checkbox" class="debtGroupItems" debtGroupDebtId="' + value + '" debtRowTotal="' + full.DebtTotal + '">';
                 },
             }],
             "initComplete": function (settings, json) {
@@ -83,7 +73,20 @@ function loadDebtsView(result) {
                 var selectedRowHtml     = $(ee.currentTarget.cells[0]);
                 var selectedRowValue    = selectedRowHtml.find('input:checkbox');
 
+                // THESE WILL BE REMOVED AT PRODUCTION
                 console.log('rowId:' + selectedRowValue.attr('debtGroupDebtId'));
+                console.log('rowDebtTotal:' + selectedRowValue.attr('debtRowTotal'));
+
+                $('#debtRowTotalValue').val(selectedRowValue.attr('debtRowTotal'));
+
+                // CHECK FOR EXISTING CONTROL, IF ALREADY LOADED FORCE REFRESH
+                if ($('#agmTotalDebtAmount') != 'undefined') {
+                    console.log('Modal_Exists');
+                    $('#agmTotalDebtAmount').val(selectedRowValue.attr('debtRowTotal'));
+                    $('#agmAgreedAmount').val(selectedRowValue.attr('debtRowTotal'));
+                } else {
+                    console.log('Modal_Null');
+                }
 
                 selectRow(selectedRowValue.attr('debtGroupDebtId'));
 
@@ -140,6 +143,44 @@ function loadRecoveryCycleList() {
                 $('#recoveryCycles').append($('<option>', {
                     value: item.RecoveryCycleId,
                     text: item.RecoveryCycleName
+                }));
+            });
+        }
+    });
+}
+function loadArrangementFrequenciesList() {
+    $('#agmFrequency').val('');
+    $.ajax({
+        type: "POST",
+        url: "DataService.aspx/GetFrequencyList",
+        data: "{}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            $.each(result.d, function (i, item) {
+                console.log(item.ArrangementName);
+                $('#agmFrequency').append($('<option>', {
+                    value: item.ArrangementCode,
+                    text: item.ArrangementName
+                }));
+            });
+        }
+    });
+}
+function loadArrangementPaymentMethodList() {
+    $('#agmPaymentMethod').val('');
+    $.ajax({
+        type: "POST",
+        url: "DataService.aspx/GetPaymenyMethodList",
+        data: "{}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            $.each(result.d, function (i, item) {
+                console.log(item.ArrangementName);
+                $('#agmPaymentMethod').append($('<option>', {
+                    value: item.PaymentMethodCode,
+                    text: item.PaymentMethodName
                 }));
             });
         }
@@ -524,23 +565,24 @@ function createDebtAttribute() {
     });
 }
 function createPersonAttribute() {
+    console.log('createPersonAttribute');
     $.ajax({
         type: "POST",
         url: "DataService.aspx/CreatePersonAttribute",
-        data: "{'sourceRef':'" + $("#sourceRefValue").val() + "','userId':'" + $('#UserSessionToken').val() + "','attributeId':'" + $('#personAttributes').val() + "','isCurrent':'true','attributeValue':'" + $('#personAttributesValue').val() + "'}",
+        data: "{'sourceRef':'" + $("#cnpin").val() + "','userId':'" + $('#UserSessionToken').val() + "','attributeId':'" + $('#personAttributes').val() + "','isCurrent':'true','attributeValue':'" + $('#personAttributesValue').val() + "'}",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
             if (result.d != true) {
-                alert('error: CreatePersonAttribute returned FALSE');
+                console.log('error: CreatePersonAttribute returned FALSE');
             } else {
                 $("#personAttributesValue").val("");
-                refreshPersonAttributes($("#sourceRefValue").val());
+                refreshPersonAttributes($("#cnpin").val());
             }
             $('#personAttributeModal').modal('hide');
         },
         failure: function (error) {
-            alert(error);
+            console.log(error);
             $('#personAttributeModal').modal('hide');
         }
     });
@@ -568,8 +610,8 @@ function setCurrent(id) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
-                refreshCurrentAttributes($("#sourceRefValue").val());
-                refreshPersonAttributes($("#sourceRefValue").val());
+            refreshCurrentAttributes($("#cnpin").val());
+            refreshPersonAttributes($("#cnpin").val());
         },
         failure: function (error) {
             alert(error.message);

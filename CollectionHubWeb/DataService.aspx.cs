@@ -102,16 +102,22 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-    //[WebMethod]
-    //public static List<DebtItem> GetDebts(string source, string sourceRef)
-    //{
-    //    var returnData = new List<DebtItem>();
-    //    var dataAccess = new CollectionHubData.DataAccess();
+    [WebMethod]
+    public static List<ArrangementFrequencyItem> GetFrequencyList()
+    {
+        var dataAccess = new CollectionHubData.DataAccess();
+        var returnData = dataAccess.GetFrequencyList();
 
-    //    returnData = dataAccess.GetDebts(sourceRef, source);
+        return returnData;
+    }
+    [WebMethod]
+    public static List<ArrangementPaymentMethods> GetPaymenyMethodList()
+    {
+        var dataAccess = new CollectionHubData.DataAccess();
+        var returnData = dataAccess.GetPaymenyMethodList();
 
-    //    return returnData;
-    //}
+        return returnData;
+    }
     [WebMethod]
     public static List<DebtItem> GetDebts(int pin)
     {
@@ -176,6 +182,15 @@ public partial class DataService : System.Web.UI.Page
     {
         var dataAccess = new DataAccess();
         var returnData = dataAccess.GetDashboardDataPercentByYear(sourceId, historic);
+
+        return returnData;
+    }
+    [WebMethod]
+    [ScriptMethod(UseHttpGet = false, ResponseFormat = ResponseFormat.Json)]
+    public static String GetDashboardDataAmountByYear(int sourceId, int historic)
+    {
+        var dataAccess = new DataAccess();
+        var returnData = dataAccess.GetDashboardDataAmountByYear(sourceId, historic);
 
         return returnData;
     }

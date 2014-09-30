@@ -52,6 +52,7 @@
                     <div class="form-group">
                         <label>Includes Debt Streem</label>
                         <select class="form-control" id="debtStreamCode">
+                            <option value="0">All</option>
                             <option value="1">Council Tax</option>
                             <option value="2">Housing Benifit</option>
                             <option value="3">Benifits</option>
@@ -63,6 +64,7 @@
                     <div class="form-group">
                         <label>Last Payment Made</label>
                         <select class="form-control" id="lastPayment">
+                            <option value="0">All</option>
                             <option value="1">Within Last Week</option>
                             <option value="2">Within Last Month</option>
                             <option value="3">Within Last Quarter</option>
@@ -75,6 +77,7 @@
                     <div class="form-group">
                         <label>Debt Age</label>
                         <select class="form-control" id="debtAge">
+                            <option value="0">All</option>
                             <option value="1">Within Last Week</option>
                             <option value="2">Within Last Month</option>
                             <option value="3">Within Last Quarter</option>
@@ -110,8 +113,8 @@
                                 <th class="last_paid">Last Paid</th>
                                 <th class="latest_debt">Latest Debt</th>
                                 <th class="source">Souce</th>
-                                <th class="pin">Pin</th>
-                                <th class="urpin">UrPin</th>
+                                <th class="cnpin">CnPin</th>
+                                <%--<th class="urpin">UrPin</th>--%>
                             </tr>
                         </thead>
                     </table>

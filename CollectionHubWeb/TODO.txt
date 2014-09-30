@@ -25,20 +25,22 @@
 ✔ AJH - Current Attributes UI
 ✔ AJH - Set recovery period & refresh recovery grid
 ✔ AJH - Show Address Grid
+✔ AJH - Show dashboard charts
+✔ AJH - Show Arrangements Grid
+✔ AJH - Allow unset options of 0
+✔ AJH - Person Attribute Fix
+✔ AJH - Lookup table for payment methods
+✔ AJH - Lookup table for arrangement frequencies
 
-	AJH - Show all three charts on dashboard
-	AJH - Show Arrangements Grid
-	AJH - Code to add new arrangement
-	AJH - Display schedule
-	AJH - Code to edit an arrangemwent
+AJH - Internal hidden var for selected debt amount
+AJH - Code to add new arrangement
+AJH - Display schedule presentation
+AJH - Code to edit an arrangemwent
+AJH - Set party as primary party
+AJH - Show debt search results in two stages
 
-	AJH - Dashboard Screens 
-
-	AJH - Show debt search results in two stages
-	AJH - Export to csv the debt search results
-	AJH - Set party as primary party
-	AJH - Lookup table for payment methods
-
-
-  AJH - Create Interfaces for all Poco's
-  AJH - New Recovery Cycle Date Validation
+AJH - Group Debts - Ensure working
+AJH - Reports on dashboard, change working for refresh
+AJH - Export to csv the debt search results
+AJH - Create Interfaces for all Poco's
+AJH - New Recovery Cycle Date Validation

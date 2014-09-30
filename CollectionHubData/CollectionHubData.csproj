@@ -41,6 +41,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Arrangement.cs" />
+    <Compile Include="ArrangementFrequencyItem.cs" />
+    <Compile Include="ArrangementPaymentMethods.cs" />
     <Compile Include="AttributesItem.cs" />
     <Compile Include="CurrentAttributes.cs" />
     <Compile Include="DataAccess.cs" />
