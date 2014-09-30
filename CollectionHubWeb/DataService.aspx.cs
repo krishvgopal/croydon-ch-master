@@ -177,24 +177,6 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
-    [ScriptMethod(UseHttpGet = false, ResponseFormat = ResponseFormat.Json)] 
-    public static String GetDashboardDataPercentByYear(int sourceId, int historic)
-    {
-        var dataAccess = new DataAccess();
-        var returnData = dataAccess.GetDashboardDataPercentByYear(sourceId, historic);
-
-        return returnData;
-    }
-    [WebMethod]
-    [ScriptMethod(UseHttpGet = false, ResponseFormat = ResponseFormat.Json)]
-    public static String GetDashboardDataAmountByYear(int sourceId, int historic)
-    {
-        var dataAccess = new DataAccess();
-        var returnData = dataAccess.GetDashboardDataAmountByYear(sourceId, historic);
-
-        return returnData;
-    }
-    [WebMethod]
     public static bool CreateDebtAttribute(int debtId, int userId, int attributeId, bool isCurrent, string attributeValue)
     {
         var returnData = false;
@@ -261,6 +243,25 @@ public partial class DataService : System.Web.UI.Page
         var dataAccess = new CollectionHubData.DataAccess();
 
         returnData = dataAccess.SetPersonAttributeCurrent(personAttributeId);
+
+        return returnData;
+    }
+
+    [WebMethod]
+    [ScriptMethod(UseHttpGet = false, ResponseFormat = ResponseFormat.Json)]
+    public static String GetDashboardDataPercentByYear(int sourceId, int historic)
+    {
+        var dataAccess = new DataAccess();
+        var returnData = dataAccess.GetDashboardDataPercentByYear(sourceId, historic);
+
+        return returnData;
+    }
+    [WebMethod]
+    [ScriptMethod(UseHttpGet = false, ResponseFormat = ResponseFormat.Json)]
+    public static String GetDashboardDataAmountByYear(int sourceId, int historic)
+    {
+        var dataAccess = new DataAccess();
+        var returnData = dataAccess.GetDashboardDataAmountByYear(sourceId, historic);
 
         return returnData;
     }

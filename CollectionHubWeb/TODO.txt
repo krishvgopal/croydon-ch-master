@@ -31,11 +31,12 @@
 ✔ AJH - Person Attribute Fix
 ✔ AJH - Lookup table for payment methods
 ✔ AJH - Lookup table for arrangement frequencies
+✔ AJH - Internal hidden var for selected debt amount
 
-AJH - Internal hidden var for selected debt amount
-AJH - Code to add new arrangement
 AJH - Display schedule presentation
+AJH - Code to add new arrangement
 AJH - Code to edit an arrangemwent
+
 AJH - Set party as primary party
 AJH - Show debt search results in two stages
 

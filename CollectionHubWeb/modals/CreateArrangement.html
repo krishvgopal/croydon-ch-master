@@ -12,7 +12,7 @@
         <div class="modal-body" style="height:550px;">
             <p>Fill in the below to create a new arrangement</p>
             <br />
-            <div style="width:35%;margin-left:35px;float:left;height:auto">
+            <div style="width:45%;margin-left:10px;float:left;height:auto">
                 <div class="form-group">
                     <label>Agreement Date</label>
                     <input type="text" id="agmAgreementDate" class="date-picker form-control" />
@@ -35,26 +35,12 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>Installment Amount</label>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon">
-                            <i class="fa fa-gbp"></i>
-                        </span>
-                        <input type="text" id="agmInstallmentAmount" class="form-control">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Initial Downpayment Amount</label>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon">
-                            <i class="fa fa-gbp"></i>
-                        </span>
-                        <input type="text" id="agmStartAmount" class="form-control">
-                    </div>
+                    <label>No. of installments</label>
+                    <input type="text" id="agmNumberOfInstallments" class="form-control" onchange="updateCalculation(3);" />
                 </div>
             </div>
 
-            <div style="width:220px;margin-right:35px;float:right;height:auto">
+            <div style="width:45%;margin-right:10px;float:right;height:auto">
                 <div class="form-group">
                     <label>Total Debt Amount</label>
                     <div class="form-group input-group">
@@ -123,18 +109,28 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>Payment Start Date</label>
-                    <input type="text" id="agmPaymentStartDate" class="date-picker form-control" />
-                </div>
-                <div class="form-group">
                     <label>Payment Method</label>
                     <select id="agmPaymentMethod" class="form-control"></select>
                 </div>
                 <div class="form-group">
-                    <label>No. of installments</label>
-                    <input type="text" id="agmNumberOfInstallments" class="form-control" onchange="updateCalculation(3);" />
+                    <label>Initial Downpayment Amount</label>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">
+                            <i class="fa fa-gbp"></i>
+                        </span>
+                        <input type="text" id="agmStartAmount" class="form-control" onchange="updateCalculation(1);">
+                    </div>
                 </div>
-                <div class="form-group" style="visibility: hidden;">
+                <div class="form-group">
+                    <label>Installment Amount</label>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">
+                            <i class="fa fa-gbp"></i>
+                        </span>
+                        <input type="text" id="agmInstallmentAmount" class="form-control" onchange="updateCalculation(2);">
+                    </div>
+                </div>
+                <div class="form-group" style="visibility: visible;">
                     <label>Last Payment Amount</label>
                     <div class="form-group input-group">
                         <span class="input-group-addon">
@@ -149,65 +145,19 @@
                 <button type="button" class="btn btn-primary" onclick="createDebtAttribute();" id="formCreate">Create Arrangement</button>
             </div>
         </div>
-
+        
         <script>
-            console.log('RowDebtValue: ' + $('#debtRowTotalValue').val());
+            
+            var currentDate = formatDate();
+            console.log('SELECTED_DEBT_VALUE: ' + $('#debtRowTotalValue').val() + ', CURRENT_DATE: ' + currentDate);
 
+            //$('#agmTotalDebtAmount').val(1111);
             $('#agmTotalDebtAmount').val($('#debtRowTotalValue').val());
             $('#agmAgreedAmount').val($('#debtRowTotalValue').val());
-            $("agmStartAmount").val(0);
-
-            function updateCalculation(callingId) {
-
-                var agreedAmount = $("#agmAgreedAmount").val();
-                var installmentAmount = $("#agmInstallmentAmount").val();
-                var installmentCount = $("#agmNumberOfInstallments").val();
-                var startAmount = $("agmStartAmount").val();
-                var lastAmount = $("agmLastAmount").val();
-
-                console.log("[agreedAmount:" + agreedAmount + ", installmentAmount:" + installmentAmount + ", installmentCount:" + installmentCount + ", startAmount:" + startAmount + ", lastAmount:" + lastAmount + "]");
-
-                if (callingId == 1) {
-                    console.log('?');
-                }
-
-                if (callingId == 2) {
-                    console.log('?');
-                }
-
-                if (callingId == 3) {
-                    console.log('Installments');
-
-                    var newFigure = installmentAmount / installmentCount;
-                    var newRemainder = agreedAmount - newFigure;
-
-                    console.log("[newFigure:" + newFigure + ", newRemainder:" + newRemainder + "]");
-
-
-                    // END FIGURE
-                    $("#agmInstallmentAmount").val(newFigure);
-                }
-
-                // agmAgreedAmount
-                // agmLastAmount
-                // agmStartAmount
-                // agmLastAmount
-                // agmNumberOfInstallments
-            }
-
-            function updateAgreedAmount() {
-                var agreedAmount = $('#agmAgreedAmount').val();
-                var totalAmount = $('#agmTotalDebtAmount').val();
-                if (agreedAmount > totalAmount) {
-                    $('#fgAgreedAmount').addClass('has-error');
-                    $("#formCreate").prop('disabled', true);
-                } else {
-                    $('#fgAgreedAmount').removeClass('has-error');
-                    $("#formCreate").prop('disabled', false);
-                }
-            }
-
-            var currentDate = formatDate();
+            $("#agmStartAmount").val('0');
+            $("#agmLastAmount").val('0');
+            $("#agmInstallmentAmount").val('0');
+            $("#agmNumberOfInstallments").val('1');
 
             $("#agmAgreementDate").datepicker();
             $("#agmStartDate").datepicker();
@@ -222,6 +172,57 @@
             loadArrangementFrequenciesList();
             loadArrangementPaymentMethodList();
 
+            function updateCalculation(callingId) {
+
+                var agreedAmount = $("#agmAgreedAmount").val();
+                var installmentAmount = $("#agmInstallmentAmount").val();
+                var installmentCount = $("#agmNumberOfInstallments").val();
+                var deposit = $("#agmStartAmount").val();
+                var lastAmount = $("#agmLastAmount").val();
+
+                if (deposit == 'undefined') { $("#agmStartAmount").val('0'); }
+                if (lastAmount == 'undefined') { $("#agmLastAmount").val('0'); }
+                if (installmentCount == 'undefined') { $("#agmNumberOfInstallments").val('1'); }
+                if (installmentAmount == 'undefined') { $("#agmInstallmentAmount").val('0'); }
+                if (agreedAmount == 'undefined') { $("#agmAgreedAmountagmLastAmount").val('0'); }
+
+                console.log("[AGREED_AMOUNT:" + agreedAmount + ", INSTALLMENT_AMOUNT:" + installmentAmount + ", INSTALLMENT_COUNT:" + installmentCount + ", PAID_UPFRONT:" + deposit + ", LAST_AMOUNT:" + lastAmount + "]");
+
+                // INSTALLMENT AMOUNT
+                if (callingId == 2) {
+                    var toClear = (agreedAmount - deposit);
+                    var rawInstall = toClear / installmentAmount;
+                    var cleanInstall = rawInstall.toFixed(0);
+                    var cleanAllItem = cleanInstall * installmentAmount;
+                    var leftOver = agreedAmount - cleanAllItem;
+                    console.log("[TO_CLEAR:" + toClear + ", RAW_INSTALLMENT_AMOUNT:" + rawInstall + ", CLEAN_INSTALLMENT_COUNT:" + cleanInstall + ", CLEAN_INSTALLMENT_AMOUNT:" + cleanAllItem + ", LAST_PAYMENT:" + leftOver + "]");
+                    $("#agmNumberOfInstallments").val(cleanInstall);
+                    $("#agmLastAmount").val(leftOver);
+                }
+                // NUMBER OF INSTALLMENTS
+                if (callingId == 3 || callingId == 1) {
+                    var rawCalculation = (agreedAmount - deposit) / installmentCount; // 176.833 = (1111 - 50) / 12
+                    var cleanCalculation = +rawCalculation.toFixed(2); // 176.83
+                    var cleanInstallments = cleanCalculation * installmentCount; // 1060.98 = 176.83 * 12
+                    var rawDifference = (agreedAmount - deposit) - cleanInstallments; // 0.019999
+                    var cleanDifference = +rawDifference.toFixed(2); // 0.02
+                    var firstPayment = cleanDifference + cleanCalculation; // Initial  amount includes the difference
+                    console.log("[rawCalculation:" + rawCalculation + ", cleanCalculation:" + cleanCalculation + ", cleanInstallments:" + cleanInstallments + ", rawDifference:" + rawDifference + ", cleanDifference:" + cleanDifference + ", firstPayment:" + firstPayment + "]");
+                    $("#agmInstallmentAmount").val(cleanCalculation.toFixed(2));
+                    $("#agmLastAmount").val(firstPayment.toFixed(2));
+                }
+            }
+            function updateAgreedAmount() {
+                var agreedAmount = $('#agmAgreedAmount').val();
+                var totalAmount = $('#agmTotalDebtAmount').val();
+                if (agreedAmount > totalAmount) {
+                    $('#fgAgreedAmount').addClass('has-error');
+                    $("#formCreate").prop('disabled', true);
+                } else {
+                    $('#fgAgreedAmount').removeClass('has-error');
+                    $("#formCreate").prop('disabled', false);
+                }
+            }
             function formatDate() {
                 var today = new Date();
                 var dd = today.getDate();

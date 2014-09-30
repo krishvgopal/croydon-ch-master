@@ -7,96 +7,10 @@ namespace CollectionHubData
 {
     public class DataAccess
     {
-        //private const string CONNECTION_STRING = "Data Source=192.168.1.19;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=sa;Password=Croydon#";
-        private const string CONNECTION_STRING = "Data Source=192.168.1.17;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=HubAdmin;Password=Croydon#";
-        ///private const string CONNECTION_STRING = "Data Source=HIT-DEV-02\\SQL14;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=sa;Password=bakeryCakes1";
-        //private const string CONNECTION_STRING = "Data Source=192.168.1.66;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=sa;Password=Croydon#";
-
-        //public DebtAddress GetAddressForDebt(string sourceRef, string source)
-        //{
-        //    var returnValue = new DebtAddress();
-        //    var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
-
-        //    sqlDataConnection.Open();
-        //    using (var sqlCommand = new SqlCommand("CHP_GetNameAddress", sqlDataConnection))
-        //    {
-        //        sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-
-        //        sqlCommand.Parameters.Add(new SqlParameter("source_ref", sourceRef));
-        //        sqlCommand.Parameters.Add(new SqlParameter("source", source));
-
-        //        var dataReader = sqlCommand.ExecuteReader();
-
-        //        if (dataReader.HasRows)
-        //        {
-        //            while (dataReader.Read())
-        //            {
-        //                var newResult = new DebtAddress(dataReader);
-        //                returnValue = newResult;
-        //            }
-        //        }
-        //    }
-
-        //    sqlDataConnection.Close();
-
-        //    return returnValue;
-        //}
-
-        public DebtAddress GetAddressForDebt(string pin)
-        {
-            var returnValue = new DebtAddress();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
-
-            sqlDataConnection.Open();
-            using (var sqlCommand = new SqlCommand("CHP_GetNameAddress_byPIN", sqlDataConnection))
-            {
-                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-
-                sqlCommand.Parameters.Add(new SqlParameter("pin", pin));
-
-                var dataReader = sqlCommand.ExecuteReader();
-
-                if (dataReader.HasRows)
-                {
-                    while (dataReader.Read())
-                    {
-                        var newResult = new DebtAddress(dataReader);
-                        returnValue = newResult;
-                    }
-                }
-            }
-
-            sqlDataConnection.Close();
-
-            return returnValue;
-        }
-        public UserData AuthenticateUser(string loginName, string passwordHash) 
-        {
-            UserData returnValue = null;
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
-
-            sqlDataConnection.Open();
-            using (var sqlCommand = new SqlCommand("CH_AUTHENTICATE_USER", sqlDataConnection))
-            {
-                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                sqlCommand.Parameters.Add(new SqlParameter("LoginName", loginName));
-                sqlCommand.Parameters.Add(new SqlParameter("PasswordHash", passwordHash));
-
-                var dataReader = sqlCommand.ExecuteReader();
-
-                if (dataReader.HasRows)
-                {
-                    while (dataReader.Read())
-                    {
-                        returnValue = new UserData(dataReader);
-                    }
-                }
-            }
-
-            sqlDataConnection.Close();
-
-            return returnValue;
-        }
+        ///private const string CONNECTION_STRING = "Data Source=192.168.1.17;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=HubAdmin;Password=Croydon#";
+        private const string CONNECTION_STRING = "Data Source=HIT-DEV-02\\SQL14;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=sa;Password=bakeryCakes1";
+        
+        
         public bool SetRecoveryCycle(int debtId, int recoveryCycleId, int userId, DateTime recoveryDateTime)
         {
             var returnvalue = false;
@@ -248,7 +162,6 @@ namespace CollectionHubData
             }
             return returnvalue;
         }
-
         public bool CreateArrangement(int agm_pin, int agm_cd_id, DateTime? agm_start_date, int agm_frequency,
                                       int agm_day_of_month, int agm_day_of_week, decimal agm_start_amount,
                                       decimal agm_installment_amount, int agm_number_installment, int agm_payment_method,
@@ -346,7 +259,6 @@ namespace CollectionHubData
 
             return returnValue;
         }
-
         public string GetDashboardDataAmountByYear(int sourceId, int historic)
         {
             var returnValue = "";
@@ -388,7 +300,6 @@ namespace CollectionHubData
 
             return returnValue;
         }
-
         public string GetDashboardDataBalanceByYear(int sourceId, int historic)
         {
             var returnValue = "";
@@ -455,7 +366,6 @@ namespace CollectionHubData
             }
             return returnValue;
         }
-
         public List<DebtItem> GetDebts(int pin)
         {
             var returnValue = new List<DebtItem>();
@@ -484,7 +394,6 @@ namespace CollectionHubData
 
             return returnValue;
         }
-
         public List<ArrangementPaymentMethods> GetPaymenyMethodList()
         {
             var returnValue = new List<ArrangementPaymentMethods>();
@@ -509,7 +418,6 @@ namespace CollectionHubData
             }
             return returnValue;
         }
-
         public List<DebtNote> GetDebtNotes(int debtId)
         {
             var returnValue = new List<DebtNote>();
@@ -631,35 +539,6 @@ namespace CollectionHubData
 
             return returnValue;
         }
-        //public List<DebtItem> GetDebts(string sourceRef, string source)
-        //{
-        //    var returnValue = new List<DebtItem>();
-        //    var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
-
-        //    sqlDataConnection.Open();
-        //    using (var sqlCommand = new SqlCommand("CHP_GETPERSONDEBTS", sqlDataConnection))
-        //    {
-        //        sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-
-        //        sqlCommand.Parameters.Add(new SqlParameter("source_ref", sourceRef));
-        //        sqlCommand.Parameters.Add(new SqlParameter("source", source));
-
-        //        var dataReader = sqlCommand.ExecuteReader();
-
-        //        if (dataReader.HasRows)
-        //        {
-        //            while (dataReader.Read())
-        //            {
-        //                var newResult = new DebtItem(dataReader);
-        //                returnValue.Add(newResult);
-        //            }
-        //        }
-        //    }
-
-        //    sqlDataConnection.Close();
-
-        //    return returnValue;
-        //}
         public List<DebtItem> GetFrequencyListGetDebts(int pin)
         {
             var returnValue = new List<DebtItem>();
@@ -889,6 +768,7 @@ namespace CollectionHubData
             }
             return returnValue;
         }
+        
         public DebtSearchResult DebtSearch(decimal amountFrom, decimal amountTo, int debtStreamCount, int includesStreamCode, int lastPaymentCode, int debtAgeCode)
         {
             var returnValue = new DebtSearchResult();
@@ -947,7 +827,62 @@ namespace CollectionHubData
             }
             return returnValue;
         }
-        
+        public DebtAddress GetAddressForDebt(string pin)
+        {
+            var returnValue = new DebtAddress();
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CHP_GetNameAddress_byPIN", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                sqlCommand.Parameters.Add(new SqlParameter("pin", pin));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        var newResult = new DebtAddress(dataReader);
+                        returnValue = newResult;
+                    }
+                }
+            }
+
+            sqlDataConnection.Close();
+
+            return returnValue;
+        }
+        public UserData AuthenticateUser(string loginName, string passwordHash)
+        {
+            UserData returnValue = null;
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CH_AUTHENTICATE_USER", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("LoginName", loginName));
+                sqlCommand.Parameters.Add(new SqlParameter("PasswordHash", passwordHash));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue = new UserData(dataReader);
+                    }
+                }
+            }
+
+            sqlDataConnection.Close();
+
+            return returnValue;
+        }
+
         private decimal getMarker(SqlDataReader dataReader)
         {
             decimal marker = 0;
