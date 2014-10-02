@@ -588,17 +588,27 @@ function createPersonAttribute() {
     });
 }
 function createRecoveryCycle() {
+    console.log($("#recoveryStartDate").val());
     $.ajax({
         type: "POST",
         url: "DataService.aspx/SetRecoveryCycle",
-        data: "{'debtId':'" + $("#selectedDebtId").val() + "','recoveryCycleId':'" + $('#recoveryCycles').val() + "','userId':'" + $('#UserSessionToken').val() + "','recoveryDateTime':'" + $('#datepicker').val() + "'}",
+        data: "{'debtId':'" + $("#selectedDebtId").val() + "','recoveryCycleId':'" + $('#recoveryCycles').val() + "','userId':'" + $('#UserSessionToken').val() + "','recoveryDateTime':'" + $('#recoveryStartDate').val() + "'}",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
-            alert(result.d);
+            if (result.d != true) {
+                console.log('error: createRecoveryCycle returned FALSE');
+            } else {
+                $("#recoveryStartDate").val("");
+                $("#recoveryCycles").val("");
+                $('#createRecoveryCycleModal').modal('hide');
+                refreshRecoveryCycles($("#selectedDebtId").val());
+            }
+            $('#personAttributeModal').modal('hide');
         },
         failure: function (error) {
-            alert(error.message);
+            console.log(error.message);
+            $('#debtAttributeModal').modal('hide');
         }
     });
 }
@@ -628,5 +638,35 @@ function groupDebts() {
     $(".debtGroupItems:checked").each(function () {
         checkedInvoiceLineIds.push($(this).data("debtGroupDebtId"));
     });
+
+
+    $.ajax({
+        type: "POST",
+        url: "DataService.aspx/CreateDebtGroup",
+        // CreateDebtGroup(string debtIdString, int userId, int partyPin, string source)
+        data: "{'debtId':'" + $("#selectedDebtId").val() + "','userId':'" + $('#UserSessionToken').val() + "','attributeId':'" + $('#debtAttributes').val() + "','isCurrent':'true','attributeValue':'" + $('#debtAttributesValue').val() + "'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            if (result.d != true) {
+                alert('error: CreateDebtAttribute returned FALSE');
+            } else {
+                $("#debtAttributesValue").val("");
+                refreshDebtAttributes($("#selectedDebtId").val());
+            }
+            $('#debtAttributeModal').modal('hide');
+        },
+        failure: function (error) {
+            alert(error);
+            $('#debtAttributeModal').modal('hide');
+        }
+    });
+
+
+
+
     $('#myModal').modal('hide');
 }
+
+
+

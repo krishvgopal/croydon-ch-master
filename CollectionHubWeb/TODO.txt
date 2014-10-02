@@ -32,8 +32,10 @@
 ✔ AJH - Lookup table for payment methods
 ✔ AJH - Lookup table for arrangement frequencies
 ✔ AJH - Internal hidden var for selected debt amount
+✔ AJH - Display schedule presentation
+✔ AJH - Reports on dashboard, change working for refresh
 
-AJH - Display schedule presentation
+
 AJH - Code to add new arrangement
 AJH - Code to edit an arrangemwent
 
@@ -41,7 +43,7 @@ AJH - Set party as primary party
 AJH - Show debt search results in two stages
 
 AJH - Group Debts - Ensure working
-AJH - Reports on dashboard, change working for refresh
+
 AJH - Export to csv the debt search results
 AJH - Create Interfaces for all Poco's
 AJH - New Recovery Cycle Date Validation

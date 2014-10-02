@@ -273,7 +273,7 @@
             </div>
         </div>
         <div class="modal fade" id="tableArrangementsModal" tabindex="-1" role="dialog" aria-labelledby="tableArrangementsModal" aria-hidden="true" >
-            <div class="modal-dialog" style="width:800px">
+            <div class="modal-dialog" style="width:825px">
                 <div class="modal-content">
                 </div>
             </div>

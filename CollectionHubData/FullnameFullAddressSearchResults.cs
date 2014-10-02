@@ -36,7 +36,14 @@ namespace CollectionHubData
             Source = value["SOURCE"].ToString();
             FullName = value["FULLNAME"].ToString();
             FullAddress = value["FULLADDRESS"].ToString();
-            DebtOutstanding = Convert.ToInt32(value["DEBTOS"]);
+            if (value["DEBTOS"] != DBNull.Value)
+            {
+                DebtOutstanding = Convert.ToInt32(value["DEBTOS"]);
+            }
+            else
+            {
+                DebtOutstanding = 0;
+            }
             ResponsibleOfficer = value["RESPOFFICER"].ToString();
             LastName = value["LASTNAME"].ToString();
             CN_Pin = value["CN_PIN"].ToString();

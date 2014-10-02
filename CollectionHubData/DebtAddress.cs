@@ -21,9 +21,9 @@ namespace CollectionHubData
             UPRN        = value["UPRN"].ToString();
             FullAddress = value["FullAddress"].ToString();
             FullName    = value["FullName"].ToString();
-            RespOfficer = value["RespOfficer"].ToString();
-            DebtOS      = Convert.ToDecimal(value["DebtOS"]);
-            TotalDebt   = Convert.ToDecimal( value["TotalDebt"] );
+            //RespOfficer = value["RespOfficer"].ToString();
+            //DebtOS      = Convert.ToDecimal(value["DebtOS"]);
+            //TotalDebt   = Convert.ToDecimal( value["TotalDebt"] );
         }
     }
 }
