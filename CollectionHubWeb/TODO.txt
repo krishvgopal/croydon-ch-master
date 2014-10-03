@@ -34,16 +34,25 @@
 ✔ AJH - Internal hidden var for selected debt amount
 ✔ AJH - Display schedule presentation
 ✔ AJH - Reports on dashboard, change working for refresh
+✔ AJH - Ungroup debts
+✔ AJH - Debt view working
+✔ AJH - Show source system in person attributes
 
+
+
+AJH - Group Debts - Ensure working
+AJH - Debt Groups Formatting correctly
+AJH - Debt Goups Selection Boxes, apply the logic
+AJH - Set party as primary party
+AJH - IE 7/8 Review
+AJH - RTF/Word Findings
+AJH - Show debt search results in two stages
 
 AJH - Code to add new arrangement
 AJH - Code to edit an arrangemwent
-
-AJH - Set party as primary party
-AJH - Show debt search results in two stages
-
-AJH - Group Debts - Ensure working
-
 AJH - Export to csv the debt search results
 AJH - Create Interfaces for all Poco's
 AJH - New Recovery Cycle Date Validation
+AJH - Validation across all input values
+
+AJH - User table data

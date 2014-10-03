@@ -1499,6 +1499,43 @@ table th[class*="col-"] {
   border-color: #bce8f1;
   font-weight:100;
 }
+.table > thead > tr > td.groupTop,
+.table > tbody > tr > td.groupTop,
+.table > tfoot > tr > td.groupTop,
+.table > thead > tr > th.groupTop,
+.table > tbody > tr > th.groupTop,
+.table > tfoot > tr > th.groupTop,
+.table > thead > tr.groupTop > td,
+.table > tbody > tr.groupTop > td,
+.table > tfoot > tr.groupTop > td,
+.table > thead > tr.groupTop > th,
+.table > tbody > tr.groupTop > th,
+.table > tfoot > tr.groupTop > th {
+  /*background-color: #d9edf7;*/ /*f5f5f5*/
+  /*border-color: #bce8f1;*/
+  border-top: 1px solid #9A9A9A;
+  font-weight:100;
+}
+.table > thead > tr > td.groupBottom,
+.table > tbody > tr > td.groupBottom,
+.table > tfoot > tr > td.groupBottom,
+.table > thead > tr > th.groupBottom,
+.table > tbody > tr > th.groupBottom,
+.table > tfoot > tr > th.groupBottom,
+.table > thead > tr.groupBottom > td,
+.table > tbody > tr.groupBottom > td,
+.table > tfoot > tr.groupBottom > td,
+.table > thead > tr.groupBottom > th,
+.table > tbody > tr.groupBottom > th,
+.table > tfoot > tr.groupBottom > th {
+  /*background-color: #d9edf7;*/ /*f5f5f5*/
+  /*border-color: #bce8f1;*/
+  border-top: 2px solid #9A9A9A;
+  border-bottom: 2px solid #9A9A9A;
+  font-style: italic;
+  font-weight: bold;
+  /*font-weight:100;*/
+}
 .table-hover > tbody > tr > td.active:hover,
 .table-hover > tbody > tr > th.active:hover,
 .table-hover > tbody > tr.active:hover > td,

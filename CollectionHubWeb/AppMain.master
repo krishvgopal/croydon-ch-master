@@ -2,50 +2,50 @@
 
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Collection Hub</title>
-    <script type="text/javascript" charset="utf8" src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="//code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
-    <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="js/bootstrap.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
-    <script type="text/javascript" charset="utf8" src="js/sb-admin.js"></script>
-    <script type="text/javascript" charset="utf8" src="js/plugins/moment/moment.js"></script>
-    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css">
-    <link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
-    <link rel="stylesheet" type="text/css" href="font-awesome/css/font-awesome.css">
-    <link rel="stylesheet" type="text/css" href="css/plugins/morris/morris-0.4.3.min.css">
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="css/sb-admin.css">
-</head>
-<body>
-    <form id="mainForm" runat="server">
-        <asp:HiddenField runat="server" ID="UserSessionToken" />
-        <div id="wrapper">
-            <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0">
-                <div class="navbar-header">
-                    <asp:ContentPlaceHolder id="headMenu" runat="server"></asp:ContentPlaceHolder>
-                </div>
-                <asp:ContentPlaceHolder id="headInfo" runat="server"></asp:ContentPlaceHolder>
-                <div class="navbar-default navbar-static-side" role="navigation">
-                    <div class="sidebar-collapse">
-                        <asp:ContentPlaceHolder id="menuSide" runat="server"></asp:ContentPlaceHolder>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Collection Hub</title>
+        <script type="text/javascript" charset="utf8" src="js/jquery-1.11.1.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="js/jquery-ui.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="js/bootstrap.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+        <script type="text/javascript" charset="utf8" src="js/sb-admin.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="js/plugins/moment/moment.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/jquery.dataTables.min.css">
+        <link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css">
+        <link rel="stylesheet" type="text/css" href="css/font-awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="css/plugins/morris/morris-0.4.3.min.css">
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="css/sb-admin.css">
+    </head>
+    <body>
+        <form id="mainForm" runat="server">
+            <asp:HiddenField runat="server" ID="UserSessionToken" />
+            <div id="wrapper">
+                <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0">
+                    <div class="navbar-header">
+                        <asp:ContentPlaceHolder id="headMenu" runat="server"></asp:ContentPlaceHolder>
                     </div>
-                </div>
-            </nav>
-            <div id="page-wrapper">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <asp:ContentPlaceHolder id="pageTitle" runat="server"></asp:ContentPlaceHolder>
+                    <asp:ContentPlaceHolder id="headInfo" runat="server"></asp:ContentPlaceHolder>
+                    <div class="navbar-default navbar-static-side" role="navigation">
+                        <div class="sidebar-collapse">
+                            <asp:ContentPlaceHolder id="menuSide" runat="server"></asp:ContentPlaceHolder>
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <asp:ContentPlaceHolder id="pageBody" runat="server"></asp:ContentPlaceHolder>
+                </nav>
+                <div id="page-wrapper">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <asp:ContentPlaceHolder id="pageTitle" runat="server"></asp:ContentPlaceHolder>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <asp:ContentPlaceHolder id="pageBody" runat="server"></asp:ContentPlaceHolder>
+                    </div>
                 </div>
             </div>
-        </div>
-    </form>
-</body>
+        </form>
+    </body>
 </html>

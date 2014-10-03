@@ -207,22 +207,22 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
-    public static bool RemoveDebtFromGroup(int debtId, int userId, int partyPin, string source)
+    public static bool RemoveDebtGroup(int debtId)
     {
         var returnData = false;
         var dataAccess = new CollectionHubData.DataAccess();
 
-        returnData = dataAccess.RemoveDebtFromGroup(debtId);
+        returnData = dataAccess.RemoveDebtGroup(debtId);
 
         return returnData;
     }
     [WebMethod]
-    public static bool CreateDebtGroup(string debtIdString, int userId, int partyPin, string source)
+    public static bool CreateDebtGroup(string debtIdString, int userId, int partyPin)
     {
         var returnData = false;
         var dataAccess = new CollectionHubData.DataAccess();
 
-        returnData = dataAccess.CreateDebtGroup(debtIdString, userId, partyPin, source);
+        returnData = dataAccess.CreateDebtGroup(debtIdString, userId, partyPin);
 
         return returnData;
     }

@@ -1,24 +1,6 @@
 ﻿$(function () {
     var sourcePin = $("#cnpin").val();
-    refreshPersonAttributes(sourcePin);
-    refreshCurrentAttributes(sourcePin);
-});
-
-var vDataMainTable = null;
-$.ajax({
-    type: "POST",
-    url: "DataService.aspx/GetDebts",
-    data: "{'pin':'" + $("#cnpin").val() + "'}",
-    contentType: "application/json; charset=utf-8",
-    dataType: "json",
-    success: function (data) {
-        loadDebtsView(data);
-        var sourcePin = $("#cnpin").val();
-        console.log(sourcePin);
-        refreshPersonAttributes(sourcePin);
-        refreshCurrentAttributes(sourcePin);
-        refreshAddresses(sourcePin);
-    }
+    refreshSingleDebtView();
 });
 
 function selectRow(idValue) {
@@ -34,7 +16,9 @@ function selectRow(idValue) {
 function loadDebtsView(result) {
 
     if (result.hasOwnProperty("d")) { result = result.d; }
-    vDataMainTable = $("#dataTableMain").dataTable({
+    var vDataMainTable = $("#dataTableMain").dataTable({
+        "destroy": true,
+        "bSort" : false,
         "order": [[2, "desc"]],
         "aaData": result,
         aoColumns: [
@@ -46,46 +30,70 @@ function loadDebtsView(result) {
             { mData: 'DebtOutstanding' },
             { mData: 'RecoveryCycle' },
             { mData: 'Status' },
-            { mData: 'Type' }
+            { mData: 'Type' },
+            { mData: 'GroupOrder' }
         ],
         "aoColumnDefs": [
             {
-              "sTitle": "Debt ID"
-            , "aTargets": ["debt_id"]
-            , "mRender": function (value, type, full) {
-                return '<a href="#" onclick="selectRow(' + value + ')">' + value + '</a>';}
+                "sTitle": "Debt ID",
+                "aTargets": ["debt_id"],
+                "mRender": function(value, type, full) {
+                    return '<a href="#" onclick="selectRow(' + value + ')">' + value + '</a>';
+                }
             }, {
-                  "sTitle": "<input id=\"debtGroupAll\" type=\"checkbox\" class=\"debtGroupAll\">"
-                , "bSortable": false
-                , "bSearchable": false
-                , "aTargets": ["select_id"]
-                , "mRender": function (value, type, full) {
+                "sTitle": "<input id=\"debtGroupAll\" type=\"checkbox\" class=\"debtGroupAll\">",
+                "bSortable": false,
+                "bSearchable": false,
+                "aTargets": ["select_id"],
+                "mRender": function(value, type, full) {
                     return '<input type="checkbox" class="debtGroupItems" debtGroupDebtId="' + value + '" debtRowTotal="' + full.DebtTotal + '">';
                 },
-            }],
-            "initComplete": function (settings, json) {
+            }, {
+                "aTargets": ["group_order"],
+                "bVisible": false,
+            }, { "width": "10px", "targets": 0 }
+        ],
+        "initComplete": function (settings, json) {
+
+            var source = [];
+            var groups = [];
+
+            for (var i = 0; i < settings.aoData.length; i++) {
+                if (settings.aoData[i].anCells[9].outerText.length > 0) {
+                    source.push(settings.aoData[i].anCells[9].outerText + '-' + i);
+                    groups.push(settings.aoData[i].anCells[9].outerText);
+                }
+            }
+            for (var j = 0; j < groups.length; j++) {
+                var min = 9999;
+                var max = 0;
+                for (var k = 0; k < source.length; k++) {
+                    if (source[k].split("-")[0] == groups[j]) {
+                        if (source[k].split("-")[1] < min) { min = parseInt((source[k].split("-")[1])) + 1; }
+                        if (source[k].split("-")[1] > max) { max = parseInt((source[k].split("-")[1])) + 1; }
+                    }
+                }
+                min = min++;
+                max = max++;
+                console.log("min:'" + min + "', max:'" + max + "'");
+                $('#dataTableMain tr:nth-child(' + min + ')').addClass('groupTop');
+                $('#dataTableMain tr:nth-child(' + max + ')').addClass('groupBottom');
+            }
+
             $("#debtGroupAll").click(function () {
                 $(".debtGroupItems").prop('checked', $(this).prop('checked'));
             });
-
             $('#dataTableMain tbody').on('click', 'tr', function (ee) {
-
                 var selectedRowHtml     = $(ee.currentTarget.cells[0]);
                 var selectedRowValue    = selectedRowHtml.find('input:checkbox');
 
-                // THESE WILL BE REMOVED AT PRODUCTION
-                console.log('rowId:' + selectedRowValue.attr('debtGroupDebtId'));
-                console.log('rowDebtTotal:' + selectedRowValue.attr('debtRowTotal'));
+                console.log('rowId:' + selectedRowValue.attr('debtGroupDebtId') + ', ' + 'rowDebtTotal:' + selectedRowValue.attr('debtRowTotal'));
 
                 $('#debtRowTotalValue').val(selectedRowValue.attr('debtRowTotal'));
 
-                // CHECK FOR EXISTING CONTROL, IF ALREADY LOADED FORCE REFRESH
                 if ($('#agmTotalDebtAmount') != 'undefined') {
-                    console.log('Modal_Exists');
                     $('#agmTotalDebtAmount').val(selectedRowValue.attr('debtRowTotal'));
                     $('#agmAgreedAmount').val(selectedRowValue.attr('debtRowTotal'));
-                } else {
-                    console.log('Modal_Null');
                 }
 
                 selectRow(selectedRowValue.attr('debtGroupDebtId'));
@@ -112,7 +120,6 @@ function loadAttributesList() {
         dataType: "json",
         success: function (result) {
             $.each(result.d, function (i, item) {
-
                 if (item.IsDebtAttribute) {
                     $('#debtAttributes').append($('<option>', {
                         value: item.AttributeId,
@@ -126,7 +133,6 @@ function loadAttributesList() {
                         text: item.AttributeText
                     }));
                 }
-
             });
         }
     });
@@ -187,6 +193,26 @@ function loadArrangementPaymentMethodList() {
     });
 }
 
+function refreshSingleDebtView() {
+
+    var vDataMainTable = null;
+    $.ajax({
+        type: "POST",
+        url: "DataService.aspx/GetDebts",
+        data: "{'pin':'" + $("#cnpin").val() + "'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (data) {
+            loadDebtsView(data);
+            var sourcePin = $("#cnpin").val();
+            console.log(sourcePin);
+            refreshPersonAttributes(sourcePin);
+            refreshCurrentAttributes(sourcePin);
+            refreshAddresses(sourcePin);
+        }
+    });
+
+}
 function refreshRecoveryCycles(debtId) {
     $.ajax({
         type: "POST",
@@ -345,45 +371,6 @@ function refreshDebtAttributes(debtId) {
         }
     });
 }
-function refreshPersonAttributes(sourcePin) {
-    $.ajax({
-        type: "POST",
-        url: "DataService.aspx/GetPersonAttribute",
-        data: "{'sourcePin':'" + sourcePin + "'}",
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (result) {
-            if (result.hasOwnProperty("d")) { result = result.d; }
-            $("#tablePerson").dataTable({
-                "destroy": true,
-                "aaData": result,
-                aoColumns: [
-                    { mData: 'AttributeText' },
-                    { mData: 'AttributeValue' },
-                    { mData: 'IsCurrent' },
-                    { mData: 'PersonAttributeId' }],
-                "aoColumnDefs": [{
-                    "sTitle": "Current Attribute"
-                    , "aTargets": ["set_current"]
-                    , "mRender": function (value, type, full) {
-                        if (value == true) {
-                            return 'Current'
-                        }
-                        else {
-                            return '<a href="#" onclick="setCurrent(\'' + full.PersonAttributeId + '\');">Set Current</a>';
-                        }
-                    }
-                },
-                {
-                        "aTargets": ["person_attribute_id"]
-                    ,   "bVisible": false},
-                { "width": "200px", "targets": 0 },
-                { "width": "*%", "targets": 1 },
-                { "width": "150px", "targets": 2 }]
-            });
-        }
-    });
-}
 function refreshNotes(debtId) {
     $.ajax({
         type: "POST",
@@ -519,6 +506,70 @@ function refreshAddresses(partyPin) {
         }
     });
 }
+function refreshPersonAttributes(partyPin) {
+    $.ajax({
+        type: "POST",
+        url: "DataService.aspx/GetPersonAttribute",
+        data: "{'sourcePin':'" + partyPin + "'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            if (result.hasOwnProperty("d")) { result = result.d; }
+            $("#tablePerson").dataTable({
+                "destroy": true,
+                "aaData": result,
+                aoColumns: [
+                    { mData: 'AttributeText' },
+                    { mData: 'AttributeValue' },
+                    { mData: 'IsCurrent' },
+                    { mData: 'Streams' },
+                    { mData: 'ToDate' },
+                    { mData: 'FromDate' },
+                    { mData: 'PersonAttributeId' }],
+                "aoColumnDefs": [
+                    {
+                        "sTitle": "To Date"
+                        , "aTargets": ["from_date"]
+                        , "mRender": function (value, type, full) {
+                            if (value != null) {
+                                var dtStart = new Date(parseInt(value.substr(6)));
+                                var dtStartWrapper = moment(dtStart);
+                                return dtStartWrapper.format('DD/MM/YYYY');
+                            } else { return ''; }
+                        }
+                    }, {
+                    "sTitle": "From Date"
+                        , "aTargets": ["to_date"]
+                        , "mRender": function (value, type, full) {
+                            if (value != null) {
+                                var dtStart = new Date(parseInt(value.substr(6)));
+                                var dtStartWrapper = moment(dtStart);
+                                return dtStartWrapper.format('DD/MM/YYYY');
+                            } else { return ''; }
+                        }
+                }, {
+                    "sTitle": "Current Attribute"
+                    , "aTargets": ["set_current"]
+                    , "mRender": function (value, type, full) {
+                        if (value == true) {
+                            return 'Current';
+                        }
+                        else {
+                            return '<a href="#" onclick="setCurrent(\'' + full.PersonAttributeId + '\');">Set Current</a>';
+                        }
+                    }
+                },
+                {
+                    "aTargets": ["person_attribute_id"]
+                    , "bVisible": false
+                },
+                { "width": "200px", "targets": 0 },
+                { "width": "*%", "targets": 1 },
+                { "width": "150px", "targets": 2 }]
+            });
+        }
+    });
+}
 
 function createNote() {
     $.ajax({
@@ -629,44 +680,70 @@ function setCurrent(id) {
     });
 }
 
-function ajh() {
-    alert('Save');
-    $('#myModal').modal('hide');
-}
 function groupDebts() {
-    var checkedInvoiceLineIds = [];
-    $(".debtGroupItems:checked").each(function () {
-        checkedInvoiceLineIds.push($(this).data("debtGroupDebtId"));
-    });
-
-
+    var debtIdString = '';
+    $(".debtGroupItems:checked").each(function () { debtIdString = debtIdString + $(this).attr("debtGroupDebtId") + ','; });
+    console.log(debtIdString);
     $.ajax({
         type: "POST",
-        url: "DataService.aspx/CreateDebtGroup",
-        // CreateDebtGroup(string debtIdString, int userId, int partyPin, string source)
-        data: "{'debtId':'" + $("#selectedDebtId").val() + "','userId':'" + $('#UserSessionToken').val() + "','attributeId':'" + $('#debtAttributes').val() + "','isCurrent':'true','attributeValue':'" + $('#debtAttributesValue').val() + "'}",
+        url: "DataService.aspx/CreateDebtGroup", 
+        data: "{'debtIdString':'" + debtIdString + "','userId':'" + $('#UserSessionToken').val() + "','partyPin':'" + $("#cnpin").val() + "'}",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
             if (result.d != true) {
-                alert('error: CreateDebtAttribute returned FALSE');
+                alert('error: groupDebts returned FALSE');
             } else {
-                $("#debtAttributesValue").val("");
-                refreshDebtAttributes($("#selectedDebtId").val());
+                refreshSingleDebtView();
             }
-            $('#debtAttributeModal').modal('hide');
         },
         failure: function (error) {
             alert(error);
-            $('#debtAttributeModal').modal('hide');
         }
     });
 
-
-
-
     $('#myModal').modal('hide');
+}
+function ungroupDebts() {
+    var debtIdString = '';
+    $(".debtGroupItems:checked").each(function () { debtIdString = debtIdString + $(this).attr("debtGroupDebtId"); });
+    console.log(debtIdString);
+    $.ajax({
+        type: "POST",
+        url: "DataService.aspx/RemoveDebtGroup",
+        data: "{'debtId':'" + debtIdString + "'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            if (result.d != true) {
+                alert('error: ungroupDebts returned FALSE');
+            } else {
+                refreshSingleDebtView();
+            }
+        },
+        failure: function (error) {
+            alert(error);
+        }
+    });
+    $('#ungroupDebtModal').modal('hide');
 }
 
 
 
+
+Array.prototype.contains = function (v) {
+    for (var i = 0; i < this.length; i++) {
+        if (this[i] === v) return true;
+    }
+    return false;
+};
+
+Array.prototype.unique = function () {
+    var arr = [];
+    for (var i = 0; i < this.length; i++) {
+        if (!arr.contains(this[i])) {
+            arr.push(this[i]);
+        }
+    }
+    return arr;
+}

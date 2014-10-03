@@ -17,6 +17,7 @@ namespace CollectionHubData
         public string   RecoveryCycle { get; set; }
         public DateTime? DebtDate { get; set; }
         public DateTime? LastActionDate { get; set; }
+        public string GroupOrder { get; set; }
 
         public DebtItem() { }
         public DebtItem(System.Data.SqlClient.SqlDataReader value)
@@ -30,6 +31,7 @@ namespace CollectionHubData
             RecoveryCycle       = value["Recovery_Cycle"].ToString();
             Status              = value["cd_Status"].ToString();
             Type                = value["cd_Type"].ToString();
+            GroupOrder          = value["OrderId"].ToString();
 
             object sqlDebtOutstanding = value["cd_os_bal"];
             DebtOutstanding = (sqlDebtOutstanding == System.DBNull.Value)

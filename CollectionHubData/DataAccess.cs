@@ -7,8 +7,8 @@ namespace CollectionHubData
 {
     public class DataAccess
     {
-        //private const string CONNECTION_STRING = "Data Source=192.168.1.17;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=HubAdmin;Password=Croydon#";
-        private const string CONNECTION_STRING = "Data Source=HIT-DEV-02\\SQL14;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=sa;Password=bakeryCakes1";
+        private const string CONNECTION_STRING = "Data Source=192.168.1.17;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=HubAdmin;Password=Croydon#";
+        //private const string CONNECTION_STRING = "Data Source=HIT-DEV-02\\SQL14;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=sa;Password=bakeryCakes1";
         
         
         public bool SetRecoveryCycle(int debtId, int recoveryCycleId, int userId, DateTime recoveryDateTime)
@@ -33,7 +33,7 @@ namespace CollectionHubData
             }
             return returnvalue;
         }
-        public bool CreateDebtGroup(string debtIdString, int userId, int partyPin, string source)
+        public bool CreateDebtGroup(string debtIdString, int userId, int partyPin)
         {
             var returnvalue = false;
             using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
@@ -43,29 +43,28 @@ namespace CollectionHubData
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add(new SqlParameter("DebtIdList", debtIdString));
-                    sqlCommand.Parameters.Add(new SqlParameter("Source", source));
                     sqlCommand.Parameters.Add(new SqlParameter("UserId", userId));
-                    sqlCommand.Parameters.Add(new SqlParameter("Party_pin", partyPin));
+                    sqlCommand.Parameters.Add(new SqlParameter("cn_pin", partyPin));
 
                     var count = sqlCommand.ExecuteNonQuery();
-
                     if (count > 0) returnvalue = true;
                 }
                 sqlDataConnection.Close();
             }
             return returnvalue;
         }
-        public bool RemoveDebtFromGroup(int debtId)
+        public bool RemoveDebtGroup(int debtId)
         {
             var returnvalue = false;
             using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
             {
                 sqlDataConnection.Open();
-                using (var sqlCommand = new SqlCommand("[CHP_DEBTGROUP_CREATE]", sqlDataConnection))
+                using (var sqlCommand = new SqlCommand("[CHP_DEBTGROUP_DELETE]", sqlDataConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add(new SqlParameter("DebtId", debtId));
-                    sqlCommand.Parameters.Add(new SqlParameter("ERROR_MESSAGE", System.Data.SqlDbType.Text).Direction);
+
+                    sqlCommand.Parameters.Add(new SqlParameter("ERROR_MESSAGE", System.Data.SqlDbType.NVarChar, 200));
                     sqlCommand.Parameters["ERROR_MESSAGE"].Direction = System.Data.ParameterDirection.Output;
 
                     var count = sqlCommand.ExecuteNonQuery();

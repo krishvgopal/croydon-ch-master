@@ -77,10 +77,13 @@
                             <th>Recovery Cycle</th>
                             <th>Status</th>
                             <th>Type</th>
+                            <th class="group_order">GroupOrder</th>
                         </tr>
                     </thead>
                 </table>
-                <a data-toggle="modal" href="modals/page.html" data-target="#myModal">Create Group</a>
+                <a data-toggle="modal" href="modals/CreateDebtGroup.html" data-target="#myModal">Create Group</a>
+                <a data-toggle="modal" href="modals/RemoveDebtGroup.html" data-target="#ungroupDebtModal">Remove Group</a>
+                <%--class="btn btn-outline btn-primary"--%>
             </div>
             <div style="clear:both"><br /></div>
             <ul class="nav nav-tabs">
@@ -187,6 +190,9 @@
                                     <th>Type</th>
                                     <th>Information</th>
                                     <th class="set_current">Current</th>
+                                    <th>From Streams</th>
+                                    <th class="from_date">Date From</th>
+                                    <th class="to_date">Date To</th>
                                     <th class="person_attribute_id"></th>
                                 </tr>
                             </thead>
@@ -274,6 +280,12 @@
         </div>
         <div class="modal fade" id="tableArrangementsModal" tabindex="-1" role="dialog" aria-labelledby="tableArrangementsModal" aria-hidden="true" >
             <div class="modal-dialog" style="width:825px">
+                <div class="modal-content">
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="ungroupDebtModal" tabindex="-1" role="dialog" aria-labelledby="ungroupDebtModal" aria-hidden="true" >
+            <div class="modal-dialog">
                 <div class="modal-content">
                 </div>
             </div>
