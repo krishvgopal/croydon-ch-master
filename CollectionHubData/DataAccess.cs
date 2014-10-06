@@ -254,8 +254,6 @@ namespace CollectionHubData
             }
             sqlDataConnection.Close();
 
-        
-
             return returnValue;
         }
         public string GetDashboardDataAmountByYear(int sourceId, int historic)
