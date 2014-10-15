@@ -5,17 +5,31 @@ public partial class Search : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        cnpin.Value             = Request["cn_pin"].ToString();
+        cnpin.Value = Request["cn_pin"].ToString();
 
-        var da                   = new DataAccess();
-        var debtAddress          = da.GetAddressForDebt(Request["cn_pin"].ToString());
-
-        pageFullName.Text        = debtAddress.FullName;
-        pageFullAddress.Text     = debtAddress.FullAddress;
-        pageTotalDebt.Text       = debtAddress.TotalDebt.ToString();
-        pageDebtOutstanding.Text = debtAddress.DebtOS.ToString();
+        var da          = new DataAccess();
+        var debtAddress = da.GetAddressForDebt(Request["cn_pin"].ToString());
+        var pageIconUrl = "img/person_misc.png";
         
-        //sourceValue.Value           = Request["source"].ToString();
-        //sourceRefValue.Value        = Request["source_ref"].ToString();
+        var mapsUrl     = "https://www.google.co.uk/maps/place/" + debtAddress.FullAddress.UrlEncode();
+        var searchUrl   = "https://www.google.co.uk/?gws_rd=ssl#q=";
+
+        var addressUrl  = @"<a target='_blank' href=" + mapsUrl + ">" + debtAddress.FullAddress + "</a>";
+        
+        pageFullName.Text           = debtAddress.FullName;
+        pageFullAddress.Text        = addressUrl;
+        pageTotalDebt.Text          = debtAddress.TotalDebt.ToString();
+        pageDebtOutstanding.Text    = debtAddress.DebtOS.ToString();
+
+        var thisTitle = String.Empty;
+
+        if (debtAddress.FullName != null)
+        {
+            thisTitle = debtAddress.FullName.ToLower();
+            if (thisTitle.StartsWith("mr")) { pageIconUrl = "img/person_boy.png"; }
+            if (thisTitle.StartsWith("miss") || thisTitle.StartsWith("mrs") || thisTitle.StartsWith("ms")){pageIconUrl = "img/person_girl.png";}
+        }
+
+        pageIcon.ImageUrl = pageIconUrl;
     }
 }

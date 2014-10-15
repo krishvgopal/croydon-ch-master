@@ -24,20 +24,20 @@
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label>Amount From</label>
-                        <input class="form-control" id="amountFrom" name="firstName">
+                        <input class="form-control-compact" id="amountFrom" name="firstName">
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label>Amount To</label>
-                        <input class="form-control" id="amountTo" name="lastName">
+                        <input class="form-control-compact" id="amountTo" name="lastName">
                     </div>
                 </div>
                 
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label>Stream Count</label>
-                        <select class="form-control" id="debtStreamCount">
+                        <select class="form-control-compact" id="debtStreamCount">
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
@@ -51,7 +51,7 @@
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label>Includes Debt Streem</label>
-                        <select class="form-control" id="debtStreamCode">
+                        <select class="form-control-compact" id="debtStreamCode">
                             <option value="0">All</option>
                             <option value="1">Council Tax</option>
                             <option value="2">Housing Benifit</option>
@@ -63,7 +63,7 @@
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label>Last Payment Made</label>
-                        <select class="form-control" id="lastPayment">
+                        <select class="form-control-compact" id="lastPayment">
                             <option value="0">All</option>
                             <option value="1">Within Last Week</option>
                             <option value="2">Within Last Month</option>
@@ -76,7 +76,7 @@
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label>Debt Age</label>
-                        <select class="form-control" id="debtAge">
+                        <select class="form-control-compact" id="debtAge">
                             <option value="0">All</option>
                             <option value="1">Within Last Week</option>
                             <option value="2">Within Last Month</option>
@@ -102,7 +102,7 @@
             <div class="col-lg-12">
                 <br />
                 <div class="table-responsive" id="searchResultsTable">
-                    <table class="table table-striped table-bordered table-hover" id="searchTable">
+                    <table class="table compact table-striped table-bordered table-hover" id="searchTable">
                         <thead> 
                             <tr>
                                 <th class="full_name">Full Name</th>

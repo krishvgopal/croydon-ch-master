@@ -45,7 +45,7 @@
             </div>      
             <script>
                        
-                //displayPercentageReport();
+                displayPercentageReport();
                 //displayAmountReport();
 
                 function createChart(yMin, yMax) {

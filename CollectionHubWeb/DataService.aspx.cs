@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Script.Serialization;
 using System.Web.Script.Services;
 using CollectionHubData;
@@ -129,6 +130,17 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    public static List<DebtItem> GetDebts(int pin, bool showCleared)
+    {
+        var returnData = new List<DebtItem>();
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.GetDebts(pin);
+        if (!showCleared) { returnData.RemoveAll(o => o.DebtOutstanding.Equals(0)); }
+       
+        return returnData;
+    }
+    [WebMethod]
     public static List<FullNameFullAddressSearchResults> SearchFullNameFullAddress(string firstName, string lastName)
     {
         var returnData = new List<FullNameFullAddressSearchResults>();
@@ -246,6 +258,29 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
+
+    [WebMethod]
+    public static List<MatchList> GetMatchListByPin(int pin)
+    {
+        var returnData = new List<MatchList>();
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.GetMatchListByPin(pin);
+
+        return returnData;
+    }
+
+    [WebMethod]
+    public static List<MisMatchList> GetMisMatchListByPin(int pin)
+    {
+        var returnData = new List<MisMatchList>();
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.GetMisMatchListByPin(pin);
+
+        return returnData;
+    }
+
 
     [WebMethod]
     [ScriptMethod(UseHttpGet = false, ResponseFormat = ResponseFormat.Json)]

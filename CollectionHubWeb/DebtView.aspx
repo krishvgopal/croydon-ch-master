@@ -25,47 +25,38 @@
 <asp:Content ID="Content5" ContentPlaceHolderID="pageBody" Runat="Server">
     <div class="row">
         <div class="col-lg-12">
-            <div class="well" style="height:75px;">
+            
+            <div style="border-bottom: 1px solid rgb(215,229,223); height:90px" > 
+                <div class="col-lg-4" style="padding-left:0px !important; padding-bottom: 10px !important; width: 90px">
+                    <asp:Image runat="server" ID="pageIcon"/>
+                </div> 
                 <div class="col-lg-2">
-                    <div class="form-group">
-                        <label>Full Name</label>
-                        <p class="form-control-static">
-                            <asp:Literal ID="pageFullName" runat="server"></asp:Literal>
-                        </p>
-                    </div>
+                    <p class="form-control-compact-static">
+                        <asp:Literal ID="pageFullName" runat="server"></asp:Literal>
+                        <br/><br/>
+                        <asp:Literal ID="pageFullAddress" runat="server"></asp:Literal>
+                    </p>
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <label>Address</label>
-                        <p class="form-control-static">
-                            <asp:Literal ID="pageFullAddress" runat="server"></asp:Literal>
-                        </p>
-                    </div>
-                </div>
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <label>Total Debt</label>
-                        <p class="form-control-static">
-                            <strong>
-                                <asp:Literal ID="pageTotalDebt" runat="server"></asp:Literal>
-                            </strong>
-                        </p>
-                    </div>
-                </div>
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <label>Total Debt Outstanding</label>
-                        <p class="form-control-static">
-                            <strong>
-                                <asp:Literal ID="pageDebtOutstanding" runat="server"></asp:Literal>
-                            </strong>
-                        </p>
+                        <label>Total Debt &pound;</label>
+                        <asp:Literal ID="pageTotalDebt" runat="server"></asp:Literal>
+                        <br/>
+                        <label>Total Debt Outstanding &pound;</label>
+                        <asp:Literal ID="pageDebtOutstanding" runat="server"></asp:Literal>
+                        <br/>
+                         <select id="showCleared" class="form-control-compact" style="width:80% !important;float:left;margin-top: 5px" onchange="refreshDebtsList();" >
+                           <option value="1">Show Open Debts</option>
+                           <option value="2">Show All Debts</option>
+                        </select>
+                        <img id="showClearedLoadingImage" src="img/gif-load.gif" alt="Loading Image" style="float:left;padding-left: 5px;padding-top: 3px;" />
                     </div>
                 </div>
             </div>
+            
             <div class="table-responsive">
-                <br/>
-                <table class="table table-striped table-bordered table-hover" id="dataTableMain">
+               <br/>
+                <table class="table compact table-striped table-bordered table-hover" id="dataTableMain">
                     <thead>
                         <tr>
                             <th class="select_id">Select</th>
@@ -83,7 +74,6 @@
                 </table>
                 <a data-toggle="modal" href="modals/CreateDebtGroup.html" data-target="#myModal">Create Group</a>
                 <a data-toggle="modal" href="modals/RemoveDebtGroup.html" data-target="#ungroupDebtModal">Remove Group</a>
-                <%--class="btn btn-outline btn-primary"--%>
             </div>
             <div style="clear:both"><br /></div>
             <ul class="nav nav-tabs">
@@ -96,6 +86,8 @@
                 <li><a href="#notes"        data-toggle="tab">Notes</a></li>
                 <li><a href="#current"      data-toggle="tab">Current Attributes</a>
                 <li><a href="#addresses"    data-toggle="tab">Related Addresses</a>
+                <li><a href="#matchTab1"    data-toggle="tab">Matches</a>
+                <li><a href="#matchTab2"    data-toggle="tab">Mis-Matches</a>
                 </li>
             </ul>
             <div class="tab-content">
@@ -231,6 +223,7 @@
                         </table>
                     </div>
                 </div>
+
                 <div class="tab-pane fade" id="addresses">
                     <br />
                     <div class="table-responsive">
@@ -243,6 +236,45 @@
                                 </tr>
                             </thead>
                         </table>
+                    </div>
+                </div> 
+
+                <div class="tab-pane fade" id="matchTab1">
+                    <br />
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover" id="matchTable1">
+                            <thead>
+                                <tr>
+                                    <th>Source Name</th>
+                                    <th>Source Acc Ref</th>
+                                    <th>Full Name</th>
+                                    <th>Full Address</th>
+                                    <th>NINO</th>
+                                    <th class="until_date">DOB</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="matchTab2">
+                    <br />
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover" id="matchTable2">
+                            <thead>
+                                <tr>
+                                    <th>Source Name</th>
+                                    <th>Source Acc Ref</th>
+                                    <th>Full Name</th>
+                                    <th>Full Address</th>
+                                    <th>NINO</th>
+                                    <th>DOB</th>
+                                    <th>Match Score</th>
+                                    <th>Matched Elements</th>
+                                </tr>
+                            </thead>
+                        </table>
+                      </div>
                     </div>
                     <%--<a data-toggle="modal" href="modals/CreateNewAddress.html" data-target="#addressModal" class="btn btn-outline btn-primary">Create New Address</a>--%>
                 </div> 
@@ -290,7 +322,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    <%--</div>--%>
     <script type="text/javascript" charset="utf8" src="js/DebtView.js"></script>
 </asp:Content>
 

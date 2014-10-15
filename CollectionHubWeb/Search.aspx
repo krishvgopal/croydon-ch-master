@@ -24,43 +24,43 @@
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label>First Name</label>
-                        <input class="form-control" id="firstName" name="firstName">
+                        <input class="form-control-compact" id="firstName" name="firstName">
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label>Last Name</label>
-                        <input class="form-control" id="lastName" name="lastName">
+                        <input class="form-control-compact" id="lastName" name="lastName">
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label>NINO</label>
-                        <input class="form-control">
+                        <input class="form-control-compact">
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label>D.O.B.</label>
-                        <input class="form-control">
+                        <input class="form-control-compact">
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label>Address</label>
-                        <input class="form-control">
+                        <input class="form-control-compact">
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label>Street</label>
-                        <input class="form-control">
+                        <input class="form-control-compact">
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label>Postcode</label>
-                        <input class="form-control">
+                        <input class="form-control-compact">
                     </div>
                 </div>
                 <div style="clear:both;"></div>
@@ -77,7 +77,7 @@
             <div class="col-lg-12">
                 <br />
                 <div class="table-responsive" id="searchResultsTable">
-                    <table class="table table-striped table-bordered table-hover" id="searchTable">
+                    <table class="table compact table-striped table-bordered table-hover" id="searchTable">
                         <thead> 
                             <tr>
                                 <th class="record_selector">Debtor Name</th>  
