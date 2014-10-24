@@ -5,10 +5,11 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="headMenu" Runat="Server">
     <sh:SiteHeader ID="SiteHeader" runat="server" />
-    <asp:HiddenField ID="sourceValue" runat="server" ClientIDMode="Static" />
+    <asp:HiddenField ID="sourceValue" runat="server"    ClientIDMode="Static" />
     <asp:HiddenField ID="sourceRefValue" runat="server" ClientIDMode="Static" />
     <asp:HiddenField ID="selectedDebtId" runat="server" ClientIDMode="Static" />
     <asp:HiddenField ID="cnpin" runat="server" ClientIDMode="Static" />
+     <asp:HiddenField ID="uprn" runat="server" ClientIDMode="Static" />
     <asp:HiddenField ID="debtRowTotalValue" runat="server" ClientIDMode="Static" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="headInfo" Runat="Server">
@@ -23,9 +24,14 @@
     </div>
 </asp:Content>
 <asp:Content ID="Content5" ContentPlaceHolderID="pageBody" Runat="Server">
+     
+    <div class="progress" style="margin: -15px -15px 15px -15px;height:5px">
+        <div class="progress-bar" id="loadProgress" role="progressbar" style="width:0%;">
+        </div>
+    </div>
+    
     <div class="row">
         <div class="col-lg-12">
-            
             <div style="border-bottom: 1px solid rgb(215,229,223); height:90px" > 
                 <div class="col-lg-4" style="padding-left:0px !important; padding-bottom: 10px !important; width: 90px">
                     <asp:Image runat="server" ID="pageIcon"/>
@@ -53,7 +59,6 @@
                     </div>
                 </div>
             </div>
-            
             <div class="table-responsive">
                <br/>
                 <table class="table compact table-striped table-bordered table-hover" id="dataTableMain">
@@ -77,17 +82,18 @@
             </div>
             <div style="clear:both"><br /></div>
             <ul class="nav nav-tabs">
-                <li class="active"><a href="#recovery" data-toggle="tab">Recovery History</a></li>
-                <li><a href="#payments"     data-toggle="tab">Payments</a></li>
-                <li><a href="#parties"      data-toggle="tab">Parties</a></li>
-                <li><a href="#arrangements" data-toggle="tab">Arrangements</a></li>
-                <li><a href="#debt"         data-toggle="tab">Debt Attributes</a></li>
-                <li><a href="#person"       data-toggle="tab">Person Attributes</a></li>
-                <li><a href="#notes"        data-toggle="tab">Notes</a></li>
-                <li><a href="#current"      data-toggle="tab">Current Attributes</a>
-                <li><a href="#addresses"    data-toggle="tab">Related Addresses</a>
-                <li><a href="#matchTab1"    data-toggle="tab">Matches</a>
-                <li><a href="#matchTab2"    data-toggle="tab">Mis-Matches</a>
+                <li class="active"> 
+                    <a href="#recovery"     data-toggle="tab"  id="arefRecovery">Recovery History</a></li>
+                <li><a href="#payments"     data-toggle="tab"  id="arefPayments">Payments</a></li>
+                <li><a href="#parties"      data-toggle="tab"  id="arefParties">Parties</a></li>
+                <li><a href="#arrangements" data-toggle="tab"  id="arefArrangements">Arrangements</a></li>
+                <li><a href="#debt"         data-toggle="tab"  id="arefDebtAttributes">Debt Attributes</a></li>
+                <li><a href="#person"       data-toggle="tab"  id="arefPersonAttributes">Person Attributes</a></li>
+                <li><a href="#notes"        data-toggle="tab"  id="arefNotes">Notes</a></li>
+                <li><a href="#current"      data-toggle="tab"  id="arefCurrentAttributes">Current Attributes</a>
+                <li><a href="#addresses"    data-toggle="tab"  id="arefRelatedAddresses">Related Addresses</a>
+                <li><a href="#matchTab1"    data-toggle="tab"  id="arefMatches">Matches</a>
+                <li><a href="#matchTab2"    data-toggle="tab"  id="arefMisMatches">Mis-Matches</a>
                 </li>
             </ul>
             <div class="tab-content">
@@ -223,7 +229,6 @@
                         </table>
                     </div>
                 </div>
-
                 <div class="tab-pane fade" id="addresses">
                     <br />
                     <div class="table-responsive">
@@ -238,8 +243,18 @@
                         </table>
                     </div>
                 </div> 
-
                 <div class="tab-pane fade" id="matchTab1">
+                    <table class="table compact table-striped table-bordered table-hover" id="dataTablePersonDetails">
+                        <thead>
+                            <tr>
+                                <th class="AccountRef">Source Acc Ref</th>
+                                <th class="FULLNAME">Full Name</th>
+                                <th class="FULLADDRESS">Full Address</th>
+                                <th class="NINO">NINO</th>
+                                <th class="DOB">DOB</th>
+                            </tr>
+                        </thead>
+                    </table>
                     <br />
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered table-hover" id="matchTable1">
@@ -251,13 +266,43 @@
                                     <th>Full Address</th>
                                     <th>NINO</th>
                                     <th class="until_date">DOB</th>
+                                    <th class="MatchId"></th>
                                 </tr>
                             </thead>
                         </table>
                     </div>
-                </div>
 
-                <div class="tab-pane fade" id="matchTab2">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover" id="matchTable2">
+                            <thead>
+                                <tr>
+                                    <th>Source Name</th>
+                                    <th>Source Acc Ref</th>
+                                    <th>Full Name</th>
+                                    <th>Full Address</th>
+                                    <th>NINO</th>
+                                    <th>DOB</th>
+                                    <th>Match Score</th>
+                                    <th>Matched Elements</th>
+                                </tr>
+                            </thead>
+                        </table>
+                      </div>
+
+
+                </div>
+               <%-- <div class="tab-pane fade" id="matchTab2">
+                    <table class="table compact table-striped table-bordered table-hover" id="dataTablePersonDetailsSecond">
+                        <thead>
+                            <tr>
+                                <th class="AccountRef">Source Acc Ref</th>
+                                <th class="FULLNAME">Full Name</th>
+                                <th class="FULLADDRESS">Full Address</th>
+                                <th class="NINO">NINO</th>
+                                <th class="DOB">DOB</th>
+                            </tr>
+                        </thead>
+                    </table>
                     <br />
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered table-hover" id="matchTable2">
@@ -275,8 +320,8 @@
                             </thead>
                         </table>
                       </div>
-                    </div>
-                    <%--<a data-toggle="modal" href="modals/CreateNewAddress.html" data-target="#addressModal" class="btn btn-outline btn-primary">Create New Address</a>--%>
+                      <a href="#" class="btn btn-outline btn-primary" onclick="refresMisMisMatchList($('#cnpin').val());">Load Mismatch Records</a>
+                    </div>--%>
                 </div> 
             </div>
         </div>
@@ -322,7 +367,6 @@
                 </div>
             </div>
         </div>
-    <%--</div>--%>
-    <script type="text/javascript" charset="utf8" src="js/DebtView.js"></script>
+        <script type="text/javascript" charset="utf8" src="js/DebtView.js"></script>
 </asp:Content>
 

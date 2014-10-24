@@ -16,6 +16,7 @@ namespace CollectionHubData
         public string FullAddress   { get; set; }
         public string NINO          { get; set; }
         public string DOB           { get; set; }
+        public string MatchId       { get; set; }
 
         public MatchList() { }
         public MatchList(System.Data.SqlClient.SqlDataReader value)
@@ -27,7 +28,8 @@ namespace CollectionHubData
             FullName            = value["FullName"].ToString();
             FullAddress         = value["FullAddress"].ToString();
             NINO                = value["NINO"].ToString();
-            DOB                 = value["DOB"].ToString(); 
+            DOB                 = value["DOB"].ToString();
+            MatchId             = value["MatchId"].ToString(); 
         }
     }
     public class MisMatchList

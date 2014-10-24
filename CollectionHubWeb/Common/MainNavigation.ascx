@@ -11,10 +11,43 @@
             </span>
         </div>
     </li>
-    <li><a href="Dashboard.aspx"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a></li>
-    <li><a href="Search.aspx"><i class="fa fa-search fa-fw"></i> Name & Address </a></li>
-    <li><a href="DebtSearch.aspx"><i class="fa fa-search fa-fw"></i> Debt </a></li>
+    <li><a href="Dashboard.aspx">   <i class="fa fa-dashboard fa-fw"></i>   &nbsp;Dashboard</a></li>
+    <li><a href="Search.aspx">      <i class="fa fa-search fa-fw"></i>      &nbsp;Name & Address</a></li>
+    <li><a href="DebtSearch.aspx">  <i class="fa fa-search fa-fw"></i>      &nbsp;Debt</a></li>
+    <li><a href="Processes.aspx">   <i class="fa fa-cogs fa-fw"></i>        &nbsp;Processes</a></li>
 
-<%--    <li><a href="workqueue.aspx"><i class="fa fa-bars fa-fw"></i> Work Queue</a></li>
-    <li><a href="debtrecovery.aspx"><i class="fa fa-jpy fa-fw"></i> Auto Debt Recovery</a></li>--%>
+    <ul class="nav" id="side-menu">
+        <li><a href="#" onclick="toggleNavigation();"> <i id="resizeContainer" class="fa fa-expand"></i> </a></li>
+    </ul>
+
 </ul>
+
+<script>
+
+    function toggleNavigation()
+    {
+        var currentValue = $("#resizeContainer").attr("class");
+
+        if (currentValue == 'fa fa-expand') {
+            $("#page-wrapper").css({ 'margin': '0px 0px 0px 225px' });
+            $("#side-nav-master").css({ 'width': '225px' });
+            $("#resizeContainer").attr('class', 'fa fa-compress');
+        } else {
+            $("#page-wrapper").css({ 'margin': '0px 0px 0px 175px' });
+            $("#side-nav-master").css({ 'width': '175px' });
+            $("#resizeContainer").attr('class', 'fa fa-expand');
+        }
+
+        //if (currentValue == 'fa fa-expand') {
+        //    $("#page-wrapper").css({ 'margin': '0px 0px 0px 500px' });
+        //    $("#side-nav-master").css({ 'width': '500px' });
+        //    $("#resizeContainer").attr('class', 'fa fa-compress');
+        //} else {
+        //    $("#page-wrapper").css({ 'margin': '0px 0px 0px 175px' });
+        //    $("#side-nav-master").css({ 'width': '175px' });
+        //    $("#resizeContainer").attr('class', 'fa fa-expand');
+        //}
+
+    };
+</script>
+

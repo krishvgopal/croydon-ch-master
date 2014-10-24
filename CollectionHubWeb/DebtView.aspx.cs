@@ -6,9 +6,10 @@ public partial class Search : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         cnpin.Value = Request["cn_pin"].ToString();
+        uprn.Value  = Request["uprn"].ToString();
 
         var da          = new DataAccess();
-        var debtAddress = da.GetAddressForDebt(Request["cn_pin"].ToString());
+        var debtAddress = da.GetAddressForDebt(Request["cn_pin"].ToString(), Request["uprn"].ToString());
         var pageIconUrl = "img/person_misc.png";
         
         var mapsUrl     = "https://www.google.co.uk/maps/place/" + debtAddress.FullAddress.UrlEncode();

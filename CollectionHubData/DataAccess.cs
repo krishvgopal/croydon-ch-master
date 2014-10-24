@@ -7,9 +7,27 @@ namespace CollectionHubData
 {
     public class DataAccess
     {
-        //private const string CONNECTION_STRING = "Data Source=192.168.1.17;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=HubAdmin;Password=Croydon#";
-        private const string CONNECTION_STRING = "Data Source=HIT-DEV-02\\SQL14;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=sa;Password=bakeryCakes1;Connection Timeout=30";
-        
+        private const string CONNECTION_STRING = "Data Source=192.168.1.17;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=HubAdmin;Password=Croydon#;Connection Timeout=60";
+        //private const string CONNECTION_STRING = "Data Source=HIT-DEV-02\\SQL14;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=sa;Password=bakeryCakes1;Connection Timeout=30";
+
+        public bool RemoveMatch(int matchId)
+        {
+            var returnvalue = false;
+            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            {
+                sqlDataConnection.Open();
+                using (var sqlCommand = new SqlCommand("[CH_NAMES_UNLINK]", sqlDataConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add(new SqlParameter("matchId", matchId));
+
+                    var count = sqlCommand.ExecuteNonQuery();
+                    if (count > 0) returnvalue = true;
+                }
+                sqlDataConnection.Close();
+            }
+            return returnvalue;
+        }
         public bool SetRecoveryCycle(int debtId, int recoveryCycleId, int userId, DateTime recoveryDateTime)
         {
             var returnvalue = false;
@@ -785,9 +803,7 @@ namespace CollectionHubData
                     }
                 }
             }
-
             sqlDataConnection.Close();
-
             return returnValue;
         }
         public List<MisMatchList> GetMisMatchListByPin(int pin)
@@ -816,7 +832,6 @@ namespace CollectionHubData
 
             return returnValue;
         }
-
         public DebtSearchResult DebtSearch(decimal amountFrom, decimal amountTo, int debtStreamCount, int includesStreamCode, int lastPaymentCode, int debtAgeCode)
         {
             var returnValue = new DebtSearchResult();
@@ -875,7 +890,7 @@ namespace CollectionHubData
             }
             return returnValue;
         }
-        public DebtAddress GetAddressForDebt(string pin)
+        public DebtAddress GetAddressForDebt(string pin, string uprn)
         {
             var returnValue = new DebtAddress();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
@@ -886,6 +901,7 @@ namespace CollectionHubData
                 sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
 
                 sqlCommand.Parameters.Add(new SqlParameter("pin", pin));
+                sqlCommand.Parameters.Add(new SqlParameter("uprn", uprn));
 
                 var dataReader = sqlCommand.ExecuteReader();
 
@@ -980,6 +996,126 @@ namespace CollectionHubData
             {
                 return "0";
             }
+        }
+
+        public List<BatchProcessHistory> GetBatchProcessHistory()
+        {
+            List<BatchProcessHistory> returnValue = new List<BatchProcessHistory>();
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CHP_BATCH_PROCESS_HISTORY", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add(new BatchProcessHistory(dataReader));
+                    }
+                }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
+        public List<BatchProcess> GetBatchProcess(int bp_id)
+        {
+            List<BatchProcess> returnValue = new List<BatchProcess>();
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CHP_BATCH_PROCESS_byId", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("bp_id", bp_id));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add(new BatchProcess(dataReader));
+                    }
+                }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
+        public List<BatchProcessJobs> GetBatchProcessJobs()
+        {
+            List<BatchProcessJobs> returnValue = new List<BatchProcessJobs>();
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CHP_BATCH_PROCESS_LIST", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add(new BatchProcessJobs(dataReader));
+                    }
+                }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
+        public List<BatchProcessFields> GetBatchProcessFields(int bp_id)
+        {
+            List<BatchProcessFields> returnValue = new List<BatchProcessFields>();
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CHP_BATCH_PROCESS_Fields", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("bp_id", bp_id));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add(new BatchProcessFields(dataReader));
+                    }
+                }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
+        public List<PersonDetails> GetPersonDetails(int pin, string uprn)
+        {
+            List<PersonDetails> returnValue = new List<PersonDetails>();
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open(); // CHP_GetNameAddress_byPIN // CHP_PersonDetails_byPIN
+            using (var sqlCommand = new SqlCommand("CHP_GetNameAddress_byPIN", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("PIN", pin));
+                sqlCommand.Parameters.Add(new SqlParameter("UPRN", uprn));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add(new PersonDetails(dataReader));
+                    }
+                }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
         }
     }
 }

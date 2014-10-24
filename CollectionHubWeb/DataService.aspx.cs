@@ -258,7 +258,6 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-
     [WebMethod]
     public static List<MatchList> GetMatchListByPin(int pin)
     {
@@ -269,7 +268,6 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-
     [WebMethod]
     public static List<MisMatchList> GetMisMatchListByPin(int pin)
     {
@@ -277,6 +275,18 @@ public partial class DataService : System.Web.UI.Page
         var dataAccess = new CollectionHubData.DataAccess();
 
         returnData = dataAccess.GetMisMatchListByPin(pin);
+
+        return returnData;
+    }
+
+    // public List<PersonDetails> GetPersonDetails(int pin)
+    [WebMethod]
+    public static List<PersonDetails> GetPersonDetails(int pin, string uprn)
+    {
+        var returnData = new List<PersonDetails>();
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.GetPersonDetails(pin, uprn);
 
         return returnData;
     }
@@ -297,6 +307,57 @@ public partial class DataService : System.Web.UI.Page
     {
         var dataAccess = new DataAccess();
         var returnData = dataAccess.GetDashboardDataAmountByYear(sourceId, historic);
+
+        return returnData;
+    }
+    [WebMethod]
+    public static List<BatchProcessHistory> GetBatchProcessHistory()
+    {
+        var returnData = new List<BatchProcessHistory>();
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.GetBatchProcessHistory();
+
+        return returnData;
+    }
+    [WebMethod]
+    public static List<BatchProcess> GetBatchProcess(int bp_id)
+    {
+        var returnData = new List<BatchProcess>();
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.GetBatchProcess(bp_id);
+
+        return returnData;
+    }
+    // 
+    [WebMethod]
+    public static List<BatchProcessJobs> GetBatchProcessJobs()
+    {
+        var returnData = new List<BatchProcessJobs>();
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.GetBatchProcessJobs();
+
+        return returnData;
+    }
+    [WebMethod]
+    public static List<BatchProcessFields> GetBatchProcessFields(int bp_id)
+    {
+        var returnData = new List<BatchProcessFields>();
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.GetBatchProcessFields(bp_id);
+
+        return returnData;
+    }
+    [WebMethod]
+    public static bool RemoveMatch(int matchId)
+    {
+        var returnData = false;
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.RemoveMatch(matchId);
 
         return returnData;
     }

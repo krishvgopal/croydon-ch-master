@@ -20,12 +20,13 @@ function doSearch() {
                     { mData: 'Pin' },
                     { mData: 'Source' },
                     { mData: 'CN_Pin' },
+                    { mData: 'Urpin' }
                 ],
                 "aoColumnDefs": [{
                       "aTargets": ["record_selector"]
                     , "mRender": function (value, type, full) {
                         //return '<a href="DebtView.aspx?source_ref=' + full.Pin + '&source=' + full.Source + '" target=\"_blank\" ">' + value + '</a>';
-                        return '<a href="DebtView.aspx?cn_pin=' + full.CN_Pin + '" target=\"_blank\" ">' + value + '</a>';
+                        return '<a href="DebtView.aspx?cn_pin=' + full.CN_Pin + '&uprn=' + full.Urpin + '" target=\"_blank\" ">' + value + '</a>';
                     }
                 },{
                     "aTargets": ["source"]
@@ -35,6 +36,9 @@ function doSearch() {
                     , "bVisible": false
                 }, {
                     "aTargets": ["cn_pin"]
+                    , "bVisible": false
+                }, {
+                    "aTargets": ["uprn"]
                     , "bVisible": false
                 }
                 ]

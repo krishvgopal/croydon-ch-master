@@ -2,9 +2,6 @@
 $("#searchResults").hide();
 
 function doSearch() {
-
-    console.log("{'amountFrom':'" + $("#amountFrom").val() + "', 'amountTo':'" + $("#amountTo").val() + "', 'debtStreamCount':'0', 'includesStreamCode':'" + $("#debtStreamCode").val() + "', 'lastPaymentCode':'" + $("#lastPayment").val() + "', 'debtAgeCode':'" + $("#debtAge").val() + "'}");
-
     $("#loadingImage").toggle();
     $.ajax({
         type: "POST",

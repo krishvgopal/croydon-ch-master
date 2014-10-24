@@ -86,6 +86,7 @@
                                 <th class="source"></th>
                                 <th class="pin_id"></th>
                                 <th class="cn_pin"></th>
+                                <th class="uprn"></th>
                             </tr>
                         </thead>
                     </table>
