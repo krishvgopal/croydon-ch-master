@@ -17,6 +17,7 @@ namespace CollectionHubData
         public string NINO          { get; set; }
         public string DOB           { get; set; }
         public string MatchId       { get; set; }
+        public string InfoString    { get; set; }
 
         public MatchList() { }
         public MatchList(System.Data.SqlClient.SqlDataReader value)
@@ -29,7 +30,16 @@ namespace CollectionHubData
             FullAddress         = value["FullAddress"].ToString();
             NINO                = value["NINO"].ToString();
             DOB                 = value["DOB"].ToString();
-            MatchId             = value["MatchId"].ToString(); 
+            MatchId             = value["MatchId"].ToString();
+
+            if (value["MatchUser"] != DBNull.Value)
+            {
+                InfoString += "Matched By : " + value["MatchUser"].ToString() + Environment.NewLine ;
+            }
+            if (value["MatchDate"] != DBNull.Value)
+            {
+                InfoString += "Matched At : " + value["MatchDate"].ToString();
+            }
         }
     }
     public class MisMatchList
@@ -46,8 +56,11 @@ namespace CollectionHubData
         //public string MatchToDOB        { get; set; }
         //public string MatchToNINO       { get; set; }
         //public string MatchToOrgName    { get; set; }
+        public string MatchId           { get; set; }
         public string MatchScore        { get; set; }
         public string MatchedElements   { get; set; }
+        public string InfoString        { get; set; }
+
         
         public MisMatchList() { }
         public MisMatchList(System.Data.SqlClient.SqlDataReader value)
@@ -66,6 +79,24 @@ namespace CollectionHubData
             //MatchToOrgName  = value["MatchToOrgName"].ToString();
             MatchScore      = value["MatchScore"].ToString();
             MatchedElements = value["MatchedElements"].ToString();
+            MatchId         = value["MatchId"].ToString();
+
+            if (value["MatchUser"] != DBNull.Value)
+            {
+                InfoString += "Matched By : " + value["MatchUser"].ToString() + Environment.NewLine ;
+            }
+            if (value["MatchDate"] != DBNull.Value)
+            {
+                InfoString += "Matched At : " + value["MatchDate"].ToString() + Environment.NewLine;
+            }
+            if (value["MatchUser"] != DBNull.Value)
+            {
+                InfoString += "Matched On : " + value["MatchedElements"].ToString() + Environment.NewLine ;
+            }
+            if (value["MatchDate"] != DBNull.Value)
+            {
+                InfoString += "Matching Score : " + value["MatchScore"].ToString();
+            }
         }
     }
 }

@@ -1,28 +1,24 @@
 ﻿$("#showClearedLoadingImage").hide();
+var progressInterval    = 20;
+var progressValue       = 0;
 
 $(function () {
     var sourcePin = $("#cnpin").val();
     refreshSingleDebtView();
-    setTimeout(function () { updateProgressBar('0'); }, 1500);
 });
 
 function selectRow(idValue) {
-    updateProgressBar('10');
+
     $("#selectedDebtId").val(idValue);
-    updateProgressBar('20');
+
+    progressInterval    = 17;
+    progressValue       = 0;
     refreshRecoveryCycles(idValue);
-    updateProgressBar('30');
     refreshPaymentHistory(idValue);
-    updateProgressBar('45');
     refreshParties(idValue);
-    updateProgressBar('65');
     refreshDebtAttributes(idValue);
-    updateProgressBar('80');
     refreshNotes(idValue);
-    updateProgressBar('90');
     refreshArrangements(idValue);
-    updateProgressBar('100');
-    //setTimeout(function () { updateProgressBar('0'); }, 1500);
 }
 
 function loadDebtsView(result) {
@@ -211,17 +207,8 @@ function loadArrangementPaymentMethodList() {
 
 function refreshDebtsList() {
 
-    //console.log('start');
-    //$("#showClearedLoadingImage").show();
-    //console.log('end');
-
     var showCleared = 'false';
-
-    if ($("#showCleared").val() == 2) {
-        showCleared = 'true';
-    }
-
-    //console.log( "{'pin':'" + $("#cnpin").val() + "', 'showCleared':'" + showCleared + "'}" );
+    if ($("#showCleared").val() == 2) { showCleared = 'true'; }
 
     $.ajax({
         type: "POST",
@@ -234,6 +221,7 @@ function refreshDebtsList() {
         }
     });
 }
+
 function refreshSingleDebtView() {
     var showCleared = 'false';
     if ($("#showCleared").val() == 2) { showCleared = 'true'; }
@@ -245,34 +233,17 @@ function refreshSingleDebtView() {
         dataType: "json",
         success: function (data) {
 
-            updateProgressBar('17');
-            loadDebtsView(data);
-
             var sourcePin   = $("#cnpin").val();
             var uprn        = $("#uprn").val();
+            
+            loadDebtsView(data);
 
-            updateProgressBar('34');
             refreshPersonAttributes(sourcePin);
-
-            updateProgressBar('51');
             refreshCurrentAttributes(sourcePin);
-
-            updateProgressBar('68');
             refreshAddresses(sourcePin);
-
-            updateProgressBar('75');
             refresMatchList(sourcePin);
-
-            // THIS CALL CAUSES A SQL TIMEOUT, THE USER WILL NEED TO
-            // MANUALLY CLICK ON THE REFRESH BUTTON TO ENSURE IT'S
-            // NOT PUTTING OVERLOAD/STRAIN ON THE SERVER AS NOT EVERYONE
-            // WILL NEED/WANT TO SEE THIS GRID.
-            //----------------------------------------------------------
             refresMisMisMatchList(sourcePin);
-
-            updateProgressBar('90');
             refreshPersonDetails(sourcePin, uprn);
-            updateProgressBar('100');
         }
     });
 }
@@ -284,8 +255,8 @@ function refreshRecoveryCycles(debtId) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
+            doProgress(result.d.length, 'arefRecovery');
             if (result.hasOwnProperty("d")) { result = result.d; }
-            setTagIndicator(result, "arefRecovery");
             $("#tableRecovery").dataTable({
                 "destroy": true,
                 "aaData": result,
@@ -314,8 +285,8 @@ function refreshPaymentHistory(debtId) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
+            doProgress(result.d.length, 'arefPayments');
             if (result.hasOwnProperty("d")) { result = result.d; }
-            setTagIndicator(result, "arefPayments");
             $("#tablePayments").dataTable({
                 "destroy": true,
                 "aaData": result,
@@ -339,8 +310,8 @@ function refreshParties(debtId) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
+            doProgress(result.d.length, 'arefParties');
             if (result.hasOwnProperty("d")) { result = result.d; }
-            setTagIndicator(result, "arefParties");
             $("#tableParties").dataTable({
                 "destroy": true,
                 "aaData": result,
@@ -349,11 +320,7 @@ function refreshParties(debtId) {
                     { mData: 'PartyFullName' },
                     { mData: 'PrimaryFlag' }
                 ],
-                //"columnDefs": [
-                //    { "width": "200px", "targets": 0 },
-                //    { "width": "*%", "targets": 1 }]
             });
-
         }
     });
 }
@@ -365,8 +332,8 @@ function refreshArrangements(debtId) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
+            doProgress(result.d.length, 'arefArrangements');
             if (result.hasOwnProperty("d")) { result = result.d; }
-            setTagIndicator(result, "arefArrangements");
             $("#tableArrangements").dataTable({
                 "destroy": true,
                 "aaData": result,
@@ -378,38 +345,6 @@ function refreshArrangements(debtId) {
                     { mData: 'InstallmentAmount' },
                     { mData: 'NumberOfInstallments' },
                     { mData: 'AgmStatus' }]
-                //, "aoColumnDefs": [
-                //     {
-                //         "sTitle": "Address"
-                //        , "aTargets": ["address"]
-                //        , "mRender": function (value, type, full) {
-                //            return value;
-                //        }
-                //     }, {
-                //         "sTitle": "From Date"
-                //        , "aTargets": ["from_date"]
-                //        , "mRender": function (value, type, full) {
-                //            if (value != null) {
-                //                var dtStart = new Date(parseInt(value.substr(6)));
-                //                var dtStartWrapper = moment(dtStart);
-                //                return dtStartWrapper.format('DD/MM/YYYY');
-                //            } else { return ''; }
-                //        }
-                //     }, {
-                //         "sTitle": "Until Date"
-                //        , "aTargets": ["until_date"]
-                //        , "mRender": function (value, type, full) {
-                //            if (value != null) {
-                //                var dtStart = new Date(parseInt(value.substr(6)));
-                //                var dtStartWrapper = moment(dtStart);
-                //                return dtStartWrapper.format('DD/MM/YYYY');
-                //            } else { return ''; }
-                //        }
-                //     },
-                //    { "width": "*%", "targets": 0 },
-                //    { "width": "150px", "targets": 1 },
-                //    { "width": "150px", "targets": 2 }
-                //]
             });
         }
     });
@@ -422,8 +357,8 @@ function refreshDebtAttributes(debtId) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
+            doProgress(result.d.length, 'arefDebtAttributes');
             if (result.hasOwnProperty("d")) { result = result.d; }
-            setTagIndicator(result, "arefDebtAttributes");
             $("#tableDebt").dataTable({
                 "destroy": true,
                 "aaData": result,
@@ -437,6 +372,72 @@ function refreshDebtAttributes(debtId) {
         }
     });
 }
+function refreshPersonAttributes(partyPin) {
+    $.ajax({
+        type: "POST",
+        url: "DataService.aspx/GetPersonAttribute",
+        data: "{'sourcePin':'" + partyPin + "'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            doProgress(result.d.length, 'arefPersonAttributes');
+            if (result.hasOwnProperty("d")) { result = result.d; }
+            
+            $("#tablePerson").dataTable({
+                "destroy": true,
+                "aaData": result,
+                aoColumns: [
+                    { mData: 'AttributeText' },
+                    { mData: 'AttributeValue' },
+                    { mData: 'IsCurrent' },
+                    { mData: 'Streams' },
+                    { mData: 'ToDate' },
+                    { mData: 'FromDate' },
+                    { mData: 'PersonAttributeId' }],
+                "aoColumnDefs": [
+                    {
+                        "sTitle": "To Date"
+                        , "aTargets": ["from_date"]
+                        , "mRender": function (value, type, full) {
+                            if (value != null) {
+                                var dtStart = new Date(parseInt(value.substr(6)));
+                                var dtStartWrapper = moment(dtStart);
+                                return dtStartWrapper.format('DD/MM/YYYY');
+                            } else { return ''; }
+                        }
+                    }, {
+                        "sTitle": "From Date"
+                        , "aTargets": ["to_date"]
+                        , "mRender": function (value, type, full) {
+                            if (value != null) {
+                                var dtStart = new Date(parseInt(value.substr(6)));
+                                var dtStartWrapper = moment(dtStart);
+                                return dtStartWrapper.format('DD/MM/YYYY');
+                            } else { return ''; }
+                        }
+                    }, {
+                        "sTitle": "Current Attribute"
+                    , "aTargets": ["set_current"]
+                    , "mRender": function (value, type, full) {
+                        if (value == true) {
+                            return 'Current';
+                        }
+                        else {
+                            return '<a href="#" onclick="setCurrent(\'' + full.PersonAttributeId + '\');">Set Current</a>';
+                        }
+                    }
+                    },
+                {
+                    "aTargets": ["person_attribute_id"]
+                    , "bVisible": false
+                },
+                { "width": "200px", "targets": 0 },
+                { "width": "*%", "targets": 1 },
+                { "width": "150px", "targets": 2 }]
+            });
+        }
+    });
+}
 function refreshNotes(debtId) {
     $.ajax({
         type: "POST",
@@ -445,8 +446,9 @@ function refreshNotes(debtId) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
+            doProgress(result.d.length, 'arefNotes');
             if (result.hasOwnProperty("d")) { result = result.d; }
-            setTagIndicator(result, "arefNotes");
+            
             $("#tableNotes").dataTable({
                 "destroy": true,
                 "aaData": result,
@@ -486,8 +488,8 @@ function refreshCurrentAttributes(partyPin) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
+            doProgress(result.d.length, 'arefCurrentAttributes');
             if (result.hasOwnProperty("d")) { result = result.d; }
-            setTagIndicator(result, "arefCurrentAttributes");
             $("#tableCurrent").dataTable({
                 "destroy": true,
                 "aaData": result,
@@ -532,8 +534,8 @@ function refreshAddresses(partyPin) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
+            doProgress(result.d.length, 'arefRelatedAddresses');
             if (result.hasOwnProperty("d")) { result = result.d; }
-            setTagIndicator(result, "arefRelatedAddresses");
             $("#tableAddress").dataTable({
                 "destroy": true,
                 "aaData": result,
@@ -576,71 +578,6 @@ function refreshAddresses(partyPin) {
         }
     });
 }
-function refreshPersonAttributes(partyPin) {
-    $.ajax({
-        type: "POST",
-        url: "DataService.aspx/GetPersonAttribute",
-        data: "{'sourcePin':'" + partyPin + "'}",
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (result) {
-            if (result.hasOwnProperty("d")) { result = result.d; }
-            setTagIndicator(result, "arefPersonAttributes");
-            $("#tablePerson").dataTable({
-                "destroy": true,
-                "aaData": result,
-                aoColumns: [
-                    { mData: 'AttributeText' },
-                    { mData: 'AttributeValue' },
-                    { mData: 'IsCurrent' },
-                    { mData: 'Streams' },
-                    { mData: 'ToDate' },
-                    { mData: 'FromDate' },
-                    { mData: 'PersonAttributeId' }],
-                "aoColumnDefs": [
-                    {
-                        "sTitle": "To Date"
-                        , "aTargets": ["from_date"]
-                        , "mRender": function (value, type, full) {
-                            if (value != null) {
-                                var dtStart = new Date(parseInt(value.substr(6)));
-                                var dtStartWrapper = moment(dtStart);
-                                return dtStartWrapper.format('DD/MM/YYYY');
-                            } else { return ''; }
-                        }
-                    }, {
-                    "sTitle": "From Date"
-                        , "aTargets": ["to_date"]
-                        , "mRender": function (value, type, full) {
-                            if (value != null) {
-                                var dtStart = new Date(parseInt(value.substr(6)));
-                                var dtStartWrapper = moment(dtStart);
-                                return dtStartWrapper.format('DD/MM/YYYY');
-                            } else { return ''; }
-                        }
-                }, {
-                    "sTitle": "Current Attribute"
-                    , "aTargets": ["set_current"]
-                    , "mRender": function (value, type, full) {
-                        if (value == true) {
-                            return 'Current';
-                        }
-                        else {
-                            return '<a href="#" onclick="setCurrent(\'' + full.PersonAttributeId + '\');">Set Current</a>';
-                        }
-                    }
-                },
-                {
-                    "aTargets": ["person_attribute_id"]
-                    , "bVisible": false
-                },
-                { "width": "200px", "targets": 0 },
-                { "width": "*%", "targets": 1 },
-                { "width": "150px", "targets": 2 }]
-            });
-        }
-    });
-}
 function refreshPersonDetails(partyPin, uprn) {
     $.ajax({
         type: "POST",
@@ -657,69 +594,31 @@ function refreshPersonDetails(partyPin, uprn) {
                 "paging": false,
                 "bFilter": false,
                 "bInfo": false,
-                "aoColumns": [
-                    { mData: 'AccountRef' },
-                    { mData: 'FULLNAME' },
-                    { mData: 'FULLADDRESS' },
-                    { mData: 'NINO' },
-                    { mData: 'DOB' }
-                ],
+                "aoColumns":    [
+                                    { mData: 'AccountRef' },
+                                    { mData: 'FULLNAME' },
+                                    { mData: 'FULLADDRESS' },
+                                    { mData: 'NINO' },
+                                    { mData: 'DOB' }
+                                ],
                 "aoColumnDefs": [
-                {
-                    "sTitle": "To Date",
-                    "aTargets": ["DOB"],
-                    "mRender": function (value, type, full) {
-                        if (value != null) {
-                            var dtStart = new Date(parseInt(value.substr(6)));
-                            var dtStartWrapper = moment(dtStart);
-                            return dtStartWrapper.format('DD/MM/YYYY');
-                        } else {
-                            return '';
-                        }
-                    }
-                }, { "width": "240px", "targets": 0 }
-                  , { "width": "250px", "targets": 1 }
-                ]
-            });
-        }
-    });
-    $.ajax({
-        type: "POST",
-        url: "DataService.aspx/GetPersonDetails",
-        data: "{'pin':'" + partyPin + "','uprn':'" + uprn + "'}",
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (result) {
-            if (result.hasOwnProperty("d")) { result = result.d; }
-            $("#dataTablePersonDetailsSecond").dataTable({
-                "destroy": true,
-                "aaData": result,
-                "scrollCollapse": true,
-                "paging": false,
-                "bFilter": false,
-                "bInfo": false,
-                "aoColumns": [
-                    { mData: 'AccountRef' },
-                    { mData: 'FULLNAME' },
-                    { mData: 'FULLADDRESS' },
-                    { mData: 'NINO' },
-                    { mData: 'DOB' }
-                ],
-                "aoColumnDefs": [
-                {
-                    "sTitle": "To Date",
-                    "aTargets": ["DOB"],
-                    "mRender": function (value, type, full) {
-                        if (value != null) {
-                            var dtStart = new Date(parseInt(value.substr(6)));
-                            var dtStartWrapper = moment(dtStart);
-                            return dtStartWrapper.format('DD/MM/YYYY');
-                        } else {
-                            return '';
-                        }
-                    }
-                }, { "width": "240px", "targets": 0 }
-                 , { "width": "250px", "targets": 1 }
+                                    {
+                                    "sTitle": "To Date",
+                                    "aTargets": ["DOB"],
+                                    "mRender": function (value, type, full) {
+                                        if (value != null) {
+                                            var dtStart = new Date(parseInt(value.substr(6)));
+                                            var dtStartWrapper = moment(dtStart);
+                                            return dtStartWrapper.format('DD/MM/YYYY');
+                                        } else {
+                                            return '';
+                                        }
+                                    }
+                                    }
+                                    , { "width": "175px",   "targets": 0 }
+                                    , { "width": "250px",   "targets": 1 }
+                                    , { "width": "175px",   "targets": 3 }
+                                    , { "width": "80px",    "targets": 4 }
                 ]
             });
         }
@@ -733,28 +632,34 @@ function refresMatchList(partyPin) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
+            doProgress(result.d.length, 'arefMatches');
             if (result.hasOwnProperty("d")) { result = result.d; }
-            setTagIndicator(result, "arefMatches");
+            
             $("#matchTable1").dataTable({
                 "destroy": true,
                 "aaData": result,
+                "bSort": false,
                 "paging": false,
+                "bFilter": false,
+                "bInfo": false,
                 aoColumns: [
+                    { mData: 'InfoString' },
                     { mData: 'SourceName' },
                     { mData: 'SourceAccRef' },
                     { mData: 'FullName' },
                     { mData: 'FullAddress' },
                     { mData: 'NINO' },
                     { mData: 'DOB' },
-                    { mData: 'MatchId' }
+                    { mData: 'MatchId' }  
                     ],
                 "aoColumnDefs": [
                     {
                         "sTitle": "To Date"
-                        , "aTargets": ["DOB"]
+                        , "aTargets": ["dob"]
                         , "mRender": function (value, type, full) {
                             if (value != null) {
                                 var dtStart = new Date(parseInt(value.substr(6)));
+                                //consle.log('TE' + dtStart);
                                 var dtStartWrapper = moment(dtStart);
                                 return dtStartWrapper.format('DD/MM/YYYY');
                             } else {
@@ -766,12 +671,24 @@ function refresMatchList(partyPin) {
                           "sTitle": "Action"
                         , "aTargets": ["MatchId"]
                         , "mRender": function (value, type, full) {
-                            return '<a href="#" onclick="unlinkMatchedResult(' + value + ');">Unlink Match</a>';
-                        }
+                                return '<a href="#" onclick="unlinkMatchedResult(' + value + ');">Unlink</a>';
+                            }
+                    },
+                    {
+                        "sTitle": ""
+                        , "aTargets": ["infoHover"]
+                        ,  "mRender": function (value, type, full) {
+                                return '<div title="' + full.InfoString + '"><i class="fa fa-info-circle"></i></div>';
+                            }
                     }
-                    //, { "width": "105px", "targets": 0 }
-                    //, { "width": "120px", "targets": 1 }
-                    //, { "width": "250px", "targets": 2 }
+                     ,  { "width": "10px", "targets": 0 }
+                      , { "width": "50px", "targets": 1 }
+                      , { "width": "80px", "targets": 2 }
+                      , { "width": "250px", "targets": 3 }
+                      , { "width": "*%", "targets": 4 }
+                      , { "width": "80px", "targets": 5 }
+                      , { "width": "80px", "targets": 6 }
+                      , { "width": "80px", "targets": 7 }
                 ]
             });
         }
@@ -785,43 +702,74 @@ function refresMisMisMatchList(partyPin) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
+            doProgress(result.d.length, 'arefMisMatches');
             if (result.hasOwnProperty("d")) { result = result.d; }
-            setTagIndicator(result, "arefMisMatches");
+            
             $("#matchTable2").dataTable({
                 "destroy": true,
                 "aaData": result,
+                "bSort": false,
+                "bFilter" : false,
                 "paging": false,
+                "bInfo": false,
                 aoColumns: [
+                    { mData: 'InfoString' },
                     { mData: 'SourceName' },
                     { mData: 'SourceAccRef' },
                     { mData: 'FullName' },
                     { mData: 'FullAddress' },
                     { mData: 'NINO' },
                     { mData: 'DOB' }   ,
-                    { mData: 'MatchScore' },
-                    { mData: 'MatchedElements' }
+                    { mData: 'MatchId' }
                 ],
                 "aoColumnDefs": [
                     {
-                        "sTitle": "To Date"
-                        , "aTargets": ["DOB"]
+                        "sTitle": "Action"
+                        , "aTargets": ["MatchId"]
                         , "mRender": function (value, type, full) {
-                            if (value != null) {
-                                var dtStart = new Date(parseInt(value.substr(6)));
-                                var dtStartWrapper = moment(dtStart);
-                                return dtStartWrapper.format('DD/MM/YYYY');
-                            } else { return ''; }
+                            return '<a href="#" onclick="linkMatchedResult(' + full.MatchId  + ');">Link</a>';
                         }
                     },
-                        { "width": "105px", "targets": 0 }
-                      , { "width": "120px", "targets": 1 }
-                      , { "width": "250px", "targets": 2 }
+                    {
+                        "sTitle": ""
+                        , "aTargets": ["infoHover"]
+                        , "mRender": function (value, type, full) {
+                            return '<div title="' + full.InfoString + '"><i class="fa fa-info-circle"></i></div>';
+                        }
+                    }
+                      , { "width": "10px", "targets": 0 }
+                      , { "width": "50px", "targets": 1 }
+                      , { "width": "80px", "targets": 2 }
+                      , { "width": "250px","targets": 3 }
+                      , { "width": "*%",   "targets": 4 }
+                      , { "width": "80px", "targets": 5 }
+                      , { "width": "80px", "targets": 6 }
+                      , { "width": "80px", "targets": 7 }
                     ]
             });
         }
     });
 }
 
+
+
+function linkMatchedResult(matchId) {
+    var sourcePin = $("#cnpin").val();
+    $.ajax({
+        type: "POST",
+        url: "DataService.aspx/CreateMatch",
+        data: "{'matchId':'" + matchId + "','pin':'" + sourcePin + "','userId':'" + $('#UserSessionToken').val() + "'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            refresMatchList(sourcePin);
+            refresMisMisMatchList(sourcePin)
+        },
+        failure: function (error) {
+            alert(error.message);
+        }
+    });
+}
 function unlinkMatchedResult(matchId)
 {
     var sourcePin = $("#cnpin").val();
@@ -839,6 +787,7 @@ function unlinkMatchedResult(matchId)
         }
     });
 }
+
 function createNote() {
     $.ajax({
         type: "POST",
@@ -948,16 +897,18 @@ function setCurrent(id) {
     });
 }                                                                                                                                                                
 
-function setTagIndicator(result, controlName) {
+function setTagIndicator(resultLength, controlName) {
 
     controlName = '#' + controlName;
-    console.log(controlName + ' ' + result.length);
+
+    //console.log(controlName + ' ' + result.length);
 
     if (result.length > 0) {
         $(controlName).css("font-weight", "bold");
     } else {
         $(controlName).css("font-weight", "normal"); 
-    }    
+    }
+
 }
 function updateProgressBar(percentage) {
     if (percentage == 0) {
@@ -966,6 +917,30 @@ function updateProgressBar(percentage) {
     } else {
         $("#loadProgress").show();
         $("#loadProgress").css("width", percentage + "%");
+    }
+}
+
+function doProgress(resultLength, controlName) {
+
+    var fontWeight      = 'normal';
+    progressValue = progressValue + progressInterval;
+
+    console.log(controlName + ' - ' + progressValue + ' - ' + resultLength + ' - ' + fontWeight);
+    
+    if (resultLength > 0)                       {  fontWeight = 'bold'; }
+        
+    $("#" + controlName).css("font-weight", fontWeight);
+    $("#loadProgress").css("width", progressValue + "%");
+
+    if (progressValue <= 0) {
+        $("#loadProgress").hide();
+    }
+    if (progressValue >= 100) {
+        setTimeout(function () { $("#loadProgress").hide(); progressInterval = 10; progressValue = 0; }, 1000);
+    }
+
+    if (progressValue > 0) {
+        $("#loadProgress").show();
     }
 }
 

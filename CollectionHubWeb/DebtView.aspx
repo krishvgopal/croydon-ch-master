@@ -10,6 +10,7 @@
     <asp:HiddenField ID="selectedDebtId" runat="server" ClientIDMode="Static" />
     <asp:HiddenField ID="cnpin" runat="server" ClientIDMode="Static" />
      <asp:HiddenField ID="uprn" runat="server" ClientIDMode="Static" />
+    <asp:HiddenField ID="userId" runat="server" ClientIDMode="Static" />
     <asp:HiddenField ID="debtRowTotalValue" runat="server" ClientIDMode="Static" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="headInfo" Runat="Server">
@@ -85,7 +86,7 @@
                 <li class="active"> 
                     <a href="#recovery"     data-toggle="tab"  id="arefRecovery">Recovery History</a></li>
                 <li><a href="#payments"     data-toggle="tab"  id="arefPayments">Payments</a></li>
-                <li><a href="#parties"      data-toggle="tab"  id="arefParties">Parties</a></li>
+                <li><a href="#parties"      data-toggle="tab"  id="arefParties">    Parties</a></li>
                 <li><a href="#arrangements" data-toggle="tab"  id="arefArrangements">Arrangements</a></li>
                 <li><a href="#debt"         data-toggle="tab"  id="arefDebtAttributes">Debt Attributes</a></li>
                 <li><a href="#person"       data-toggle="tab"  id="arefPersonAttributes">Person Attributes</a></li>
@@ -93,7 +94,6 @@
                 <li><a href="#current"      data-toggle="tab"  id="arefCurrentAttributes">Current Attributes</a>
                 <li><a href="#addresses"    data-toggle="tab"  id="arefRelatedAddresses">Related Addresses</a>
                 <li><a href="#matchTab1"    data-toggle="tab"  id="arefMatches">Matches</a>
-                <li><a href="#matchTab2"    data-toggle="tab"  id="arefMisMatches">Mis-Matches</a>
                 </li>
             </ul>
             <div class="tab-content">
@@ -256,34 +256,37 @@
                         </thead>
                     </table>
                     <br />
+                    <h4>Matched Records</h4>
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered table-hover" id="matchTable1">
                             <thead>
                                 <tr>
-                                    <th>Source Name</th>
-                                    <th>Source Acc Ref</th>
+                                    <th class="infoHover"></th>
+                                    <th>Source</th>
+                                    <th>A/C Ref</th>
                                     <th>Full Name</th>
                                     <th>Full Address</th>
                                     <th>NINO</th>
-                                    <th class="until_date">DOB</th>
+                                    <th class="dob">DOB</th>
                                     <th class="MatchId"></th>
                                 </tr>
                             </thead>
                         </table>
                     </div>
-
+                    <br />
+                    <h4>Unmatched Records</h4>
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered table-hover" id="matchTable2">
                             <thead>
                                 <tr>
-                                    <th>Source Name</th>
-                                    <th>Source Acc Ref</th>
+                                    <th class="infoHover"></th>
+                                    <th>Source</th>
+                                    <th>A/C Ref</th>
                                     <th>Full Name</th>
                                     <th>Full Address</th>
                                     <th>NINO</th>
-                                    <th>DOB</th>
-                                    <th>Match Score</th>
-                                    <th>Matched Elements</th>
+                                    <th class="dob">DOB</th>
+                                    <th class="MatchId"></th>
                                 </tr>
                             </thead>
                         </table>
@@ -291,37 +294,7 @@
 
 
                 </div>
-               <%-- <div class="tab-pane fade" id="matchTab2">
-                    <table class="table compact table-striped table-bordered table-hover" id="dataTablePersonDetailsSecond">
-                        <thead>
-                            <tr>
-                                <th class="AccountRef">Source Acc Ref</th>
-                                <th class="FULLNAME">Full Name</th>
-                                <th class="FULLADDRESS">Full Address</th>
-                                <th class="NINO">NINO</th>
-                                <th class="DOB">DOB</th>
-                            </tr>
-                        </thead>
-                    </table>
-                    <br />
-                    <div class="table-responsive">
-                        <table class="table table-striped table-bordered table-hover" id="matchTable2">
-                            <thead>
-                                <tr>
-                                    <th>Source Name</th>
-                                    <th>Source Acc Ref</th>
-                                    <th>Full Name</th>
-                                    <th>Full Address</th>
-                                    <th>NINO</th>
-                                    <th>DOB</th>
-                                    <th>Match Score</th>
-                                    <th>Matched Elements</th>
-                                </tr>
-                            </thead>
-                        </table>
-                      </div>
-                      <a href="#" class="btn btn-outline btn-primary" onclick="refresMisMisMatchList($('#cnpin').val());">Load Mismatch Records</a>
-                    </div>--%>
+              
                 </div> 
             </div>
         </div>

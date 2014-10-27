@@ -13,7 +13,25 @@ function refreshProcessInfo() {
             if (result.hasOwnProperty("d")) { result = result.d; }
             {
                 jQuery.each(result, function () {
-                    $("#processFieldTags").append('<span style="border:1px solid #9A9A9A;padding:5px;margin-right:5px;background-color:#F8F8F8">' + this.FieldLabel + '</span>');
+
+                    if (this.DataType == 'string') {
+                        $("#processFieldTags").append(getTextBox(this.bf_id, this.FieldLabel, this.DefaultValue, this.HelpText));
+                    }
+                    if (this.DataType == 'textarea') {
+                        $("#processFieldTags").append(getTextArea(this.bf_id, this.FieldLabel, this.DefaultValue, this.HelpText));
+                    }
+                    if (this.DataType == 'datetime') {
+                        $("#processFieldTags").append(getDateTime(this.bf_id, this.FieldLabel, this.DefaultValue, this.HelpText));
+                    }
+                    if (this.DataType == 'boolean') {
+                        $("#processFieldTags").append(getCheckBox(this.bf_id, this.FieldLabel, this.DefaultValue, this.HelpText));
+                    }
+                    if (this.DataType == 'multiselect') {
+                        $("#processFieldTags").append(getMultiSelect(this.bf_id, this.FieldLabel, this.DefaultValue, this.HelpText, this.FieldData, true));
+                    }
+                    if (this.DataType == 'select') {
+                        $("#processFieldTags").append(getMultiSelect(this.bf_id, this.FieldLabel, this.DefaultValue, this.HelpText, this.FieldData, false));
+                    }
                 });
             }
         }
@@ -47,4 +65,35 @@ function QueryString() {
         vars[hash[0]] = hash[1];
     }
     return vars;
+}
+
+function getTextBox(id, label, defaultValue, helpText) {
+    return '<div class="form-group"><label>' + label + '</label><input id="auto_' + id + '" class="form-control" value="' + defaultValue + '"><p class="help-block">' + helpText + '</p></div>';
+}
+function getTextArea(id, label, defaultValue, helpText) {
+    return '<div class="form-group"><label>' + label + '</label><textarea id="auto_' + id + '" class="form-control" >' + defaultValue + '</textarea><p class="help-block">' + helpText + '</p></div>';
+}
+function getDateTime(id, label, defaultValue, helpText) {
+    return '<div class="form-group"><label>' + label + '</label><input id="auto_datepicker_' + id + '" class="form-control" value="' + defaultValue + '"><p class="help-block">' + helpText + '</p></div>';
+}
+function getCheckBox(id, label, defaultValue, helpText) {
+    return '<div class="form-group"><label>' + label + '</label><div class="checkbox"><label><input id="auto_' + id + '" type="checkbox" value="' + defaultValue + '">' + helpText + '</label></div></div>'
+}
+function getMultiSelect(id, label, defaultValue, helpText, fieldData, isMultiSelect) {
+    
+    var returnValue = '';
+    var selectItems = '';
+    var tokenPairs  = fieldData.split(";");
+
+    for (i = 0; i < tokenPairs.length; i++) {
+        var pair = tokenPairs[i].split('|');
+        selectItems += '<option value="' + pair[1] + '">' + pair[0] + '</option>';
+    }
+
+    if (isMultiSelect) {
+       returnValue = '<div class="form-group"><label>' + label + '</label><select multiple class="form-control">' + selectItems + '</select></div>';
+    } else {
+        returnValue = '<div class="form-group"><label>' + label + '</label><select class="form-control">' + selectItems + '</select></div>';
+    }
+    return returnValue;
 }

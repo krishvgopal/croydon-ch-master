@@ -34,14 +34,27 @@ namespace CollectionHubData
     }
     public class BatchProcessFields
     {
-        public int      bf_id       { get; set; }
-        public string   FieldLabel  { get; set; }
-
+        public int      bf_id           { get; set; }
+        public string   FieldLabel      { get; set; }
+        public string   DataType        { get; set; }
+        public string   DefaultValue    { get; set; }
+        public bool     ReadOnly        { get; set; }
+        public DateTime CreatedDate     { get; set; }
+        public string   CreatedBy         { get; set; }
+        public string HelpText { get; set; }
+        public string FieldData { get; set; }
+        
         public BatchProcessFields() { }
         public BatchProcessFields(System.Data.SqlClient.SqlDataReader value)
         {
             bf_id       = Convert.ToInt32(value["bf_id"]);
             FieldLabel  = Convert.ToString(value["FieldLabel"]);
-        }
-    }
-}
+            DataType       = Convert.ToString(value["DataType"]);
+            DefaultValue   = Convert.ToString(value["DefaultValue"]);
+            ReadOnly       = Convert.ToBoolean(value["DisplayOnly"]);
+            HelpText    = Convert.ToString(value["HelpText"]);
+            CreatedBy   = Convert.ToString(value["CreatedBy"]);
+            FieldData   = Convert.ToString(value["FieldData"]);
+        } 
+    } 
+} 

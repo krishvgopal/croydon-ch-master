@@ -27,15 +27,14 @@
     <div class="col-lg-12">
         <div id="processTitle"></div>
         <div id="processDescription"></div>
+    </div>
+
+    <div class="col-lg-3">
         <div id="processFieldTags"></div>
     </div>
     
-    <!--
-        -->
-    
-
-
     <script type="text/javascript" charset="utf8" src="js/ProcessView.js"></script>
+
 </asp:Content>
 
 

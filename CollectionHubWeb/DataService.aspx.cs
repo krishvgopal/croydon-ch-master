@@ -361,4 +361,15 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
+    [WebMethod]
+    public static bool CreateMatch(int matchId, string pin, string userId)
+    {
+        var returnData = false;
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.CreateMatch(matchId, pin, userId);
+
+        return returnData;
+    }
+    // 
 }

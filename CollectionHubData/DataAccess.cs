@@ -28,6 +28,26 @@ namespace CollectionHubData
             }
             return returnvalue;
         }
+        public bool CreateMatch(int matchId, string pin, string userId)
+        {
+            var returnvalue = false;
+            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            {
+                sqlDataConnection.Open();
+                using (var sqlCommand = new SqlCommand("[CH_NAMES_LINK]", sqlDataConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add(new SqlParameter("matchId", matchId));
+                    sqlCommand.Parameters.Add(new SqlParameter("pin", pin));
+                    sqlCommand.Parameters.Add(new SqlParameter("userId", userId));
+
+                    var count = sqlCommand.ExecuteNonQuery();
+                    if (count > 0) returnvalue = true;
+                }
+                sqlDataConnection.Close();
+            }
+            return returnvalue;
+        }
         public bool SetRecoveryCycle(int debtId, int recoveryCycleId, int userId, DateTime recoveryDateTime)
         {
             var returnvalue = false;
