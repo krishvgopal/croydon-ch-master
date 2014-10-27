@@ -14,7 +14,12 @@ function refreshProcessInfo() {
             {
                 jQuery.each(result, function () {
 
+                    console.log( 'MAN ' + this.IsMandatory);
+
                     if (this.DataType == 'string') {
+                        $("#processFieldTags").append(getTextBox(this.bf_id, this.FieldLabel, this.DefaultValue, this.HelpText));
+                    }
+                    if (this.DataType == 'currency') {
                         $("#processFieldTags").append(getTextBox(this.bf_id, this.FieldLabel, this.DefaultValue, this.HelpText));
                     }
                     if (this.DataType == 'textarea') {
@@ -22,6 +27,7 @@ function refreshProcessInfo() {
                     }
                     if (this.DataType == 'datetime') {
                         $("#processFieldTags").append(getDateTime(this.bf_id, this.FieldLabel, this.DefaultValue, this.HelpText));
+                        applyDatePickers();
                     }
                     if (this.DataType == 'boolean') {
                         $("#processFieldTags").append(getCheckBox(this.bf_id, this.FieldLabel, this.DefaultValue, this.HelpText));
@@ -55,7 +61,6 @@ function refreshProcessHeader() {
         }
     });
 }
-
 function QueryString() {
     var vars = [], hash;
     var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
@@ -74,7 +79,7 @@ function getTextArea(id, label, defaultValue, helpText) {
     return '<div class="form-group"><label>' + label + '</label><textarea id="auto_' + id + '" class="form-control" >' + defaultValue + '</textarea><p class="help-block">' + helpText + '</p></div>';
 }
 function getDateTime(id, label, defaultValue, helpText) {
-    return '<div class="form-group"><label>' + label + '</label><input id="auto_datepicker_' + id + '" class="form-control" value="' + defaultValue + '"><p class="help-block">' + helpText + '</p></div>';
+    return '<div class="form-group"><label>' + label + '</label><input name="datepickerEnabled" id="auto_datepicker_' + id + '" class="form-control" value="' + defaultValue + '"><p class="help-block">' + helpText + '</p></div>';
 }
 function getCheckBox(id, label, defaultValue, helpText) {
     return '<div class="form-group"><label>' + label + '</label><div class="checkbox"><label><input id="auto_' + id + '" type="checkbox" value="' + defaultValue + '">' + helpText + '</label></div></div>'
@@ -91,9 +96,35 @@ function getMultiSelect(id, label, defaultValue, helpText, fieldData, isMultiSel
     }
 
     if (isMultiSelect) {
-       returnValue = '<div class="form-group"><label>' + label + '</label><select multiple class="form-control">' + selectItems + '</select></div>';
+       returnValue = '<div class="form-group"><label>' + label + '</label><select id="auto_' + id + '" multiple class="form-control">' + selectItems + '</select></div>';
     } else {
-        returnValue = '<div class="form-group"><label>' + label + '</label><select class="form-control">' + selectItems + '</select></div>';
+        returnValue = '<div class="form-group"><label>' + label + '</label><select id="auto_' + id + '" class="form-control">' + selectItems + '</select></div>';
     }
     return returnValue;
+}
+
+function applyDatePickers()
+{
+    $("input[name='datepickerEnabled']").datepicker();
+}
+
+function postValues()
+{
+    // GET ALL THE FIELDS STARTING WITH AUTO_
+
+    $("input[id^='auto_']").each(function (index) {
+        console.log(index + ": " + $(this).attr('id') );
+        //console.log(index + ": " + $(this).text());
+    });
+
+    $("select[id^='auto_']").each(function (index) {
+        //console.log(index);
+        console.log(index + ": " + $(this).val());
+    });
+
+    // TURN THESE INTO A POST TO THE SERVER
+
+    // EXPECT ID RETURN
+
+    // SHOW RESULTS IN TABLE
 }

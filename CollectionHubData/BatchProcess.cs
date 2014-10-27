@@ -5,11 +5,14 @@ namespace CollectionHubData
     public class BatchProcess
     {
         public int      BpId            { get; set; }
+
         public string   BatchName       { get; set; }
         public string   DebtSource      { get; set; }
         public DateTime CreatedDate     { get; set; }
         public string   Procedure       { get; set; }
         public string   Description     { get; set; }
+        public string   BatchProcedure  { get; set; }
+
 
         public BatchProcess() { }
         public BatchProcess(System.Data.SqlClient.SqlDataReader value)
@@ -18,8 +21,11 @@ namespace CollectionHubData
             BatchName           = Convert.ToString(value["batch_name"]);
             DebtSource          = Convert.ToString(value["bp_debt_source"]);
             CreatedDate         = Convert.ToDateTime(value["bp_created_date"]);
-            Procedure           = Convert.ToString(value["bp_procedure"]);
+            Procedure           = Convert.ToString(value["bp_selection_procedure"]);
+            BatchProcedure      = Convert.ToString(value["bp_batch_procedure"]);
             Description         = Convert.ToString(value["bp_description"]);
+
+           // IsMandatory         = Convert.ToBoolean(value["bf_field_mandatory"]);
         }
     }
     public class BatchProcessJobs

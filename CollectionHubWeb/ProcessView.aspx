@@ -27,14 +27,15 @@
     <div class="col-lg-12">
         <div id="processTitle"></div>
         <div id="processDescription"></div>
+        <hr />
     </div>
-
     <div class="col-lg-3">
         <div id="processFieldTags"></div>
     </div>
     
-    <script type="text/javascript" charset="utf8" src="js/ProcessView.js"></script>
+    <a href="#" onclick="postValues();" class="btn btn-primary">Click Me</a>
 
+    <script type="text/javascript" charset="utf8" src="js/ProcessView.js"></script>
 </asp:Content>
 
 
