@@ -61,16 +61,7 @@ function refreshProcessHeader() {
         }
     });
 }
-function QueryString() {
-    var vars = [], hash;
-    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-    for (var i = 0; i < hashes.length; i++) {
-        hash = hashes[i].split('=');
-        vars.push(hash[0]);
-        vars[hash[0]] = hash[1];
-    }
-    return vars;
-}
+
 
 function getTextBox(id, label, defaultValue, helpText) {
     return '<div class="form-group"><label>' + label + '</label><input id="auto_' + id + '" class="form-control" value="' + defaultValue + '"><p class="help-block">' + helpText + '</p></div>';
@@ -94,7 +85,6 @@ function getMultiSelect(id, label, defaultValue, helpText, fieldData, isMultiSel
         var pair = tokenPairs[i].split('|');
         selectItems += '<option value="' + pair[1] + '">' + pair[0] + '</option>';
     }
-
     if (isMultiSelect) {
        returnValue = '<div class="form-group"><label>' + label + '</label><select id="auto_' + id + '" multiple class="form-control">' + selectItems + '</select></div>';
     } else {
@@ -102,29 +92,71 @@ function getMultiSelect(id, label, defaultValue, helpText, fieldData, isMultiSel
     }
     return returnValue;
 }
-
 function applyDatePickers()
 {
     $("input[name='datepickerEnabled']").datepicker();
 }
-
-function postValues()
-{
-    // GET ALL THE FIELDS STARTING WITH AUTO_
-
+function postValues() {
+    var s = '';
     $("input[id^='auto_']").each(function (index) {
-        console.log(index + ": " + $(this).attr('id') );
-        //console.log(index + ": " + $(this).text());
+        var i = $(this).attr('id');
+        var v = $(this).val();
+        s += i + '=' + v + '&';
     });
-
     $("select[id^='auto_']").each(function (index) {
-        //console.log(index);
-        console.log(index + ": " + $(this).val());
+        var i = $(this).attr('id');
+        var v = $(this).val();
+        s += i + '=' + v + '&';
     });
+    s = Base64.encode(s);
 
-    // TURN THESE INTO A POST TO THE SERVER
+    //console.log("{'batchId':'" + QueryString()['p'] + "','userId':'" + $("#UserSessionToken").val() + "','base64String':'" + s + "'}");
 
-    // EXPECT ID RETURN
+    $.ajax({
+        type: "POST",
+        url: "DataService.aspx/SaveBatchParameters",
+        data: "{'batchId':'" + QueryString()['p'] + "','userId':'" + $("#UserSessionToken").val() + "','base64String':'" + s + "'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            if (result.hasOwnProperty("d")) { result = result.d; }
+            {
+                //console.log('RESULT _ ' + result);
+            }
+        }
+    });
+    
+}
 
-    // SHOW RESULTS IN TABLE
+
+
+function refreshRecoveryCycles(debtId) {
+    $.ajax({
+        type: "POST",
+        url: "DataService.aspx/GetRecoveryCycleHistory",
+        data: "{'debtId':'" + debtId + "'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            doProgress(result.d.length, 'arefRecovery');
+            if (result.hasOwnProperty("d")) { result = result.d; }
+            $("#tableRecovery").dataTable({
+                "destroy": true,
+                "aaData": result,
+                aoColumns: [
+                    { mData: 'RecoveryCycle' },
+                    { mData: 'Stage' },
+                    { mData: 'StageType' },
+                    { mData: 'Status' },
+                    { mData: 'Days' },
+                    { mData: 'TargetDateFormatted' }],
+                "aoColumnDefs": [
+               { "width": "200px", "targets": 0 },
+               { "width": "*%", "targets": 1 },
+               { "width": "*%", "targets": 2 },
+               { "width": "75px", "targets": 4 },
+               { "width": "100px", "targets": 5 }]
+            });
+        }
+    });
 }

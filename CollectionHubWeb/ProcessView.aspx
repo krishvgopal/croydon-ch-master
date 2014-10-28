@@ -35,7 +35,31 @@
     
     <a href="#" onclick="postValues();" class="btn btn-primary">Click Me</a>
 
+
+    <div class="col-lg-9">    
+            <table class="table table-striped table-bordered table-hover" id="dataTableBatchProcessHistory">
+            <thead>
+                <tr>
+                    <th class="">RecordID     </th>
+                    <th class="">PIN          </th>
+                    <th class="">Source       </th>
+                    <th class="">DebtAccount  </th>
+                    <th class="">FullName     </th>
+                    <th class="">FullAddress  </th>
+                    <th class="">ThisDebt     </th>
+                    <th class="">ThisDebtOS   </th>
+                    <th class="">DebtCount    </th>
+                    <th class="">AllDebtAmount</th>
+                    <th class="">AllDebtOS    </th>
+                    <th class="">FromDate     </th>
+                    <th class="">UntilDate    </th>
+                </tr>
+            </thead>
+            </table>
+     </div> 
+
     <script type="text/javascript" charset="utf8" src="js/ProcessView.js"></script>
+
 </asp:Content>
 
 

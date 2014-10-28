@@ -5,6 +5,7 @@ using System.Web.Script.Serialization;
 using System.Web.Script.Services;
 using CollectionHubData;
 using System.Web.Services;
+using System.Text;
 
 public partial class DataService : System.Web.UI.Page
 {
@@ -278,8 +279,6 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-
-    // public List<PersonDetails> GetPersonDetails(int pin)
     [WebMethod]
     public static List<PersonDetails> GetPersonDetails(int pin, string uprn)
     {
@@ -290,8 +289,6 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-
-
     [WebMethod]
     [ScriptMethod(UseHttpGet = false, ResponseFormat = ResponseFormat.Json)]
     public static String GetDashboardDataPercentByYear(int sourceId, int historic)
@@ -330,7 +327,6 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-    // 
     [WebMethod]
     public static List<BatchProcessJobs> GetBatchProcessJobs()
     {
@@ -371,5 +367,16 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-    // 
+    [WebMethod]
+    public static List<BatchRecords> SaveBatchParameters(int batchId, int userId, string base64String)
+    {
+        List<BatchRecords> returnData = new List<BatchRecords>();
+        byte[] data = Convert.FromBase64String(base64String);
+        string decodedString = Encoding.UTF8.GetString(data);
+
+        var dataAccess = new CollectionHubData.DataAccess();
+        returnData = dataAccess.SaveBatchJob(batchId, decodedString, userId);
+
+        return returnData;
+    }
 }

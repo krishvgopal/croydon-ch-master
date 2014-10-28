@@ -5,6 +5,7 @@ namespace CollectionHubData
     public class BatchProcessHistory
     {
         public int          Id                  { get; set; }
+        public int          BpId                { get; set; }
         public int          UserId              { get; set; }
         public DateTime     ProcessDate         { get; set; }
         public int          RecordsAffected     { get; set; }
@@ -12,7 +13,6 @@ namespace CollectionHubData
         public string       PmName              { get; set; }
         public string       PmDescription       { get; set; }
         public string       UserName            { get; set; }
-        public int          BpId                { get; set; }
         public string       BatchName           { get; set; }
         public string       DebtSource          { get; set; }
 
@@ -46,6 +46,7 @@ namespace CollectionHubData
         public bool     IsMandatory     { get; set; }
         public int      BpBpId          { get; set; }
         public string   FieldName       { get; set; }
+        public bool     IsSystem        { get; set; }
         
         public BatchProcessFields() { }
         public BatchProcessFields(System.Data.SqlClient.SqlDataReader value)
@@ -61,6 +62,8 @@ namespace CollectionHubData
             IsMandatory     = Convert.ToBoolean(value["bf_field_mandatory"]);
             BpBpId          = Convert.ToInt32(value["bf_bp_id"]);
             FieldName       = Convert.ToString(value["bf_fieldname"]);
+            IsSystem        = Convert.ToBoolean(value["bf_field_system"]);    
         } 
+
     } 
 } 

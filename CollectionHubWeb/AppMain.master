@@ -11,7 +11,7 @@
         <script type="text/javascript" charset="utf8" src="js/jquery.dataTables.min.js"></script>
         <script type="text/javascript" charset="utf8" src="js/bootstrap.min.js"></script>
         <script type="text/javascript" charset="utf8" src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
-        <script type="text/javascript" charset="utf8" src="js/sb-admin.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="js/sb-admin.js"></script>
         <script type="text/javascript" charset="utf8" src="js/plugins/moment/moment.js"></script>
         <link rel="stylesheet" type="text/css" href="css/jquery.dataTables.min.css">
         <link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css">

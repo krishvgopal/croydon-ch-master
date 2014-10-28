@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Text;
 
 namespace CollectionHubData
 {
@@ -852,172 +853,6 @@ namespace CollectionHubData
 
             return returnValue;
         }
-        public DebtSearchResult DebtSearch(decimal amountFrom, decimal amountTo, int debtStreamCount, int includesStreamCode, int lastPaymentCode, int debtAgeCode)
-        {
-            var returnValue = new DebtSearchResult();
-            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
-            {
-                sqlDataConnection.Open();
-                using (var sqlCommand = new SqlCommand("CH_TOTALS_COUNT", sqlDataConnection))
-                {
-                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                    sqlCommand.Parameters.Add(new SqlParameter("AmountFrom", amountFrom));
-                    sqlCommand.Parameters.Add(new SqlParameter("AmountTo", amountTo));
-                    sqlCommand.Parameters.Add(new SqlParameter("DebtStreamCount", debtStreamCount));
-                    sqlCommand.Parameters.Add(new SqlParameter("IncludesStreamCode", includesStreamCode));
-                    sqlCommand.Parameters.Add(new SqlParameter("LastPaymentCode", lastPaymentCode));
-                    sqlCommand.Parameters.Add(new SqlParameter("DebtAgeCode", debtAgeCode));
-                    sqlCommand.Parameters.Add(new SqlParameter("List", 1));
-
-                    sqlCommand.Parameters.Add(new SqlParameter("Records", SqlDbType.Int));
-                    sqlCommand.Parameters["Records"].Direction = ParameterDirection.Output;
-                    
-                    sqlCommand.Parameters.Add(new SqlParameter("Amount",  SqlDbType.Float));
-                    sqlCommand.Parameters["Amount"].Direction  = ParameterDirection.Output;
-
-                    var dataReader = sqlCommand.ExecuteReader();
-
-                    if (dataReader.HasRows)
-                    {
-                        while (dataReader.Read())
-                        {
-                            if (dataReader[0] != DBNull.Value)
-                            {
-                                returnValue.RecordCount = Convert.ToInt32(dataReader[0].ToString());
-                            }
-                            if (dataReader[1] != DBNull.Value)
-                            {
-                                returnValue.TotalValue = Convert.ToDecimal(dataReader[1].ToString());
-                            }
-                        }
-                    }
-
-                    dataReader.NextResult();
-
-                    if (dataReader.HasRows)
-                    {
-                        var results = new List<DebtSearchResultItem>();
-                        
-                        while (dataReader.Read())
-                        {
-                            results.Add(new DebtSearchResultItem(dataReader));
-                        }
-
-                        returnValue.Results = results;
-                    }
-                }
-                sqlDataConnection.Close();
-            }
-            return returnValue;
-        }
-        public DebtAddress GetAddressForDebt(string pin, string uprn)
-        {
-            var returnValue = new DebtAddress();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
-
-            sqlDataConnection.Open();
-            using (var sqlCommand = new SqlCommand("CHP_GetNameAddress_byPIN", sqlDataConnection))
-            {
-                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-
-                sqlCommand.Parameters.Add(new SqlParameter("pin", pin));
-                sqlCommand.Parameters.Add(new SqlParameter("uprn", uprn));
-
-                var dataReader = sqlCommand.ExecuteReader();
-
-                if (dataReader.HasRows)
-                {
-                    while (dataReader.Read())
-                    {
-                        var newResult = new DebtAddress(dataReader);
-                        returnValue = newResult;
-                    }
-                }
-            }
-
-            sqlDataConnection.Close();
-
-            return returnValue;
-        }
-        public UserData AuthenticateUser(string loginName, string passwordHash)
-        {
-            UserData returnValue = null;
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
-
-            sqlDataConnection.Open();
-            using (var sqlCommand = new SqlCommand("CH_AUTHENTICATE_USER", sqlDataConnection))
-            {
-                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                sqlCommand.Parameters.Add(new SqlParameter("LoginName", loginName));
-                sqlCommand.Parameters.Add(new SqlParameter("PasswordHash", passwordHash));
-
-                var dataReader = sqlCommand.ExecuteReader();
-
-                if (dataReader.HasRows)
-                {
-                    while (dataReader.Read())
-                    {
-                        returnValue = new UserData(dataReader);
-                    }
-                }
-            }
-
-            sqlDataConnection.Close();
-
-            return returnValue;
-        }
-        
-        private decimal getMarker(SqlDataReader dataReader)
-        {
-            decimal marker = 0;
-            for (int i = 0; i < dataReader.FieldCount; i++)
-            {
-                if (dataReader.GetFieldType(i) == Type.GetType("System.Int16") ||
-                    dataReader.GetFieldType(i) == Type.GetType("System.Int32") ||
-                    dataReader.GetFieldType(i) == Type.GetType("System.Int64") ||
-                    dataReader.GetFieldType(i) == Type.GetType("System.Double") ||
-                    dataReader.GetFieldType(i) == Type.GetType("System.Decimal") ||
-                    dataReader.GetFieldType(i) == Type.GetType("System.Byte"))
-                {
-                    if (dataReader[i] != DBNull.Value)
-                    {
-                        if (marker < Convert.ToDecimal(dataReader[i]))
-                        {
-                            marker = Convert.ToDecimal(dataReader[i]);
-                        }
-                    }
-                }
-            }
-
-            return marker;
-        }
-        private string cleanValue(object value)
-        {
-            if (value != null)
-            {
-                if (value.ToString().Length > 0)
-                {
-                    decimal returnValue = Convert.ToDecimal(value);
-                    if (returnValue == 0)
-                    {
-                        return "0";
-                    }
-                    else
-                    {
-                        return returnValue.ToString("#.##");
-                    }
-                }
-                else
-                {
-                    return "0";
-                }
-            }
-            else
-            {
-                return "0";
-            }
-        }
-
         public List<BatchProcessHistory> GetBatchProcessHistory()
         {
             List<BatchProcessHistory> returnValue = new List<BatchProcessHistory>();
@@ -1137,5 +972,316 @@ namespace CollectionHubData
             sqlDataConnection.Close();
             return returnValue;
         }
+        public DebtSearchResult DebtSearch(decimal amountFrom, decimal amountTo, int debtStreamCount, int includesStreamCode, int lastPaymentCode, int debtAgeCode)
+        {
+            var returnValue = new DebtSearchResult();
+            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            {
+                sqlDataConnection.Open();
+                using (var sqlCommand = new SqlCommand("CH_TOTALS_COUNT", sqlDataConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add(new SqlParameter("AmountFrom", amountFrom));
+                    sqlCommand.Parameters.Add(new SqlParameter("AmountTo", amountTo));
+                    sqlCommand.Parameters.Add(new SqlParameter("DebtStreamCount", debtStreamCount));
+                    sqlCommand.Parameters.Add(new SqlParameter("IncludesStreamCode", includesStreamCode));
+                    sqlCommand.Parameters.Add(new SqlParameter("LastPaymentCode", lastPaymentCode));
+                    sqlCommand.Parameters.Add(new SqlParameter("DebtAgeCode", debtAgeCode));
+                    sqlCommand.Parameters.Add(new SqlParameter("List", 1));
+
+                    sqlCommand.Parameters.Add(new SqlParameter("Records", SqlDbType.Int));
+                    sqlCommand.Parameters["Records"].Direction = ParameterDirection.Output;
+                    
+                    sqlCommand.Parameters.Add(new SqlParameter("Amount",  SqlDbType.Float));
+                    sqlCommand.Parameters["Amount"].Direction  = ParameterDirection.Output;
+
+                    var dataReader = sqlCommand.ExecuteReader();
+
+                    if (dataReader.HasRows)
+                    {
+                        while (dataReader.Read())
+                        {
+                            if (dataReader[0] != DBNull.Value)
+                            {
+                                returnValue.RecordCount = Convert.ToInt32(dataReader[0].ToString());
+                            }
+                            if (dataReader[1] != DBNull.Value)
+                            {
+                                returnValue.TotalValue = Convert.ToDecimal(dataReader[1].ToString());
+                            }
+                        }
+                    }
+
+                    dataReader.NextResult();
+
+                    if (dataReader.HasRows)
+                    {
+                        var results = new List<DebtSearchResultItem>();
+                        
+                        while (dataReader.Read())
+                        {
+                            results.Add(new DebtSearchResultItem(dataReader));
+                        }
+
+                        returnValue.Results = results;
+                    }
+                }
+                sqlDataConnection.Close();
+            }
+            return returnValue;
+        }
+        public DebtAddress GetAddressForDebt(string pin, string uprn)
+        {
+            var returnValue = new DebtAddress();
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CHP_GetNameAddress_byPIN", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                sqlCommand.Parameters.Add(new SqlParameter("pin", pin));
+                sqlCommand.Parameters.Add(new SqlParameter("uprn", uprn));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        var newResult = new DebtAddress(dataReader);
+                        returnValue = newResult;
+                    }
+                }
+            }
+
+            sqlDataConnection.Close();
+
+            return returnValue;
+        }
+        public UserData AuthenticateUser(string loginName, string passwordHash)
+        {
+            UserData returnValue = null;
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CH_AUTHENTICATE_USER", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("LoginName", loginName));
+                sqlCommand.Parameters.Add(new SqlParameter("PasswordHash", passwordHash));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue = new UserData(dataReader);
+                    }
+                }
+            }
+
+            sqlDataConnection.Close();
+
+            return returnValue;
+        }
+        public List<BatchRecords> SaveBatchJob(int batchId, string parameterString, int userId)
+        {
+            List<BatchRecords> returnValue = null;
+
+            if (parameterString.EndsWith("==")) 
+            {
+                byte[] data = Convert.FromBase64String(parameterString);
+                parameterString = Encoding.UTF8.GetString(data);
+            }
+
+            BatchProcess batchProcess = GetBatchProcess(batchId)[0];
+            List<BatchProcessFields> processFields = GetBatchProcessFields(batchId);
+
+            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            {
+                sqlDataConnection.Open();
+                using (var sqlCommand = new SqlCommand(batchProcess.Procedure, sqlDataConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    foreach(var field in processFields )
+                    {
+                        if (field.IsSystem)
+                        {
+                            if(field.FieldName.ToLower() == "userid")
+                            { 
+                                sqlCommand.Parameters.Add(new SqlParameter(field.FieldName, userId));
+                            }
+                            if (field.FieldName.ToLower() == "ProcessID".ToLower())
+                            {
+                                sqlCommand.Parameters.Add(new SqlParameter(field.FieldName, batchId));
+                            }
+                        }
+                        else
+                        {
+                            var suppliedValue = getStringValue(parameterString, field.bf_id);
+
+                            if(suppliedValue.Length == 0 && field.IsMandatory) {  
+                                throw new Exception("Required value was not supplied");
+                            }
+
+                            if(suppliedValue.Length > 0)
+                            {
+                                var discovered = false;
+
+                                if (field.DataType.ToLower() == "datetime")
+                                {
+                                    DateTime dateValue = new DateTime();
+                                    if (DateTime.TryParse(suppliedValue, out dateValue))
+                                    {
+                                        sqlCommand.Parameters.Add(new SqlParameter(field.FieldName, dateValue));
+                                        discovered = true;
+                                    }
+                                }
+                                if (field.DataType.ToLower() == "boolean")
+                                {
+                                    Boolean boolValue = false;
+                                    if (Boolean.TryParse(suppliedValue, out boolValue))
+                                    {
+                                        sqlCommand.Parameters.Add(new SqlParameter(field.FieldName, boolValue));
+                                        discovered = true;
+                                    }
+                                }
+                                if (field.DataType.ToLower() == "currency")
+                                {
+                                    Decimal decimalValue = 0;
+                                    if (Decimal.TryParse(suppliedValue, out decimalValue))
+                                    {
+                                        sqlCommand.Parameters.Add(new SqlParameter(field.FieldName, decimalValue));
+                                        discovered = true;
+                                    }
+                                }
+                                if (field.DataType.ToLower() == "int")
+                                {
+                                    Int32 intValue = 0;
+                                    if (Int32.TryParse(suppliedValue, out intValue))
+                                    {
+                                        sqlCommand.Parameters.Add(new SqlParameter(field.FieldName, intValue));
+                                        discovered = true;
+                                    }
+                                }
+                                if (field.DataType.ToLower() == "string" || field.DataType.ToLower() == "textarea" || field.DataType.ToLower() == "multiselect")
+                                {
+                                    sqlCommand.Parameters.Add(new SqlParameter(field.FieldName, suppliedValue));
+                                    discovered = true;
+                                }
+                                if (!discovered) { throw new Exception("DataType Could Not Be Translated"); }
+                            }
+                        }
+                    }
+                    var returnedId = (int)sqlCommand.ExecuteScalar();
+                    if (returnedId > 0)
+                    {
+                        returnValue = getBatchRecords(returnedId);
+                    }
+                }
+                sqlDataConnection.Close();
+            }
+            return returnValue;
+        }
+        
+        private List<BatchRecords> getBatchRecords(int batchId)
+        {
+            List<BatchRecords> returnValue = null;
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CH_BATCH_LIST", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("BatchId", batchId));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add(new BatchRecords(dataReader));
+                    }
+                }
+            }
+
+            sqlDataConnection.Close();
+
+            return returnValue;
+        }
+        
+        private string getStringValue(string valueString, int targetId)
+        {
+            string r = String.Empty;
+            string[] p = valueString.Split('&');
+            foreach (var pair in p)
+            {
+                string[] kv = pair.Split('=');
+                if(kv.Length == 2)
+                {
+                    var k = kv[0];
+                    var v = kv[1];
+                    k = k.Replace("auto_datepicker_","").Replace("auto_","");
+                    if(k == targetId.ToString())
+                    {
+                        r = v.ToString();
+                    }
+                }
+            }
+            return r;
+        }
+        private decimal getMarker(SqlDataReader dataReader)
+        {
+            decimal marker = 0;
+            for (int i = 0; i < dataReader.FieldCount; i++)
+            {
+                if (dataReader.GetFieldType(i) == Type.GetType("System.Int16") ||
+                    dataReader.GetFieldType(i) == Type.GetType("System.Int32") ||
+                    dataReader.GetFieldType(i) == Type.GetType("System.Int64") ||
+                    dataReader.GetFieldType(i) == Type.GetType("System.Double") ||
+                    dataReader.GetFieldType(i) == Type.GetType("System.Decimal") ||
+                    dataReader.GetFieldType(i) == Type.GetType("System.Byte"))
+                {
+                    if (dataReader[i] != DBNull.Value)
+                    {
+                        if (marker < Convert.ToDecimal(dataReader[i]))
+                        {
+                            marker = Convert.ToDecimal(dataReader[i]);
+                        }
+                    }
+                }
+            }
+            return marker;
+        }
+        private string cleanValue(object value)
+        {
+            if (value != null)
+            {
+                if (value.ToString().Length > 0)
+                {
+                    decimal returnValue = Convert.ToDecimal(value);
+                    if (returnValue == 0)
+                    {
+                        return "0";
+                    }
+                    else
+                    {
+                        return returnValue.ToString("#.##");
+                    }
+                }
+                else
+                {
+                    return "0";
+                }
+            }
+            else
+            {
+                return "0";
+            }
+        }   
     }
 }
