@@ -22,7 +22,7 @@ namespace CollectionHubData
         {
             Source          = value["Source"].ToString().Trim();
             CnPin           = value["Cn_Pin"].ToString();
-            //UrPin           = value["uprn"].ToString().Trim();
+            UrPin           = value["uprn"].ToString().Trim();
             LastName        = value["Lastname"].ToString();
             FullName        = value["FullName"].ToString();
             FullAddress     = value["FullAddress"].ToString();

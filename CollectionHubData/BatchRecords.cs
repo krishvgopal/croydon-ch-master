@@ -8,25 +8,29 @@ namespace CollectionHubData
 {
     public class BatchRecords
     {
-        string RecordID         { get; set; }
-        string PIN              { get; set; }
-        string Source           { get; set; }
-        string DebtAccount      { get; set; }
-        string FullName         { get; set; }
-        string FullAddress      { get; set; }
-        string ThisDebt         { get; set; }
-        string ThisDebtOS       { get; set; }
-        string DebtCount        { get; set; }
-        string AllDebtAmount    { get; set; }
-        string AllDebtOS        { get; set; }
-        string FromDate         { get; set; }
-        string UntilDate        { get; set; }
+        public string RecordID         { get; set; }
+        public string PIN              { get; set; }
+        public string Source           { get; set; }
+        public string DebtAccount      { get; set; }
+        public string FullName         { get; set; }
+        public string FullAddress      { get; set; }
+        public string ThisDebt         { get; set; }
+        public string ThisDebtOS       { get; set; }
+        public string DebtCount        { get; set; }
+        public string AllDebtAmount    { get; set; }
+        public string AllDebtOS        { get; set; }
+        public DateTime? FromDate       { get; set; }
+        public DateTime? UntilDate      { get; set; }
+        public string UPRN              { get; set; }
+        public string RowIdentifier     { get; set; }
+        public Boolean Included         { get; set; }
 
         public BatchRecords() { }
         public BatchRecords(System.Data.SqlClient.SqlDataReader value) 
         {
             RecordID        = Convert.ToString(value["RecordID"]);
             PIN             = Convert.ToString(value["PIN"]);
+            UPRN            = Convert.ToString(value["UPRN"]);
             Source          = Convert.ToString(value["Source"]);
             DebtAccount     = Convert.ToString(value["DebtAccount"]);
             FullName        = Convert.ToString(value["FullName"]);
@@ -36,9 +40,18 @@ namespace CollectionHubData
             DebtCount       = Convert.ToString(value["DebtCount"]);
             AllDebtAmount   = Convert.ToString(value["AllDebtAmount"]);
             AllDebtOS       = Convert.ToString(value["AllDebtOS"]);
-            FromDate        = Convert.ToString(value["FromDate"]);
-            UntilDate       = Convert.ToString(value["UntilDate"]);
+            RowIdentifier   = Convert.ToString(value["RowIdentifier"]);
+            Included        = Convert.ToBoolean(value["Included"]);
 
+            var sqlDateTimeLatestDebt1 = value["FromDate"];
+            FromDate = (sqlDateTimeLatestDebt1 == System.DBNull.Value)
+                ? (DateTime?)null
+                : Convert.ToDateTime(sqlDateTimeLatestDebt1);
+
+            var sqlDateTimeLatestDebt2 = value["UntilDate"];
+            UntilDate = (sqlDateTimeLatestDebt2 == System.DBNull.Value)
+                ? (DateTime?)null
+                : Convert.ToDateTime(sqlDateTimeLatestDebt2);
         }
     }                               
 }

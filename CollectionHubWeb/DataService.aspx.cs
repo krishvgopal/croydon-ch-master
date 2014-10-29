@@ -368,14 +368,64 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
-    public static List<BatchRecords> SaveBatchParameters(int batchId, int userId, string base64String)
+    public static int SaveBatchParameters(int batchId, int userId, string base64String)
     {
-        List<BatchRecords> returnData = new List<BatchRecords>();
+        int returnData = 0;
         byte[] data = Convert.FromBase64String(base64String);
         string decodedString = Encoding.UTF8.GetString(data);
 
         var dataAccess = new CollectionHubData.DataAccess();
         returnData = dataAccess.SaveBatchJob(batchId, decodedString, userId);
+
+        return returnData;
+    }
+    [WebMethod]
+    public static List<BatchRecords> GetBatchRunRecords(int batchRunId)
+    {
+        List<BatchRecords> returnData = new List<BatchRecords>();
+ 
+        var dataAccess = new CollectionHubData.DataAccess();
+        returnData = dataAccess.GetBatchRunRecords(batchRunId);
+
+        return returnData;
+    }
+    [WebMethod]
+    public static bool SaveBatchIncludeStatus(int recordIdentifier, Boolean include)
+    {
+        var returnData = false;
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.SaveBatchIncludeStatus(recordIdentifier, include);
+
+        return returnData;
+    }
+    [WebMethod]
+    public static bool DeactivateBatch(int batchId)
+    {
+        var returnData = false;
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.DeactivateBatch(batchId);
+
+        return returnData;
+    }
+    [WebMethod]
+    public static bool ActivateBatch(int batchId, string batchName)
+    {
+        var returnData = false;
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.ActivateBatch(batchId, batchName);
+
+        return returnData;
+    }
+    [WebMethod]
+    public static string GetBatchName(int batchId)
+    {
+        var returnData = String.Empty;
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.GetBatchName(batchId);
 
         return returnData;
     }

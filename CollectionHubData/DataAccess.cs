@@ -11,6 +11,72 @@ namespace CollectionHubData
         private const string CONNECTION_STRING = "Data Source=192.168.1.17;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=HubAdmin;Password=Croydon#;Connection Timeout=60";
         //private const string CONNECTION_STRING = "Data Source=HIT-DEV-02\\SQL14;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=sa;Password=bakeryCakes1;Connection Timeout=30";
 
+        public bool ActivateBatchRun(int recordIdentifier, bool includeInBatch)
+        {
+            var returnvalue = false;
+            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            {
+                sqlDataConnection.Open();
+                using (var sqlCommand = new SqlCommand("[CH_SET_BATCH_INCLUDE_STATUS]", sqlDataConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add(new SqlParameter("recordIdentifier", recordIdentifier));
+                    sqlCommand.Parameters.Add(new SqlParameter("includeInBatch", includeInBatch));
+
+                    var count = sqlCommand.ExecuteNonQuery();
+                    if (count > 0) returnvalue = true;
+                }
+                sqlDataConnection.Close();
+            }
+            return returnvalue;
+        }
+
+        public bool CancelBatchRun(int recordIdentifier, bool includeInBatch)
+        {
+            var returnvalue = false;
+            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            {
+                sqlDataConnection.Open();
+                using (var sqlCommand = new SqlCommand("[CH_SET_BATCH_INCLUDE_STATUS]", sqlDataConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add(new SqlParameter("recordIdentifier", recordIdentifier));
+                    sqlCommand.Parameters.Add(new SqlParameter("includeInBatch", includeInBatch));
+
+                    var count = sqlCommand.ExecuteNonQuery();
+                    if (count > 0) returnvalue = true;
+                }
+                sqlDataConnection.Close();
+            }
+            return returnvalue;
+        }
+
+
+
+
+
+
+
+        public bool SaveBatchIncludeStatus(int recordIdentifier, bool includeInBatch)
+        {
+            var returnvalue = false;
+            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            {
+                sqlDataConnection.Open();
+                using (var sqlCommand = new SqlCommand("[CH_SET_BATCH_INCLUDE_STATUS]", sqlDataConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add(new SqlParameter("recordIdentifier", recordIdentifier));
+                    sqlCommand.Parameters.Add(new SqlParameter("includeInBatch", includeInBatch));
+
+                    var count = sqlCommand.ExecuteNonQuery();
+                    if (count > 0) returnvalue = true;
+                }
+                sqlDataConnection.Close();
+            }
+            return returnvalue;
+        }
+
         public bool RemoveMatch(int matchId)
         {
             var returnvalue = false;
@@ -1086,9 +1152,9 @@ namespace CollectionHubData
 
             return returnValue;
         }
-        public List<BatchRecords> SaveBatchJob(int batchId, string parameterString, int userId)
+        public int SaveBatchJob(int batchId, string parameterString, int userId)
         {
-            List<BatchRecords> returnValue = null;
+            int returnValue = 0;
 
             if (parameterString.EndsWith("==")) 
             {
@@ -1176,27 +1242,26 @@ namespace CollectionHubData
                             }
                         }
                     }
-                    var returnedId = (int)sqlCommand.ExecuteScalar();
-                    if (returnedId > 0)
-                    {
-                        returnValue = getBatchRecords(returnedId);
-                    }
+                    returnValue = (int)sqlCommand.ExecuteScalar();
+                    //if (returnedId > 0)
+                    //{
+                    //    returnValue = getBatchRecords(returnedId);
+                    //}
                 }
                 sqlDataConnection.Close();
             }
             return returnValue;
         }
-        
-        private List<BatchRecords> getBatchRecords(int batchId)
+        public List<BatchRecords> GetBatchRunRecords(int batchRunId)
         {
-            List<BatchRecords> returnValue = null;
+            List<BatchRecords> returnValue = new List<BatchRecords>();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("CH_BATCH_LIST", sqlDataConnection))
             {
                 sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                sqlCommand.Parameters.Add(new SqlParameter("BatchId", batchId));
+                sqlCommand.Parameters.Add(new SqlParameter("BatchId", batchRunId));
 
                 var dataReader = sqlCommand.ExecuteReader();
 
@@ -1207,6 +1272,67 @@ namespace CollectionHubData
                         returnValue.Add(new BatchRecords(dataReader));
                     }
                 }
+            }
+
+            sqlDataConnection.Close();
+
+            return returnValue;
+        }
+
+        public bool DeactivateBatch(int batchRunId)
+        {
+            bool returnValue = false;
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CH_BATCH_RUNS_DEACTIVATE", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("BatchId", batchRunId));
+
+                var count = sqlCommand.ExecuteNonQuery();
+                if (count > 0) { returnValue = true; }
+            }
+
+            sqlDataConnection.Close();
+
+            return returnValue;
+        }
+        public bool ActivateBatch(int batchRunId, string batchName)
+        {
+            bool returnValue = false;
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("[CH_BATCH_RUNS_ACTIVATE]", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("@B_ID", batchRunId));
+                sqlCommand.Parameters.Add(new SqlParameter("BatchName", batchName));
+
+                var count = sqlCommand.ExecuteNonQuery();
+                if (count > 0) { returnValue = true; }
+            }
+
+            sqlDataConnection.Close();
+
+            return returnValue;
+        }
+        public string GetBatchName(int batchId)
+        {
+            string returnValue = String.Empty;
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("[CH_BATCH_RUNS_GETNAME]", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("BatchId", batchId));
+                sqlCommand.Parameters.Add(new SqlParameter("BatchName", SqlDbType.NVarChar, 200));
+                sqlCommand.Parameters["BatchName"].Direction = ParameterDirection.Output;
+
+                sqlCommand.ExecuteScalar();
+                returnValue = sqlCommand.Parameters["BatchName"].Value.ToString();
             }
 
             sqlDataConnection.Close();
