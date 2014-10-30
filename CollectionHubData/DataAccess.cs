@@ -30,7 +30,6 @@ namespace CollectionHubData
             }
             return returnvalue;
         }
-
         public bool CancelBatchRun(int recordIdentifier, bool includeInBatch)
         {
             var returnvalue = false;
@@ -50,13 +49,6 @@ namespace CollectionHubData
             }
             return returnvalue;
         }
-
-
-
-
-
-
-
         public bool SaveBatchIncludeStatus(int recordIdentifier, bool includeInBatch)
         {
             var returnvalue = false;
@@ -76,7 +68,6 @@ namespace CollectionHubData
             }
             return returnvalue;
         }
-
         public bool RemoveMatch(int matchId)
         {
             var returnvalue = false;
@@ -476,7 +467,6 @@ namespace CollectionHubData
             using (var sqlCommand = new SqlCommand("CHP_GETPERSONDEBTS_byPIN", sqlDataConnection))
             {
                 sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-
                 sqlCommand.Parameters.Add(new SqlParameter("pin", pin));
 
                 var dataReader = sqlCommand.ExecuteReader();
@@ -1278,7 +1268,6 @@ namespace CollectionHubData
 
             return returnValue;
         }
-
         public bool DeactivateBatch(int batchRunId)
         {
             bool returnValue = false;
@@ -1339,7 +1328,6 @@ namespace CollectionHubData
 
             return returnValue;
         }
-        
         private string getStringValue(string valueString, int targetId)
         {
             string r = String.Empty;
@@ -1408,6 +1396,30 @@ namespace CollectionHubData
             {
                 return "0";
             }
-        }   
+        }
+
+        public List<BatchRunHistory> GetBatchRunHistory()
+        {
+            List<BatchRunHistory> returnValue = new List<BatchRunHistory>();
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CH_BATCH_RUNS_LIST", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add(new BatchRunHistory(dataReader));
+                    }
+                }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
     }
 }

@@ -1,8 +1,8 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/AppMain.master" AutoEventWireup="true" CodeFile="ProcessView.aspx.cs" Inherits="ProcessViewer" %>
 
-<%@ Register Src="~/Common/ActionMenu.ascx" TagName="ActionMenu" TagPrefix="am" %>
-<%@ Register Src="~/Common/MainNavigation.ascx" TagName="NavigationMenu" TagPrefix="nm" %>
-<%@ Register Src="~/Common/SiteHeader.ascx" TagName="SiteHeader" TagPrefix="sh" %>
+<%@ Register Src="~/Common/ActionMenu.ascx"     TagName="ActionMenu"        TagPrefix="am" %>
+<%@ Register Src="~/Common/MainNavigation.ascx" TagName="NavigationMenu"    TagPrefix="nm" %>
+<%@ Register Src="~/Common/SiteHeader.ascx"     TagName="SiteHeader"        TagPrefix="sh" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="headMenu" Runat="Server">
     <sh:SiteHeader ID="SiteHeader" runat="server" />
@@ -54,10 +54,9 @@
                 </tr>
             </thead>
         </table>
-         <a data-toggle="modal" href="modals/CancelBatch.html"  data-target="#cancelApprove" class="btn btn-outline btn-primary">Cancel Batch</a>
-         <a data-toggle="modal" href="modals/ApproveBatch.html" data-target="#acceptApprove" class="btn btn-outline btn-primary">Activate Batch</a>
+        <a data-toggle="modal" href="modals/CancelBatch.html"  data-target="#cancelApprove" class="btn btn-outline btn-primary">Cancel Batch</a>
+        <a data-toggle="modal" href="modals/ApproveBatch.html" data-target="#acceptApprove" class="btn btn-outline btn-primary">Activate Batch</a>
     </div> 
-
     <div class="modal fade" id="cancelApprove" tabindex="-1" role="dialog" aria-labelledby="cancelApproveModal" aria-hidden="true" >
         <div class="modal-dialog" >
             <div class="modal-content">
@@ -70,7 +69,6 @@
             </div>
         </div>
     </div>
-
     <script type="text/javascript" charset="utf8" src="js/ProcessView.js"></script>
 </asp:Content>
 

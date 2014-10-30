@@ -73,6 +73,7 @@
     </Compile>
     <Compile Include="RecoveryCycle.cs" />
     <Compile Include="RecoveryCycleItem.cs" />
+    <Compile Include="BatchRunHistory.cs" />
     <Compile Include="SampleData.cs" />
     <Compile Include="UserData.cs" />
   </ItemGroup>

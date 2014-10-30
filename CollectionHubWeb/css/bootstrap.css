@@ -13,6 +13,9 @@ html {
 body {
   margin: 0;
 }
+.error{
+    color: #ff0000;
+}
 article,
 aside,
 details,

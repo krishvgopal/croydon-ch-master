@@ -429,4 +429,14 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
+    [WebMethod]
+    public static List<BatchRunHistory> GetBatchRunHistory() 
+    {
+        var returnData = new List<BatchRunHistory>();
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.GetBatchRunHistory();
+
+        return returnData;
+    }
 }

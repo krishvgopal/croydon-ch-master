@@ -32,7 +32,7 @@
             </table>
         </div> 
          <div class="col-lg-8">    
-              <table class="table table-striped table-bordered table-hover" id="dataTableBatchProcessHistory">
+              <%--<table class="table table-striped table-bordered table-hover" id="dataTableBatchProcessHistory">
                 <thead>
                     <tr>
                         <th class="bph_process_date">Process Date</th>
@@ -43,7 +43,23 @@
                         <th class="UserName">User Name</th>
                     </tr>
                 </thead>
-               </table>
+               </table>--%>
+
+              <table class="table compact table-striped table-bordered table-hover" id="dataTableBatchRunHistory">
+                <thead>
+                    <tr>
+                        <th class="B_ID">B_ID</th>
+                        <th class="User_name">User name</th>
+                        <th class="Batch_name">Batch name</th>
+                        <th class="Date_Created">Date Created</th>
+                        <th class="Records">Records</th>
+                        <th class="Batch_Status">Batch Status</th>
+                        <th class="Debt_at_start">Debt at start</th>
+                        <th class="Debt_OS_now">Debt OS now</th>
+                    </tr>
+                </thead>
+            </table>
+
          </div> 
     </div>
 

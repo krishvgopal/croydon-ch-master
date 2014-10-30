@@ -1,4 +1,5 @@
 ﻿$("#resultsPane").hide();
+
 refreshProcessInfo();
 refreshProcessHeader();
 
@@ -13,32 +14,9 @@ function refreshProcessInfo() {
             if (result.hasOwnProperty("d")) { result = result.d; }
             {
                 jQuery.each(result, function () {
-
-                    console.log( 'MAN ' + this.IsMandatory);
-
-                    if (this.DataType == 'string') {
-                        $("#processFieldTags").append(getTextBox(this.bf_id, this.FieldLabel, this.DefaultValue, this.HelpText));
-                    }
-                    if (this.DataType == 'currency') {
-                        $("#processFieldTags").append(getTextBox(this.bf_id, this.FieldLabel, this.DefaultValue, this.HelpText));
-                    }
-                    if (this.DataType == 'textarea') {
-                        $("#processFieldTags").append(getTextArea(this.bf_id, this.FieldLabel, this.DefaultValue, this.HelpText));
-                    }
-                    if (this.DataType == 'datetime') {
-                        $("#processFieldTags").append(getDateTime(this.bf_id, this.FieldLabel, this.DefaultValue, this.HelpText));
-                        applyDatePickers();
-                    }
-                    if (this.DataType == 'boolean') {
-                        $("#processFieldTags").append(getCheckBox(this.bf_id, this.FieldLabel, this.DefaultValue, this.HelpText));
-                    }
-                    if (this.DataType == 'multiselect') {
-                        $("#processFieldTags").append(getMultiSelect(this.bf_id, this.FieldLabel, this.DefaultValue, this.HelpText, this.FieldData, true));
-                    }
-                    if (this.DataType == 'select') {
-                        $("#processFieldTags").append(getMultiSelect(this.bf_id, this.FieldLabel, this.DefaultValue, this.HelpText, this.FieldData, false));
-                    }
+                    addFieldToForm(this);
                 });
+                applyDatePickers();
             }
         }
     });
@@ -62,45 +40,70 @@ function refreshProcessHeader() {
     });
 }
 
-function getTextBox(id, label, defaultValue, helpText) {
-    return '<div class="form-group"><label>' + label + '</label><input id="auto_' + id + '" class="form-control" value="' + defaultValue + '"><p class="help-block">' + helpText + '</p></div>';
+function addFieldToForm(field) {
+    var htmlToAdd = '';
+    if (field.DataType == 'string') {
+        htmlToAdd = getTextBox(field);}
+    if (field.DataType == 'currency') {
+        htmlToAdd =  getTextBox(field);}
+    if (field.DataType == 'textarea') {
+        htmlToAdd = getTextArea(field);}
+    if (field.DataType == 'datetime') {
+        htmlToAdd =  getDateTime(field);}
+    if (field.DataType == 'boolean') {
+        htmlToAdd =  getCheckBox(field);}
+    if (field.DataType == 'multiselect') {
+        htmlToAdd =  getMultiSelect(field);}
+    if (field.DataType == 'select') {
+        htmlToAdd = getMultiSelect(field);}
+    $("#processFieldTags").append( htmlToAdd );
 }
-function getTextArea(id, label, defaultValue, helpText) {
-    return '<div class="form-group"><label>' + label + '</label><textarea id="auto_' + id + '" class="form-control" >' + defaultValue + '</textarea><p class="help-block">' + helpText + '</p></div>';
+function getTextBox(field) {
+    return '<div class="form-group"><label>' + field.FieldLabel + '</label><input ' + isRequired(field) + ' id="auto_' + field.bf_id + '" class="form-control" value="' + field.DefaultValue + '"><p class="help-block">' + field.HelpText + '</p></div>';
 }
-function getDateTime(id, label, defaultValue, helpText) {
-    return '<div class="form-group"><label>' + label + '</label><input name="datepickerEnabled" id="auto_datepicker_' + id + '" class="form-control" value="' + defaultValue + '"><p class="help-block">' + helpText + '</p></div>';
+function getTextArea(field) {
+    return '<div class="form-group"><label>' + field.FieldLabel + '</label><textarea ' + isRequired(field) + ' id="auto_' + field.bf_id + '" class="form-control" >' + field.DefaultValue + '</textarea><p class="help-block">' + field.HelpText + '</p></div>';
 }
-function getCheckBox(id, label, defaultValue, helpText) {
-    return '<div class="form-group"><label>' + label + '</label><div class="checkbox"><label><input id="auto_' + id + '" type="checkbox" value="' + defaultValue + '">' + helpText + '</label></div></div>'
+function getDateTime(field) {
+    return '<div class="form-group"><label>' + field.FieldLabel + '</label><input ' + isRequired(field) + ' name="datepickerEnabled" id="auto_datepicker_' + field.bf_id + '" class="form-control" value="' + field.DefaultValue + '"><p class="help-block">' + field.HelpText + '</p></div>';
 }
-function getMultiSelect(id, label, defaultValue, helpText, fieldData, isMultiSelect) {
+function getCheckBox(field) {
+    return '<div class="form-group"><label>' + field.FieldLabel + '</label><div class="checkbox"><label><input ' + isRequired(field) + ' id="auto_' + field.bf_id + '" type="checkbox" value="' + field.DefaultValue + '">' + field.HelpText + '</label></div></div>'
+}
+function getMultiSelect(field) {
     var returnValue = '';
     var selectItems = '';
-    var tokenPairs  = fieldData.split(";");
-    for (i = 0; i < tokenPairs.length; i++) {
-        var pair = tokenPairs[i].split('|');
+    var t = field.FieldData.split(";");
+    
+    for (i = 0; i < t.length; i++) {
+        var defaultValue = '';
+        var p = t[i].split('|');
+        if (p[1] == field.DefaultValue) { defaultValue = 'selected="selected"'; }
+        selectItems += '<option value="' + p[1] + '" ' + defaultValue + '>' + p[0] + '</option>';
+    }
 
-        if (pair[1] == defaultValue) {
-            selectItems += '<option value="' + pair[1] + '" selected="selected">' + pair[0] + '</option>';
-        }
-        else {
-            selectItems += '<option value="' + pair[1] + '">' + pair[0] + '</option>';
-        }
-    }
-    if (isMultiSelect) {
-       returnValue = '<div class="form-group"><label>' + label + '</label><select id="auto_' + id + '" multiple class="form-control">' + selectItems + '</select></div>';
-    } else {
-       returnValue = '<div class="form-group"><label>' + label + '</label><select id="auto_' + id + '" class="form-control">' + selectItems + '</select></div>';
-    }
+    var multiSelectValue = '';
+    if (field.DataType == 'multiselect') { multiSelectValue = 'multiple'; }
+    returnValue = '<div class="form-group"><label>' + field.FieldLabel + '</label><select ' + isRequired(field) + ' id="auto_' + field.bf_id + '" ' + multiSelectValue + ' class="form-control">' + selectItems + '</select></div>\n';
+   
     return returnValue;
+}
+
+function isRequired(field) {
+    var required = '';
+    if (field.IsMandatory) { required = 'required' }
+    return required;
 }
 
 function applyDatePickers()
 {
     $("input[name='datepickerEnabled']").datepicker();
 }
+
 function postValues() {
+
+    if (!$("#mainForm").valid()) { return;} 
+    
     var s = '';
     $("input[id^='auto_']").each(function (index) {
         var i = $(this).attr('id');
@@ -221,7 +224,9 @@ function refreshBatchRun(batchRunId)
         }
     });
 }
+
 function activateBatch() {
+    if ($("#newBatchName").val().length == 0) { return; }
     $.ajax({
         type: "POST",
         url: "DataService.aspx/ActivateBatch",
@@ -251,6 +256,7 @@ function cancelBatch() {
     $('#cancelApprove').modal('hide');
     window.location.replace("Processes.aspx");
 }
+
 function savePreference(checkedState, recordIdentifier) {
     var recordId = recordIdentifier.split('_')[1];
     $.ajax({
@@ -260,12 +266,10 @@ function savePreference(checkedState, recordIdentifier) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
-        },
-        error: function (result) {
-            alert('Could not update that record.');
         }
     });
 }
+
 function loadBatchName()
 {
     $.ajax({
