@@ -439,4 +439,14 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
+    [WebMethod]
+    public static List<BatchProcessResult> GetBatchProcessResults(int batchProcessId)
+    {
+        var returnData = new List<BatchProcessResult>();
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.GetBatchProcessResults(batchProcessId);
+
+        return returnData;
+    }
 }

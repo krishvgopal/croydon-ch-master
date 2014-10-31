@@ -94,6 +94,7 @@ function isRequired(field) {
     if (field.IsMandatory) { required = 'required' }
     return required;
 }
+
 function applyDatePickers()
 {
     $("input[name='datepickerEnabled']").datepicker();

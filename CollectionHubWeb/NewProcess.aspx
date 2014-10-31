@@ -1,5 +1,5 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/AppMain.master" AutoEventWireup="true" CodeFile="Processes.aspx.cs" Inherits="Processes" %>
-
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/AppMain.master" AutoEventWireup="true" CodeFile="NewProcess.aspx.cs" Inherits="NewProcess" %>
+ 
 <%@ Register Src="~/Common/ActionMenu.ascx"     TagName="ActionMenu"        TagPrefix="am" %>
 <%@ Register Src="~/Common/MainNavigation.ascx" TagName="NavigationMenu"    TagPrefix="nm" %>
 <%@ Register Src="~/Common/SiteHeader.ascx"     TagName="SiteHeader"        TagPrefix="sh" %>
@@ -20,8 +20,7 @@
 </asp:Content>
 <asp:Content ID="Content5" ContentPlaceHolderID="pageBody" Runat="Server">
     <div class="row">
-      
-          <%--<div class="col-lg-4">    
+        <div class="col-lg-4">    
              <table class="table table-striped table-bordered table-hover" id="dataTableBatchProcessJobs">
                 <thead>
                     <tr>
@@ -31,10 +30,8 @@
                     </tr>
                 </thead>
             </table>
-        </div> --%>
-
-
-         <div class="col-lg-12">    
+        </div> 
+         <div class="col-lg-8">    
               <%--<table class="table table-striped table-bordered table-hover" id="dataTableBatchProcessHistory">
                 <thead>
                     <tr>
@@ -47,8 +44,9 @@
                     </tr>
                 </thead>
                </table>--%>
-        
-                <table class="table compact table-striped table-bordered table-hover" id="dataTableBatchRunHistory">
+
+             <%-- 
+               <table class="table compact table-striped table-bordered table-hover" id="dataTableBatchRunHistory">
                 <thead>
                     <tr>
                         <th class="B_ID">B_ID</th>
@@ -59,14 +57,14 @@
                         <th class="Batch_Status">Batch Status</th>
                         <th class="Debt_at_start">Debt at start</th>
                         <th class="Debt_OS_now">Debt OS now</th>
-                        </tr>
-                    </thead>
-                </table>
-                 
+                    </tr>
+                </thead>
+            </table>
+                  --%>
 
          </div> 
     </div>
 
-    <script type="text/javascript" charset="utf8" src="js/Processes.js"></script>
+    <script type="text/javascript" charset="utf8" src="js/NewProcess.js"></script>
 </asp:Content>
 

@@ -1421,5 +1421,29 @@ namespace CollectionHubData
             sqlDataConnection.Close();
             return returnValue;
         }
+        public List<BatchProcessResult> GetBatchProcessResults(int batchProcessId)
+        {
+            List<BatchProcessResult> returnValue = new List<BatchProcessResult>();
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CH_BATCH_RESULTS_LIST", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("BatchId", batchProcessId));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add(new BatchProcessResult(dataReader));
+                    }
+                }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
     }
 }
