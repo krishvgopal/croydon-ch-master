@@ -1,8 +1,28 @@
 ﻿$("#resultsPane").hide();
 
-refreshProcessInfo();
 refreshProcessHeader();
+if (isHistoric())   { refreshHistoricProcessInfo(); }
+else                { refreshProcessInfo(); }
 
+
+function refreshHistoricProcessInfo() {
+    $.ajax({
+        type: "POST",
+        url: "DataService.aspx/GetBatchProcessFieldsFromRun",
+        data: "{'batchRunId': " + QueryString()["b"] + "}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            if (result.hasOwnProperty("d")) { result = result.d; }
+            {
+                jQuery.each(result, function () {
+                    addFieldToForm(this);
+                });
+                applyDatePickers();
+            }
+        }
+    });
+};
 function refreshProcessInfo() {
     $.ajax({
         type: "POST",
@@ -118,7 +138,7 @@ function postValues() {
 
     $("#searchPane").hide(100);
     $("#resultsPane").show(100);
-
+    
     $.ajax({
         type: "POST",
         url: "DataService.aspx/SaveBatchParameters",
@@ -127,8 +147,9 @@ function postValues() {
         dataType: "json",
         success: function (result) {
             if (result.hasOwnProperty("d")) { result = result.d; }
-            $("#BatchRunId").val( result );
+            $("#BatchRunId").val(result);
             refreshBatchRun(result);
+            $("#resultsPane").css('visibility', 'visible');
         }
     });
 }
@@ -284,4 +305,11 @@ function loadBatchName()
             alert('Could not get batch name');
         }
     });
+}
+
+function isHistoric()
+{
+    var x = QueryString()["b"];
+    if (typeof x == 'undefined') { return false; }
+    else { return true; }
 }

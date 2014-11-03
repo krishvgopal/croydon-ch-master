@@ -8,7 +8,7 @@ namespace CollectionHubData
 {
     public class DataAccess
     {
-        private const string CONNECTION_STRING = "Data Source=192.168.1.17;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=HubAdmin;Password=Croydon#;Connection Timeout=60";
+        private const string CONNECTION_STRING = "Data Source=192.168.1.10;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=HubAdmin;Password=Croydon#;Connection Timeout=60";
         //private const string CONNECTION_STRING = "Data Source=HIT-DEV-02\\SQL14;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=sa;Password=bakeryCakes1;Connection Timeout=30";
 
         public bool ActivateBatchRun(int recordIdentifier, bool includeInBatch)
@@ -1421,6 +1421,7 @@ namespace CollectionHubData
             sqlDataConnection.Close();
             return returnValue;
         }
+
         public List<BatchProcessResult> GetBatchProcessResults(int batchProcessId)
         {
             List<BatchProcessResult> returnValue = new List<BatchProcessResult>();
@@ -1445,5 +1446,81 @@ namespace CollectionHubData
             sqlDataConnection.Close();
             return returnValue;
         }
+        public BatchProcessParentHeader GetBatchProcessParentHeader(int batchRunId)
+        {
+            BatchProcessParentHeader returnValue = new BatchProcessParentHeader();
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CH_BATCH_GET_PARENT_HEADER", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("BatchRunId", batchRunId));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue = new BatchProcessParentHeader(dataReader);
+                    }
+                }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
+        public BatchProcessParentFields GetBatchProcessParentFields(int batchRunId)
+        {
+            BatchProcessParentFields returnValue = new BatchProcessParentFields();
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CH_BATCH_GET_PARENT_FIELDS", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("BatchRunId", batchRunId));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue = new BatchProcessParentFields(dataReader);
+                    }
+                }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
+
+
+        public List<BatchProcessFieldsFromRun> GetBatchProcessFieldsFromRun(int batchid)
+        {
+            List<BatchProcessFieldsFromRun> returnValue = new List<BatchProcessFieldsFromRun>();
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CHP_BATCH_PROCESS_Fields_FromRun", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("BatchID", batchid));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add(new BatchProcessFieldsFromRun(dataReader));
+                    }
+                }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
+    
+    
     }
 }

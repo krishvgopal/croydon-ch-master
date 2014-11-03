@@ -30,7 +30,6 @@ function refreshBatchProcessHistory() {
         }
     });
 };
-
 function refreshBatchProcessJobs() {
     $.ajax({
         type: "POST",
@@ -68,7 +67,6 @@ function refreshBatchProcessJobs() {
         }
     });
 };
-
 function refreshBatchRunHistory() {
 
     $.ajax({

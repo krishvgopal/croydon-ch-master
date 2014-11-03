@@ -449,4 +449,34 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
+    [WebMethod]
+    public static BatchProcessParentHeader GetBatchProcessParentHeader(int batchRunId)
+    {
+        var returnData = new BatchProcessParentHeader();
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.GetBatchProcessParentHeader(batchRunId);
+
+        return returnData;
+    }
+    [WebMethod]
+    public static BatchProcessParentFields GetBatchProcessParentFields(int batchRunId)
+    {
+        var returnData = new BatchProcessParentFields();
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.GetBatchProcessParentFields(batchRunId);
+
+        return returnData;
+    }
+    [WebMethod]
+    public static List<BatchProcessFieldsFromRun> GetBatchProcessFieldsFromRun(int batchRunId)
+    {
+        var returnData = new List<BatchProcessFieldsFromRun>();
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.GetBatchProcessFieldsFromRun(batchRunId);
+
+        return returnData;
+    }
 }

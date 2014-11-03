@@ -5,13 +5,13 @@
 <%@ Register Src="~/Common/SiteHeader.ascx"     TagName="SiteHeader"        TagPrefix="sh" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="headMenu" Runat="Server">
-    <sh:SiteHeader ID="SiteHeader" runat="server" />
-    <asp:HiddenField ID="sourceValue" runat="server" ClientIDMode="Static" />
-    <asp:HiddenField ID="sourceRefValue" runat="server" ClientIDMode="Static" />
-    <asp:HiddenField ID="selectedDebtId" runat="server" ClientIDMode="Static" />
-    <asp:HiddenField ID="cnpin" runat="server" ClientIDMode="Static" />
-    <asp:HiddenField ID="debtRowTotalValue" runat="server" ClientIDMode="Static" />
-    <asp:HiddenField ID="BatchRunId" runat="server" ClientIDMode="Static" />
+    <sh:SiteHeader ID="SiteHeader"          runat="server" />
+<%--<asp:HiddenField ID="sourceValue"       runat="server" ClientIDMode="Static" />
+    <asp:HiddenField ID="sourceRefValue"    runat="server" ClientIDMode="Static" />
+    <asp:HiddenField ID="selectedDebtId"    runat="server" ClientIDMode="Static" />
+    <asp:HiddenField ID="cnpin"             runat="server" ClientIDMode="Static" />
+    <asp:HiddenField ID="debtRowTotalValue" runat="server" ClientIDMode="Static" />--%>
+    <asp:HiddenField ID="BatchRunId"        runat="server" ClientIDMode="Static" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="headInfo" Runat="Server">
     <am:ActionMenu ID="pageActionMenu" runat="server" />
@@ -35,7 +35,7 @@
         <br />
         <a href="#" onclick="postValues();" class="btn btn-primary">Run Query</a>
     </div>
-    <div class="col-lg-12" id="resultsPane">    
+    <div class="col-lg-12" id="resultsPane" style="visibility:hidden">    
         <table class="table table-striped table-bordered table-hover" width="100%" id="dataTableBatchResults">
             <thead>
                 <tr>

@@ -47,7 +47,9 @@
     <Compile Include="BatchJobHistory.cs" />
     <Compile Include="BatchJobs.cs" />
     <Compile Include="BatchProcess.cs" />
+    <Compile Include="BatchProcessParentHeader.cs" />
     <Compile Include="BatchRecords.cs" />
+    <Compile Include="BatchProcessFieldsFromRun.cs" />
     <Compile Include="CurrentAttributes.cs" />
     <Compile Include="DataAccess.cs" />
     <Compile Include="DataReaderExtensionMethods.cs" />

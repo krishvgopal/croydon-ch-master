@@ -750,9 +750,6 @@ function refresMisMisMatchList(partyPin) {
         }
     });
 }
-
-
-
 function linkMatchedResult(matchId) {
     var sourcePin = $("#cnpin").val();
     $.ajax({
@@ -787,7 +784,6 @@ function unlinkMatchedResult(matchId)
         }
     });
 }
-
 function createNote() {
     $.ajax({
         type: "POST",
@@ -896,7 +892,6 @@ function setCurrent(id) {
         }
     });
 }                                                                                                                                                                
-
 function setTagIndicator(resultLength, controlName) {
 
     controlName = '#' + controlName;
@@ -919,7 +914,6 @@ function updateProgressBar(percentage) {
         $("#loadProgress").css("width", percentage + "%");
     }
 }
-
 function doProgress(resultLength, controlName) {
 
     var fontWeight      = 'normal';
@@ -943,7 +937,6 @@ function doProgress(resultLength, controlName) {
         $("#loadProgress").show();
     }
 }
-
 function groupDebts() {
     var debtIdString = '';
     $(".debtGroupItems:checked").each(function () { debtIdString = debtIdString + $(this).attr("debtGroupDebtId") + ','; });
