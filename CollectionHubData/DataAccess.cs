@@ -1397,7 +1397,6 @@ namespace CollectionHubData
                 return "0";
             }
         }
-
         public List<BatchRunHistory> GetBatchRunHistory()
         {
             List<BatchRunHistory> returnValue = new List<BatchRunHistory>();
@@ -1421,7 +1420,6 @@ namespace CollectionHubData
             sqlDataConnection.Close();
             return returnValue;
         }
-
         public List<BatchProcessResult> GetBatchProcessResults(int batchProcessId)
         {
             List<BatchProcessResult> returnValue = new List<BatchProcessResult>();
@@ -1494,8 +1492,6 @@ namespace CollectionHubData
             sqlDataConnection.Close();
             return returnValue;
         }
-
-
         public List<BatchProcessFieldsFromRun> GetBatchProcessFieldsFromRun(int batchid)
         {
             List<BatchProcessFieldsFromRun> returnValue = new List<BatchProcessFieldsFromRun>();
@@ -1520,7 +1516,79 @@ namespace CollectionHubData
             sqlDataConnection.Close();
             return returnValue;
         }
-    
-    
+        public List<DocumentTemplates> GetDocumentTemplates(int userId)
+        {
+            List<DocumentTemplates> returnValue = new List<DocumentTemplates>();
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CH_TEMPLATES_LIST", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("UserID", userId));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add(new DocumentTemplates(dataReader));
+                    }
+                }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
+        public int CreateNewDocumentTemplate(int userId, string documentName)
+        {
+            var returnValue = -1;
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CH_TEMPLATES_ADD", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("UserId", userId));
+                sqlCommand.Parameters.Add(new SqlParameter("Name", documentName));
+
+                SqlParameter returnParameter = sqlCommand.Parameters.Add("RetVal", SqlDbType.Int);
+                returnParameter.Direction = ParameterDirection.ReturnValue;
+
+                var dataReader = sqlCommand.ExecuteScalar();
+
+                var count = sqlCommand.ExecuteNonQuery();
+                if (count > 0) { returnValue = (int)returnParameter.Value; }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
+
+        public DocumentTemplate GetDocumentTemplate(int templateId)
+        {
+            DocumentTemplate returnValue = new DocumentTemplate();
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CH_TEMPLATES_SELECT", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("CHT_iD", templateId));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue = new DocumentTemplate(dataReader);
+                    }
+                }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
     }
+
+
 }

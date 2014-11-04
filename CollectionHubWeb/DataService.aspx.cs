@@ -479,4 +479,35 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
+
+    [WebMethod]
+    public static List<DocumentTemplates> GetDocumentTemplates(int userId)
+    {
+        var returnData = new List<DocumentTemplates>();
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.GetDocumentTemplates(userId);
+
+        return returnData;
+    }
+    [WebMethod]
+    public static int CreateNewDocumentTemplate(int userId, string documentName)
+    {
+        var returnData = -1;
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.CreateNewDocumentTemplate(userId, documentName);
+
+        return returnData;
+    }
+    [WebMethod]
+    public static DocumentTemplate GetDocumentTemplate(int templateId)
+    {
+        var returnData = new DocumentTemplate();
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.GetDocumentTemplate(templateId);
+
+        return returnData;
+    }  
 }

@@ -4,7 +4,6 @@ refreshProcessHeader();
 if (isHistoric())   { refreshHistoricProcessInfo(); }
 else                { refreshProcessInfo(); }
 
-
 function refreshHistoricProcessInfo() {
     $.ajax({
         type: "POST",

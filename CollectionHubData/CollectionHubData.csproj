@@ -60,6 +60,8 @@
     <Compile Include="DebtParties.cs" />
     <Compile Include="DebtSearchResult.cs" />
     <Compile Include="DebtSearchResultItem.cs" />
+    <Compile Include="DocumentTemplate.cs" />
+    <Compile Include="DocumentTemplates.cs" />
     <Compile Include="FullnameFullAddressSearchResults.cs" />
     <Compile Include="JavaScriptSerializer.cs" />
     <Compile Include="LinkedAddress.cs" />
