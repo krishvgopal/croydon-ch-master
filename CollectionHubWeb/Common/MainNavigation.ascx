@@ -16,7 +16,7 @@
     <li><a href="DebtSearch.aspx">  <i class="fa fa-search fa-fw"></i>      &nbsp;Debt</a></li>
     <li><a href="NewProcess.aspx">   <i class="fa fa-cogs fa-fw"></i>        &nbsp;New Process</a></li>
     <li><a href="Processes.aspx">    <i class="fa fa-cogs fa-fw"></i>        &nbsp;Processes</a></li>
-    <li><a href="DocumentTemplates.aspx">    <i class="fa fa-cogs fa-fw"></i>        &nbsp;Documents</a></li>
+    <li><a href="DocumentTemplates.aspx">    <i class="fa fa-file fa-fw"></i>        &nbsp;Documents</a></li>
 
 
     <ul class="nav" id="side-menu">

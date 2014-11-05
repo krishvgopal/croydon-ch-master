@@ -6,6 +6,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="headMenu" Runat="Server">
     <sh:SiteHeader ID="SiteHeader" runat="server" />
+    <input type="hidden" runat="server" id="selectedTemplateId" />
     <script src="Scripts/ckeditor/ckeditor.js"></script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="headInfo" Runat="Server">
@@ -42,8 +43,10 @@
 
         <div class="col-lg-8" id="documentDetails">  
             <div id="templateName" contenteditable="true" style="display:inline-block;width:100%;height:40px;margin-bottom:15px"></div>
-            <div id="templateDescription" contenteditable="true" style="display:inline-block;width:100%;height:auto;"><i>Template notes go here...</i></div>
-            <textarea class="ckeditor" name="templateDocumentContent"></textarea>
+            <div id="templateDescription" contenteditable="true" style="display:inline-block;width:100%;height:auto;"></div>
+            <textarea class="ckeditor" name="templateDocumentContent" ID="templateContent"></textarea>
+            <hr />
+            <a href="#" onclick="saveTemplate();" class="btn btn-outline btn-primary">Save Template</a>
         </div>
 
     </div>
@@ -53,7 +56,7 @@
             <div class="modal-content"></div>
         </div>
     </div>
-
+   
     <script type="text/javascript" charset="utf8" src="js/DocumentTemplates.js"></script>
 </asp:Content>
 

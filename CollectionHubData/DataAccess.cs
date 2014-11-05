@@ -256,6 +256,29 @@ namespace CollectionHubData
             }
             return returnvalue;
         }
+
+        public bool SaveTemplateContent(int chtId, int userId, string content, string notes)
+        {
+            var returnvalue = false;
+            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            {
+                sqlDataConnection.Open();
+                using (var sqlCommand = new SqlCommand("CH_TEMPLATES_UPDATE", sqlDataConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add(new SqlParameter("CHT_ID", chtId));
+                    sqlCommand.Parameters.Add(new SqlParameter("Content", content));
+                    sqlCommand.Parameters.Add(new SqlParameter("UserID", userId));
+                    sqlCommand.Parameters.Add(new SqlParameter("Notes", notes));
+
+                    var count = sqlCommand.ExecuteNonQuery();
+
+                    if (count > 0) { returnvalue = true; }
+                }
+                sqlDataConnection.Close();
+            }
+            return returnvalue;
+        }
         public bool CreateArrangement(int agm_pin, int agm_cd_id, DateTime? agm_start_date, int agm_frequency,
                                       int agm_day_of_month, int agm_day_of_week, decimal agm_start_amount,
                                       decimal agm_installment_amount, int agm_number_installment, int agm_payment_method,

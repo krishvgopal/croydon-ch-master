@@ -367,6 +367,18 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
+
+    [WebMethod]
+    public static bool SaveTemplateContent(int chtId, int userId, string content, string notes)
+    {
+        var returnData = false;
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.SaveTemplateContent(chtId, userId, content, notes);
+
+        return returnData;
+    }
+
     [WebMethod]
     public static int SaveBatchParameters(int batchId, int userId, string base64String)
     {
@@ -419,6 +431,16 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
+    //[WebMethod]
+    //public static bool ActivateBatch(int batchId, string batchName)
+    //{
+    //    var returnData = false;
+    //    var dataAccess = new CollectionHubData.DataAccess();
+
+    //    returnData = dataAccess.ActivateBatch(batchId, batchName);
+
+    //    return returnData;
+    //}
     [WebMethod]
     public static string GetBatchName(int batchId)
     {
@@ -479,7 +501,6 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-
     [WebMethod]
     public static List<DocumentTemplates> GetDocumentTemplates(int userId)
     {
@@ -509,5 +530,5 @@ public partial class DataService : System.Web.UI.Page
         returnData = dataAccess.GetDocumentTemplate(templateId);
 
         return returnData;
-    }  
+    }
 }
