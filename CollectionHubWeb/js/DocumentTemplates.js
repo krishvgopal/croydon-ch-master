@@ -2,6 +2,12 @@
 
 refreshBatchProcessJobs();
 
+CKEDITOR.replace('templateDocumentContent',
+    {
+        height: 550,
+        width: 900
+    });
+
 function getUserId() {
     if ($("#selectAll").is(':checked')) { return 0; }
     else { return $("#UserSessionToken").val(); }
@@ -36,7 +42,7 @@ function refreshBatchProcessJobs() {
                     "sTitle": "Document Name",
                     "aTargets": ["CHT_Name"],
                     "mRender": function (value, type, full) {
-                        return '<a href="#" onClick="selectTemplate(' + full.CHT_ID + ');">' + value + '</a>';
+                        return '<a href="#top" onClick="selectTemplate(' + full.CHT_ID + ');">' + value + '</a>';
                     }
                 },{
                     "aTargets": ["CHT_ID"],
@@ -70,6 +76,7 @@ function selectTemplate (templateId) {
     $("#documentList").hide();
     $("#documentDetails").show();
     refreshTemplateDocument(templateId);
+    $("html, body").animate({ scrollTop: 0 }, "slow");
 }
 function saveTemplate() {
 

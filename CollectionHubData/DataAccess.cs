@@ -8,8 +8,8 @@ namespace CollectionHubData
 {
     public class DataAccess
     {
-        private const string CONNECTION_STRING = "Data Source=192.168.1.10;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=HubAdmin;Password=Croydon#;Connection Timeout=60";
-        //private const string CONNECTION_STRING = "Data Source=HIT-DEV-02\\SQL14;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=sa;Password=bakeryCakes1;Connection Timeout=30";
+        //private const string CONNECTION_STRING = "Data Source=192.168.1.10;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=HubAdmin;Password=Croydon#;Connection Timeout=60";
+        private const string CONNECTION_STRING = "Data Source=HIT-DEV-02\\SQL14;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=sa;Password=bakeryCakes1;Connection Timeout=30";
 
         public bool ActivateBatchRun(int recordIdentifier, bool includeInBatch)
         {

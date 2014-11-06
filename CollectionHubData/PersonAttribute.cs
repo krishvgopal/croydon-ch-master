@@ -34,9 +34,9 @@ namespace CollectionHubData
             if (value["Stream3"] != DBNull.Value) { allStreams = allStreams + value["Stream3"].ToString() + ","; }
             if (value["Stream4"] != DBNull.Value) { allStreams = allStreams + value["Stream4"].ToString() + ","; }
             if (value["Stream5"] != DBNull.Value) { allStreams = allStreams + value["Stream5"].ToString() + ","; }
-            
-            Streams = allStreams.Substring(0, allStreams.Length - 1);
 
+            if (allStreams.Length > 0) { Streams = allStreams.Substring(0, allStreams.Length - 1); }
+            
             object sqlDateTimeFromDate = value["CreatedDate"];
             FromDate = (sqlDateTimeFromDate == System.DBNull.Value)
                 ? (DateTime?)null
