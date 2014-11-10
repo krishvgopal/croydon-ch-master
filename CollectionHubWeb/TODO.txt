@@ -44,6 +44,8 @@
 
 AJH|KT - Set party as primary party
 
+
+
 AJH - Code to add new arrangement
 AJH - Code to edit an arrangemwent
 
@@ -64,3 +66,12 @@ AJH - New Recovery Cycle Date Validation
 AJH - Validation across all input values
 
 AJH - User table data
+
+
+
+
+Custom Items to CKEditor Window Menu
+Ad-Hoc Letter From SDV
+
+History Window
+IE8 VIEW!!

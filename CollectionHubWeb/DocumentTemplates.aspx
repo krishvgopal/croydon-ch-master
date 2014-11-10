@@ -44,7 +44,7 @@
         <div class="col-lg-8" id="documentDetails">  
             <div id="templateName"     name="templateName"      contenteditable="true" style="display:inline-block;width:100%;height:40px;margin-bottom:15px"></div>
             <div id="templateDescription" name="templateDescription"   contenteditable="true" style="display:inline-block;width:100%;height:auto;"></div>
-            <textarea class="ckeditor" name="templateDocumentContent" ID="templateContent"></textarea>
+            <textarea class="ckeditor" name="templateDocumentContent" ID="templateContent" merge-list="VW_CH_BATCH_RECORD_FORMATS"></textarea>
             <hr />
             <a href="#" onclick="saveTemplate();" class="btn btn-outline btn-primary">Save Template</a>
         </div>

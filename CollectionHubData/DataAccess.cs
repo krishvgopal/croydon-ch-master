@@ -8,8 +8,8 @@ namespace CollectionHubData
 {
     public class DataAccess
     {
-        //private const string CONNECTION_STRING = "Data Source=192.168.1.10;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=HubAdmin;Password=Croydon#;Connection Timeout=60";
-        private const string CONNECTION_STRING = "Data Source=HIT-DEV-02\\SQL14;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=sa;Password=bakeryCakes1;Connection Timeout=30";
+        private const string CONNECTION_STRING = "Data Source=192.168.1.10;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=HubAdmin;Password=Croydon#;Connection Timeout=60";
+        //private const string CONNECTION_STRING = "Data Source=HIT-DEV-02\\SQL14;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=sa;Password=bakeryCakes1;Connection Timeout=30";
 
         public bool ActivateBatchRun(int recordIdentifier, bool includeInBatch)
         {
@@ -338,6 +338,8 @@ namespace CollectionHubData
             //@ERROR_MESSAGE			
         }
 
+        #region Dashboard Procedures
+
         public string GetDashboardDataPercentByYear(int sourceId, int historic)
         {
             var returnValue = "";
@@ -456,6 +458,8 @@ namespace CollectionHubData
 
             return returnValue;
         }
+
+        #endregion
 
         public List<ArrangementFrequencyItem> GetFrequencyList()
         {
@@ -884,7 +888,7 @@ namespace CollectionHubData
         }
         public List<MatchList> GetMatchListByPin(int pin)
         {
-            List<MatchList> returnValue = new List<MatchList>();
+            var returnValue = new List<MatchList>();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
 
             sqlDataConnection.Open();
@@ -908,7 +912,7 @@ namespace CollectionHubData
         }
         public List<MisMatchList> GetMisMatchListByPin(int pin)
         {
-            List<MisMatchList> returnValue = new List<MisMatchList>();
+            var returnValue = new List<MisMatchList>();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
 
             sqlDataConnection.Open();
@@ -934,7 +938,7 @@ namespace CollectionHubData
         }
         public List<BatchProcessHistory> GetBatchProcessHistory()
         {
-            List<BatchProcessHistory> returnValue = new List<BatchProcessHistory>();
+            var returnValue = new List<BatchProcessHistory>();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
 
             sqlDataConnection.Open();
@@ -957,7 +961,7 @@ namespace CollectionHubData
         }
         public List<BatchProcess> GetBatchProcess(int bp_id)
         {
-            List<BatchProcess> returnValue = new List<BatchProcess>();
+            var returnValue = new List<BatchProcess>();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
 
             sqlDataConnection.Open();
@@ -981,7 +985,7 @@ namespace CollectionHubData
         }
         public List<BatchProcessJobs> GetBatchProcessJobs()
         {
-            List<BatchProcessJobs> returnValue = new List<BatchProcessJobs>();
+            var returnValue = new List<BatchProcessJobs>();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
 
             sqlDataConnection.Open();
@@ -1004,7 +1008,7 @@ namespace CollectionHubData
         }
         public List<BatchProcessFields> GetBatchProcessFields(int bp_id)
         {
-            List<BatchProcessFields> returnValue = new List<BatchProcessFields>();
+            var returnValue = new List<BatchProcessFields>();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
 
             sqlDataConnection.Open();
@@ -1028,7 +1032,7 @@ namespace CollectionHubData
         }
         public List<PersonDetails> GetPersonDetails(int pin, string uprn)
         {
-            List<PersonDetails> returnValue = new List<PersonDetails>();
+            var returnValue = new List<PersonDetails>();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
 
             sqlDataConnection.Open(); // CHP_GetNameAddress_byPIN // CHP_PersonDetails_byPIN
@@ -1422,7 +1426,7 @@ namespace CollectionHubData
         }
         public List<BatchRunHistory> GetBatchRunHistory()
         {
-            List<BatchRunHistory> returnValue = new List<BatchRunHistory>();
+            var returnValue = new List<BatchRunHistory>();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
 
             sqlDataConnection.Open();
@@ -1445,7 +1449,7 @@ namespace CollectionHubData
         }
         public List<BatchProcessResult> GetBatchProcessResults(int batchProcessId)
         {
-            List<BatchProcessResult> returnValue = new List<BatchProcessResult>();
+            var returnValue = new List<BatchProcessResult>();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
 
             sqlDataConnection.Open();
@@ -1469,7 +1473,7 @@ namespace CollectionHubData
         }
         public BatchProcessParentHeader GetBatchProcessParentHeader(int batchRunId)
         {
-            BatchProcessParentHeader returnValue = new BatchProcessParentHeader();
+            var returnValue = new BatchProcessParentHeader();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
 
             sqlDataConnection.Open();
@@ -1493,7 +1497,7 @@ namespace CollectionHubData
         }
         public BatchProcessParentFields GetBatchProcessParentFields(int batchRunId)
         {
-            BatchProcessParentFields returnValue = new BatchProcessParentFields();
+            var returnValue = new BatchProcessParentFields();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
 
             sqlDataConnection.Open();
@@ -1517,7 +1521,7 @@ namespace CollectionHubData
         }
         public List<BatchProcessFieldsFromRun> GetBatchProcessFieldsFromRun(int batchid)
         {
-            List<BatchProcessFieldsFromRun> returnValue = new List<BatchProcessFieldsFromRun>();
+            var returnValue = new List<BatchProcessFieldsFromRun>();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
 
             sqlDataConnection.Open();
@@ -1541,7 +1545,7 @@ namespace CollectionHubData
         }
         public List<DocumentTemplates> GetDocumentTemplates(int userId)
         {
-            List<DocumentTemplates> returnValue = new List<DocumentTemplates>();
+            var returnValue = new List<DocumentTemplates>();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
 
             sqlDataConnection.Open();
@@ -1589,7 +1593,7 @@ namespace CollectionHubData
 
         public DocumentTemplate GetDocumentTemplate(int templateId)
         {
-            DocumentTemplate returnValue = new DocumentTemplate();
+            var returnValue = new DocumentTemplate();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
 
             sqlDataConnection.Open();
@@ -1611,6 +1615,58 @@ namespace CollectionHubData
             sqlDataConnection.Close();
             return returnValue;
         }
+
+        public List<MergeFieldItem> GetMergeFieldItems(string tableName)
+        {
+            var returnValue = new List<MergeFieldItem>();
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("SYS_FIELD_LIST", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("Tablename", tableName));
+                sqlCommand.Parameters.Add(new SqlParameter("AZSequence", 1));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add(new MergeFieldItem(dataReader));
+                    }
+                }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
+
+        public List<DataMergeSource> GetDataMergeOptions()
+        {
+            var returnValue = new List<DataMergeSource>();
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CH_CORRES_VIEWS_LIST", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add(new DataMergeSource(dataReader));
+                    }
+                }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
+
+    
     }
 
 

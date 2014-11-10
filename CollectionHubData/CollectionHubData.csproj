@@ -52,6 +52,7 @@
     <Compile Include="BatchProcessFieldsFromRun.cs" />
     <Compile Include="CurrentAttributes.cs" />
     <Compile Include="DataAccess.cs" />
+    <Compile Include="DataMergeSource.cs" />
     <Compile Include="DataReaderExtensionMethods.cs" />
     <Compile Include="DebtAddress.cs" />
     <Compile Include="DebtAttribute.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="JavaScriptSerializer.cs" />
     <Compile Include="LinkedAddress.cs" />
     <Compile Include="MatchList.cs" />
+    <Compile Include="MergeFieldItem.cs" />
     <Compile Include="Payment.cs" />
     <Compile Include="PersonAttribute.cs" />
     <Compile Include="PersonDetails.cs" />

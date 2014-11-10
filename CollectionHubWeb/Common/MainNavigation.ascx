@@ -11,12 +11,12 @@
             </span>
         </div>
     </li>
-    <li><a href="Dashboard.aspx">   <i class="fa fa-dashboard fa-fw"></i>   &nbsp;Dashboard</a></li>
-    <li><a href="Search.aspx">      <i class="fa fa-search fa-fw"></i>      &nbsp;Name & Address</a></li>
-    <li><a href="DebtSearch.aspx">  <i class="fa fa-search fa-fw"></i>      &nbsp;Debt</a></li>
-    <li><a href="NewProcess.aspx">   <i class="fa fa-cogs fa-fw"></i>        &nbsp;New Process</a></li>
-    <li><a href="Processes.aspx">    <i class="fa fa-cogs fa-fw"></i>        &nbsp;Processes</a></li>
-    <li><a href="DocumentTemplates.aspx">    <i class="fa fa-file fa-fw"></i>        &nbsp;Documents</a></li>
+    <li><a href="Dashboard.aspx">           <i class="fa fa-dashboard fa-fw"></i>   &nbsp;Dashboard</a></li>
+    <li><a href="Search.aspx">              <i class="fa fa-search fa-fw"></i>      &nbsp;Name & Address</a></li>
+    <li><a href="DebtSearch.aspx">          <i class="fa fa-search fa-fw"></i>      &nbsp;Debt</a></li>
+    <li><a href="NewProcess.aspx">          <i class="fa fa-cogs fa-fw"></i>        &nbsp;New Process</a></li>
+    <li><a href="Processes.aspx">           <i class="fa fa-cogs fa-fw"></i>        &nbsp;Processes</a></li>
+    <li><a href="DocumentTemplates.aspx">   <i class="fa fa-file fa-fw"></i>        &nbsp;Documents</a></li>
 
 
     <ul class="nav" id="side-menu">

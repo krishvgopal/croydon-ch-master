@@ -61,6 +61,12 @@
                     </div>
                 </div>
             </div>
+            
+            <div class="alert alert-danger alert-dismissable" id="alertBox" style="display: none">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <p id="alertMessage"></p><a href="#" class="alert-link">Alert Link</a>
+            </div>
+            
         </form>
     </body>
 </html>
