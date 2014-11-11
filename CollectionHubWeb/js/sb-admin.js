@@ -34,6 +34,10 @@ function htmlEscape(str) {
             .replace(/</g, '&lt;')
             .replace(/>/g, '&gt;');
 }
+function getUserId() {
+    if ($("#selectAll").is(':checked')) { return 0; }
+    else { return $("#UserSessionToken").val(); }
+}
 
 var alertFallback = true;
 if (typeof console === "undefined" || typeof console.log === "undefined") {

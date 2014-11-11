@@ -22,10 +22,11 @@
 
             <br/><br /><br />
 
-            <div class="form-group">
+            <div class="form-group" style="height:180px">
                 <span style="width:100%;padding-bottom:10px;margin-bottom:10px"><strong>Correspondence Data:</strong></span>
                 <br /><br />
-                <div id="dataSources" style="width:100%; overflow-y:scroll; height:175px;"></div>
+                <div id="dataSources" style="width:90%; overflow-y:scroll; height:175px; float:right"></div>
+                <input type="hidden" id="newDocumentTemplateView" />
             </div>
 
         </div>
@@ -39,5 +40,6 @@
             refreshMergeDataSources();
             $("#newDocumentTemplateName").val('');
         </script>
+
     </body>
 </html>

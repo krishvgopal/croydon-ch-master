@@ -512,12 +512,12 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
-    public static int CreateNewDocumentTemplate(int userId, string documentName)
+    public static int CreateNewDocumentTemplate(int userId, string documentName, string viewName)
     {
         var returnData = -1;
         var dataAccess = new CollectionHubData.DataAccess();
 
-        returnData = dataAccess.CreateNewDocumentTemplate(userId, documentName);
+        returnData = dataAccess.CreateNewDocumentTemplate(userId, documentName, viewName);
 
         return returnData;
     }
@@ -541,4 +541,16 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
+
+    [WebMethod]
+    public static List<DataMergeFields> GetDataMergeFields(string viewName)
+    {
+        var returnData = new List<DataMergeFields>();
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.GetDataMergeFields(viewName);
+
+        return returnData;
+    }
+
 }

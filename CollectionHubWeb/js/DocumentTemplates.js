@@ -1,6 +1,7 @@
-﻿$("#documentDetails").hide();
+﻿
 
-refreshBatchProcessJobs();
+$("#documentDetails").hide();
+
 
 CKEDITOR.replace('templateDocumentContent',
     {
@@ -8,11 +9,11 @@ CKEDITOR.replace('templateDocumentContent',
         width: 900
     });
 
-// TODO: MOVE THIS TO GENERAL FUNCTION JAVA FILE
-function getUserId() {
-    if ($("#selectAll").is(':checked')) { return 0; }
-    else { return $("#UserSessionToken").val(); }
-}
+
+
+
+
+refreshBatchProcessJobs();
 
 function refreshBatchProcessJobs() {
     $.ajax({
@@ -65,9 +66,12 @@ function refreshTemplateDocument(templateId) {
         success: function (result) {
             if (result.hasOwnProperty("d")) { result = result.d; }
             $("#templateName").attr('templateId', result.CHT_ID);
+            $("#templateName").attr('ViewTable', result.CHT_ViewTable);
             $("#templateName").html('<h2>' + result.CHT_Name + '</h2>');
             $("#templateDescription").html('<p><i>' + result.CHT_Notes + '</i></p>');
+            loadMergeView(result.CHT_ViewName);
             CKEDITOR.instances['templateContent'].setData(result.CHT_Content);
+
             // TODO: BETTER FIX THIS ISSUE
             $("#cke_22_text").css("width", "175px");
         }
@@ -79,6 +83,11 @@ function selectTemplate (templateId) {
     refreshTemplateDocument(templateId);
     $("html, body").animate({ scrollTop: 0 }, "slow");
 }
+
+function loadMergeView(viewName) {
+    
+}
+
 function saveTemplate() {
 
     var htmlValue = CKEDITOR.instances['templateContent'].getData();
@@ -104,27 +113,21 @@ function createNewTemplate() {
     $.ajax({
         type: "POST",
         url: "DataService.aspx/CreateNewDocumentTemplate",
-        data: "{'userId':'" + $("#UserSessionToken").val() + "','documentName':'" + $("#newDocumentTemplateName").val() + "'}",
+        data: "{'userId':'" + $("#UserSessionToken").val() + "','documentName':'" + $("#newDocumentTemplateName").val() + "','viewName':'" + $("#newDocumentTemplateView").val() + "'}",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
             if (result.hasOwnProperty("d")) { result = result.d; }
-
-            if (result = true) {
+            if (result > 0) {
                 $('#createTemplate').modal('hide');
                 refreshBatchProcessJobs();
                 
-
                 $("#documentDetails").hide();
                 $("#documentList").show();
-            } else {
-
             }
         }
     });
 }
-
-
 function refreshMergeDataSources() {
     $.ajax({
         type: "POST",
@@ -134,19 +137,15 @@ function refreshMergeDataSources() {
         dataType: "json",
         success: function (result) {
             if (result.hasOwnProperty("d")) { result = result.d; }
-
-            console.log(result);
-
             $.each(result, function (index, value) {
-                
-                var htmlValue = '<div style="border: 1px solid #E4E5FC; padding: 10px;"><p><strong>Output to selected batch debtors</strong></p><p><i>Only of any use for writing to debtors which have been selected for a batch action</i></p><p> <a href="#" onclick="alert(\'clicked\');">Select This Source</a></p></div>';
-
-                htmlValue = htmlValue + htmlValue;
-                htmlValue = htmlValue + htmlValue;
-
-                $("#dataSources").html(htmlValue);
-
+                var htmlValue = '<div name="divGroup" id="' + value.ViewName + '" style="border: 1px solid #E4E5FC; padding: 10px;"><p><strong>' + value.ViewUserName + '</strong></p><p><i>' + value.ViewDescription + '</i></p><p><a href="#" onclick="selectView(\'' + value.ViewName + '\');">Select This Source</a></p></div>';
+                $("#dataSources").append(htmlValue);
             });
         }
     });
+}
+function selectView(viewName) {
+    $("#newDocumentTemplateView").val(viewName);
+    $("div[name='divGroup']").css('background-color', '');
+    $("div[id='" + viewName + "']").css('background-color', '#D9EDF7');
 }

@@ -12,14 +12,6 @@ CKEDITOR.plugins.add('strinsert',
     requires : ['richcombo'],
     init : function( editor )
     {
-        //  array of strings to choose from that'll be inserted into the editor
-        var strings = [];
-        strings.push(['@@FAQ::displayList()@@', 'FAQs', 'FAQs']);
-        strings.push(['@@Glossary::displayList()@@', 'Glossary', 'Glossary']);
-        strings.push(['@@CareerCourse::displayList()@@', 'Career Courses', 'Career Courses']);
-        strings.push(['@@CareerProfile::displayList()@@', 'Career Profiles', 'Career Profiles']);
-
-        // add the menu to the editor
         editor.ui.addRichCombo('strinsert',
         {
             label: 'Merge Fields',
@@ -33,21 +25,28 @@ CKEDITOR.plugins.add('strinsert',
                 voiceLabel: editor.lang.panelVoiceLabel
             },
 
-            init: function() {
+            init: function () {
 
-
+                var objectPass = this;
                 var editorId = editor.ui.editor.name;
-                // get attribute value which is set to the merge field list name
-
-                console.log($('#' + editorId).attr("merge-list"));
-
-                this.startGroup( "Insert Content" );
-                for (var i in strings)
-                {
-                    this.add(strings[i][0], strings[i][1], strings[i][2]);
-                }
+          
+                this.startGroup("Insert Merge Field");
+                
+                $.ajax({
+                    async: false,
+                    type: "POST",
+                    url: "DataService.aspx/GetDataMergeFields",
+                    data: "{'viewName':'" + $("#templateName").attr('ViewTable') + "'}",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.hasOwnProperty("d")) { result = result.d; }
+                        $.each(result, function(index, value) {
+                            objectPass.add(value.Fieldname, value.Fieldname, value.Fieldname);
+                        });
+                    }
+                });
             },
-
             onClick: function( value )
             {
                 editor.focus();

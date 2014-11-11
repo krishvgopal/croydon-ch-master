@@ -11,63 +11,8 @@ namespace CollectionHubData
         private const string CONNECTION_STRING = "Data Source=192.168.1.10;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=HubAdmin;Password=Croydon#;Connection Timeout=60";
         //private const string CONNECTION_STRING = "Data Source=HIT-DEV-02\\SQL14;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=sa;Password=bakeryCakes1;Connection Timeout=30";
 
-        public bool ActivateBatchRun(int recordIdentifier, bool includeInBatch)
-        {
-            var returnvalue = false;
-            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
-            {
-                sqlDataConnection.Open();
-                using (var sqlCommand = new SqlCommand("[CH_SET_BATCH_INCLUDE_STATUS]", sqlDataConnection))
-                {
-                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                    sqlCommand.Parameters.Add(new SqlParameter("recordIdentifier", recordIdentifier));
-                    sqlCommand.Parameters.Add(new SqlParameter("includeInBatch", includeInBatch));
+        
 
-                    var count = sqlCommand.ExecuteNonQuery();
-                    if (count > 0) returnvalue = true;
-                }
-                sqlDataConnection.Close();
-            }
-            return returnvalue;
-        }
-        public bool CancelBatchRun(int recordIdentifier, bool includeInBatch)
-        {
-            var returnvalue = false;
-            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
-            {
-                sqlDataConnection.Open();
-                using (var sqlCommand = new SqlCommand("[CH_SET_BATCH_INCLUDE_STATUS]", sqlDataConnection))
-                {
-                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                    sqlCommand.Parameters.Add(new SqlParameter("recordIdentifier", recordIdentifier));
-                    sqlCommand.Parameters.Add(new SqlParameter("includeInBatch", includeInBatch));
-
-                    var count = sqlCommand.ExecuteNonQuery();
-                    if (count > 0) returnvalue = true;
-                }
-                sqlDataConnection.Close();
-            }
-            return returnvalue;
-        }
-        public bool SaveBatchIncludeStatus(int recordIdentifier, bool includeInBatch)
-        {
-            var returnvalue = false;
-            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
-            {
-                sqlDataConnection.Open();
-                using (var sqlCommand = new SqlCommand("[CH_SET_BATCH_INCLUDE_STATUS]", sqlDataConnection))
-                {
-                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                    sqlCommand.Parameters.Add(new SqlParameter("recordIdentifier", recordIdentifier));
-                    sqlCommand.Parameters.Add(new SqlParameter("includeInBatch", includeInBatch));
-
-                    var count = sqlCommand.ExecuteNonQuery();
-                    if (count > 0) returnvalue = true;
-                }
-                sqlDataConnection.Close();
-            }
-            return returnvalue;
-        }
         public bool RemoveMatch(int matchId)
         {
             var returnvalue = false;
@@ -170,6 +115,7 @@ namespace CollectionHubData
             }
             return returnvalue;
         }
+        
         public bool CreateNote(int debtId, int userId, string noteText)
         {
             var returnvalue = false;
@@ -257,28 +203,9 @@ namespace CollectionHubData
             return returnvalue;
         }
 
-        public bool SaveTemplateContent(int chtId, int userId, string content, string notes)
-        {
-            var returnvalue = false;
-            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
-            {
-                sqlDataConnection.Open();
-                using (var sqlCommand = new SqlCommand("CH_TEMPLATES_UPDATE", sqlDataConnection))
-                {
-                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                    sqlCommand.Parameters.Add(new SqlParameter("CHT_ID", chtId));
-                    sqlCommand.Parameters.Add(new SqlParameter("Content", content));
-                    sqlCommand.Parameters.Add(new SqlParameter("UserID", userId));
-                    sqlCommand.Parameters.Add(new SqlParameter("Notes", notes));
+        
 
-                    var count = sqlCommand.ExecuteNonQuery();
 
-                    if (count > 0) { returnvalue = true; }
-                }
-                sqlDataConnection.Close();
-            }
-            return returnvalue;
-        }
         public bool CreateArrangement(int agm_pin, int agm_cd_id, DateTime? agm_start_date, int agm_frequency,
                                       int agm_day_of_month, int agm_day_of_week, decimal agm_start_amount,
                                       decimal agm_installment_amount, int agm_number_installment, int agm_payment_method,
@@ -338,7 +265,7 @@ namespace CollectionHubData
             //@ERROR_MESSAGE			
         }
 
-        #region Dashboard Procedures
+        #region DASHBOARD GRAPH PROCEDURES
 
         public string GetDashboardDataPercentByYear(int sourceId, int historic)
         {
@@ -460,6 +387,8 @@ namespace CollectionHubData
         }
 
         #endregion
+
+        #region SINGLE DEBT VIEW
 
         public List<ArrangementFrequencyItem> GetFrequencyList()
         {
@@ -1142,6 +1071,11 @@ namespace CollectionHubData
 
             return returnValue;
         }
+
+        #endregion
+
+        #region AUTHENTICATION
+
         public UserData AuthenticateUser(string loginName, string passwordHash)
         {
             UserData returnValue = null;
@@ -1169,11 +1103,229 @@ namespace CollectionHubData
 
             return returnValue;
         }
+
+        #endregion
+
+        #region UTILITIES
+
+        private string getStringValue(string valueString, int targetId)
+        {
+            string r = String.Empty;
+            string[] p = valueString.Split('&');
+            foreach (var pair in p)
+            {
+                string[] kv = pair.Split('=');
+                if(kv.Length == 2)
+                {
+                    var k = kv[0];
+                    var v = kv[1];
+                    k = k.Replace("auto_datepicker_","").Replace("auto_","");
+                    if(k == targetId.ToString())
+                    {
+                        r = v.ToString();
+                    }
+                }
+            }
+            return r;
+        }
+        private decimal getMarker(SqlDataReader dataReader)
+        {
+            decimal marker = 0;
+            for (int i = 0; i < dataReader.FieldCount; i++)
+            {
+                if (dataReader.GetFieldType(i) == Type.GetType("System.Int16") ||
+                    dataReader.GetFieldType(i) == Type.GetType("System.Int32") ||
+                    dataReader.GetFieldType(i) == Type.GetType("System.Int64") ||
+                    dataReader.GetFieldType(i) == Type.GetType("System.Double") ||
+                    dataReader.GetFieldType(i) == Type.GetType("System.Decimal") ||
+                    dataReader.GetFieldType(i) == Type.GetType("System.Byte"))
+                {
+                    if (dataReader[i] != DBNull.Value)
+                    {
+                        if (marker < Convert.ToDecimal(dataReader[i]))
+                        {
+                            marker = Convert.ToDecimal(dataReader[i]);
+                        }
+                    }
+                }
+            }
+            return marker;
+        }
+        private string cleanValue(object value)
+        {
+            if (value != null)
+            {
+                if (value.ToString().Length > 0)
+                {
+                    decimal returnValue = Convert.ToDecimal(value);
+                    if (returnValue == 0)
+                    {
+                        return "0";
+                    }
+                    else
+                    {
+                        return returnValue.ToString("#.##");
+                    }
+                }
+                else
+                {
+                    return "0";
+                }
+            }
+            else
+            {
+                return "0";
+            }
+        }
+
+        #endregion
+
+        #region BATCHES
+
+        public bool SaveBatchIncludeStatus(int recordIdentifier, bool includeInBatch)
+        {
+            var returnvalue = false;
+            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            {
+                sqlDataConnection.Open();
+                using (var sqlCommand = new SqlCommand("[CH_SET_BATCH_INCLUDE_STATUS]", sqlDataConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add(new SqlParameter("recordIdentifier", recordIdentifier));
+                    sqlCommand.Parameters.Add(new SqlParameter("includeInBatch", includeInBatch));
+
+                    var count = sqlCommand.ExecuteNonQuery();
+                    if (count > 0) returnvalue = true;
+                }
+                sqlDataConnection.Close();
+            }
+            return returnvalue;
+        }
+
+        public List<BatchRunHistory> GetBatchRunHistory()
+        {
+            var returnValue = new List<BatchRunHistory>();
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CH_BATCH_RUNS_LIST", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add(new BatchRunHistory(dataReader));
+                    }
+                }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
+        public List<BatchProcessResult> GetBatchProcessResults(int batchProcessId)
+        {
+            var returnValue = new List<BatchProcessResult>();
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CH_BATCH_RESULTS_LIST", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("BatchId", batchProcessId));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add(new BatchProcessResult(dataReader));
+                    }
+                }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
+        public BatchProcessParentHeader GetBatchProcessParentHeader(int batchRunId)
+        {
+            var returnValue = new BatchProcessParentHeader();
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CH_BATCH_GET_PARENT_HEADER", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("BatchRunId", batchRunId));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue = new BatchProcessParentHeader(dataReader);
+                    }
+                }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
+        public BatchProcessParentFields GetBatchProcessParentFields(int batchRunId)
+        {
+            var returnValue = new BatchProcessParentFields();
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CH_BATCH_GET_PARENT_FIELDS", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("BatchRunId", batchRunId));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue = new BatchProcessParentFields(dataReader);
+                    }
+                }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
+        public List<BatchProcessFieldsFromRun> GetBatchProcessFieldsFromRun(int batchid)
+        {
+            var returnValue = new List<BatchProcessFieldsFromRun>();
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CHP_BATCH_PROCESS_Fields_FromRun", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("BatchID", batchid));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add(new BatchProcessFieldsFromRun(dataReader));
+                    }
+                }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
         public int SaveBatchJob(int batchId, string parameterString, int userId)
         {
             int returnValue = 0;
 
-            if (parameterString.EndsWith("==")) 
+            if (parameterString.EndsWith("=="))
             {
                 byte[] data = Convert.FromBase64String(parameterString);
                 parameterString = Encoding.UTF8.GetString(data);
@@ -1189,12 +1341,12 @@ namespace CollectionHubData
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
 
-                    foreach(var field in processFields )
+                    foreach (var field in processFields)
                     {
                         if (field.IsSystem)
                         {
-                            if(field.FieldName.ToLower() == "userid")
-                            { 
+                            if (field.FieldName.ToLower() == "userid")
+                            {
                                 sqlCommand.Parameters.Add(new SqlParameter(field.FieldName, userId));
                             }
                             if (field.FieldName.ToLower() == "ProcessID".ToLower())
@@ -1206,11 +1358,12 @@ namespace CollectionHubData
                         {
                             var suppliedValue = getStringValue(parameterString, field.bf_id);
 
-                            if(suppliedValue.Length == 0 && field.IsMandatory) {  
+                            if (suppliedValue.Length == 0 && field.IsMandatory)
+                            {
                                 throw new Exception("Required value was not supplied");
                             }
 
-                            if(suppliedValue.Length > 0)
+                            if (suppliedValue.Length > 0)
                             {
                                 var discovered = false;
 
@@ -1355,194 +1508,11 @@ namespace CollectionHubData
 
             return returnValue;
         }
-        private string getStringValue(string valueString, int targetId)
-        {
-            string r = String.Empty;
-            string[] p = valueString.Split('&');
-            foreach (var pair in p)
-            {
-                string[] kv = pair.Split('=');
-                if(kv.Length == 2)
-                {
-                    var k = kv[0];
-                    var v = kv[1];
-                    k = k.Replace("auto_datepicker_","").Replace("auto_","");
-                    if(k == targetId.ToString())
-                    {
-                        r = v.ToString();
-                    }
-                }
-            }
-            return r;
-        }
-        private decimal getMarker(SqlDataReader dataReader)
-        {
-            decimal marker = 0;
-            for (int i = 0; i < dataReader.FieldCount; i++)
-            {
-                if (dataReader.GetFieldType(i) == Type.GetType("System.Int16") ||
-                    dataReader.GetFieldType(i) == Type.GetType("System.Int32") ||
-                    dataReader.GetFieldType(i) == Type.GetType("System.Int64") ||
-                    dataReader.GetFieldType(i) == Type.GetType("System.Double") ||
-                    dataReader.GetFieldType(i) == Type.GetType("System.Decimal") ||
-                    dataReader.GetFieldType(i) == Type.GetType("System.Byte"))
-                {
-                    if (dataReader[i] != DBNull.Value)
-                    {
-                        if (marker < Convert.ToDecimal(dataReader[i]))
-                        {
-                            marker = Convert.ToDecimal(dataReader[i]);
-                        }
-                    }
-                }
-            }
-            return marker;
-        }
-        private string cleanValue(object value)
-        {
-            if (value != null)
-            {
-                if (value.ToString().Length > 0)
-                {
-                    decimal returnValue = Convert.ToDecimal(value);
-                    if (returnValue == 0)
-                    {
-                        return "0";
-                    }
-                    else
-                    {
-                        return returnValue.ToString("#.##");
-                    }
-                }
-                else
-                {
-                    return "0";
-                }
-            }
-            else
-            {
-                return "0";
-            }
-        }
-        public List<BatchRunHistory> GetBatchRunHistory()
-        {
-            var returnValue = new List<BatchRunHistory>();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
 
-            sqlDataConnection.Open();
-            using (var sqlCommand = new SqlCommand("CH_BATCH_RUNS_LIST", sqlDataConnection))
-            {
-                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+        #endregion
 
-                var dataReader = sqlCommand.ExecuteReader();
+        #region DOCUMENT TEMPLATES
 
-                if (dataReader.HasRows)
-                {
-                    while (dataReader.Read())
-                    {
-                        returnValue.Add(new BatchRunHistory(dataReader));
-                    }
-                }
-            }
-            sqlDataConnection.Close();
-            return returnValue;
-        }
-        public List<BatchProcessResult> GetBatchProcessResults(int batchProcessId)
-        {
-            var returnValue = new List<BatchProcessResult>();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
-
-            sqlDataConnection.Open();
-            using (var sqlCommand = new SqlCommand("CH_BATCH_RESULTS_LIST", sqlDataConnection))
-            {
-                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                sqlCommand.Parameters.Add(new SqlParameter("BatchId", batchProcessId));
-
-                var dataReader = sqlCommand.ExecuteReader();
-
-                if (dataReader.HasRows)
-                {
-                    while (dataReader.Read())
-                    {
-                        returnValue.Add(new BatchProcessResult(dataReader));
-                    }
-                }
-            }
-            sqlDataConnection.Close();
-            return returnValue;
-        }
-        public BatchProcessParentHeader GetBatchProcessParentHeader(int batchRunId)
-        {
-            var returnValue = new BatchProcessParentHeader();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
-
-            sqlDataConnection.Open();
-            using (var sqlCommand = new SqlCommand("CH_BATCH_GET_PARENT_HEADER", sqlDataConnection))
-            {
-                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                sqlCommand.Parameters.Add(new SqlParameter("BatchRunId", batchRunId));
-
-                var dataReader = sqlCommand.ExecuteReader();
-
-                if (dataReader.HasRows)
-                {
-                    while (dataReader.Read())
-                    {
-                        returnValue = new BatchProcessParentHeader(dataReader);
-                    }
-                }
-            }
-            sqlDataConnection.Close();
-            return returnValue;
-        }
-        public BatchProcessParentFields GetBatchProcessParentFields(int batchRunId)
-        {
-            var returnValue = new BatchProcessParentFields();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
-
-            sqlDataConnection.Open();
-            using (var sqlCommand = new SqlCommand("CH_BATCH_GET_PARENT_FIELDS", sqlDataConnection))
-            {
-                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                sqlCommand.Parameters.Add(new SqlParameter("BatchRunId", batchRunId));
-
-                var dataReader = sqlCommand.ExecuteReader();
-
-                if (dataReader.HasRows)
-                {
-                    while (dataReader.Read())
-                    {
-                        returnValue = new BatchProcessParentFields(dataReader);
-                    }
-                }
-            }
-            sqlDataConnection.Close();
-            return returnValue;
-        }
-        public List<BatchProcessFieldsFromRun> GetBatchProcessFieldsFromRun(int batchid)
-        {
-            var returnValue = new List<BatchProcessFieldsFromRun>();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
-
-            sqlDataConnection.Open();
-            using (var sqlCommand = new SqlCommand("CHP_BATCH_PROCESS_Fields_FromRun", sqlDataConnection))
-            {
-                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                sqlCommand.Parameters.Add(new SqlParameter("BatchID", batchid));
-
-                var dataReader = sqlCommand.ExecuteReader();
-
-                if (dataReader.HasRows)
-                {
-                    while (dataReader.Read())
-                    {
-                        returnValue.Add(new BatchProcessFieldsFromRun(dataReader));
-                    }
-                }
-            }
-            sqlDataConnection.Close();
-            return returnValue;
-        }
         public List<DocumentTemplates> GetDocumentTemplates(int userId)
         {
             var returnValue = new List<DocumentTemplates>();
@@ -1567,7 +1537,7 @@ namespace CollectionHubData
             sqlDataConnection.Close();
             return returnValue;
         }
-        public int CreateNewDocumentTemplate(int userId, string documentName)
+        public int CreateNewDocumentTemplate(int userId, string documentName, string viewName)
         {
             var returnValue = -1;
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
@@ -1578,19 +1548,20 @@ namespace CollectionHubData
                 sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                 sqlCommand.Parameters.Add(new SqlParameter("UserId", userId));
                 sqlCommand.Parameters.Add(new SqlParameter("Name", documentName));
+                sqlCommand.Parameters.Add(new SqlParameter("viewName", viewName));
 
                 SqlParameter returnParameter = sqlCommand.Parameters.Add("RetVal", SqlDbType.Int);
                 returnParameter.Direction = ParameterDirection.ReturnValue;
 
                 var dataReader = sqlCommand.ExecuteScalar();
 
-                var count = sqlCommand.ExecuteNonQuery();
-                if (count > 0) { returnValue = (int)returnParameter.Value; }
+                sqlCommand.ExecuteNonQuery();
+
+                returnValue = (int)returnParameter.Value;
             }
             sqlDataConnection.Close();
             return returnValue;
         }
-
         public DocumentTemplate GetDocumentTemplate(int templateId)
         {
             var returnValue = new DocumentTemplate();
@@ -1615,6 +1586,33 @@ namespace CollectionHubData
             sqlDataConnection.Close();
             return returnValue;
         }
+        public bool SaveTemplateContent(int chtId, int userId, string content, string notes)
+        {
+            var returnvalue = false;
+            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            {
+                sqlDataConnection.Open();
+                using (var sqlCommand = new SqlCommand("CH_TEMPLATES_UPDATE", sqlDataConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add(new SqlParameter("CHT_ID", chtId));
+                    sqlCommand.Parameters.Add(new SqlParameter("Content", content));
+                    sqlCommand.Parameters.Add(new SqlParameter("UserID", userId));
+                    sqlCommand.Parameters.Add(new SqlParameter("Notes", notes));
+                    //sqlCommand.Parameters.Add(new SqlParameter("viewName", viewName));
+
+                    var count = sqlCommand.ExecuteNonQuery();
+
+                    if (count > 0) { returnvalue = true; }
+                }
+                sqlDataConnection.Close();
+            }
+            return returnvalue;
+        }
+        
+        #endregion
+
+        #region MERGE FIELDS
 
         public List<MergeFieldItem> GetMergeFieldItems(string tableName)
         {
@@ -1641,7 +1639,6 @@ namespace CollectionHubData
             sqlDataConnection.Close();
             return returnValue;
         }
-
         public List<DataMergeSource> GetDataMergeOptions()
         {
             var returnValue = new List<DataMergeSource>();
@@ -1665,9 +1662,56 @@ namespace CollectionHubData
             sqlDataConnection.Close();
             return returnValue;
         }
+        public List<DataMergeFields> GetDataMergeFields(string viewName)
+        {
+            var returnValue = new List<DataMergeFields>();
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
 
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("SYS_FIELD_LIST", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("tablename", viewName));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add(new DataMergeFields(dataReader));
+                    }
+                }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
+
+        #endregion
+
+        public List<string> GetTreatmentGroups()
+        {
+            var returnValue = new List<string>();
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CH_TREATMENT_GROUP_LIST", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add(dataReader.GetString(0));
+                    }
+                }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
     
     }
-
-
 }

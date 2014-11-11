@@ -12,6 +12,7 @@ namespace CollectionHubData
         public string CHT_Name { get; set; }
         public string CHT_Notes { get; set; }
         public string CHT_Content { get; set; }
+        public string CHT_ViewTable { get; set; }   
 
         public DocumentTemplate() { }
         public DocumentTemplate(System.Data.SqlClient.SqlDataReader value)
@@ -20,6 +21,7 @@ namespace CollectionHubData
             CHT_Name = Convert.ToString(value["CHT_Name"]);
             CHT_Notes = Convert.ToString(value["CHT_Notes"]);
             CHT_Content = Convert.ToString(value["CHT_Content"]);
+            CHT_ViewTable = Convert.ToString(value["CHT_ViewName"]);
         }
     }
 
