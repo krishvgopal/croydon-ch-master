@@ -541,7 +541,6 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-
     [WebMethod]
     public static List<DataMergeFields> GetDataMergeFields(string viewName)
     {
@@ -552,5 +551,24 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
+    [WebMethod]
+    public static List<string> GetTreatmentGroups()
+    {
+        var returnData = new List<string>();
+        var dataAccess = new CollectionHubData.DataAccess();
 
+        returnData = dataAccess.GetTreatmentGroups();
+
+        return returnData;
+    }
+    [WebMethod]
+    public static List<TreatmentItems> GetTreatmentsForGroup(string viewName)
+    {
+        var returnData = new List<TreatmentItems>();
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.GetTreatmentsForGroup(viewName);
+
+        return returnData;
+    }
 }

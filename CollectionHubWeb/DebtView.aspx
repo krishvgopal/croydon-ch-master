@@ -4,14 +4,15 @@
 <%@ Register Src="~/Common/SiteHeader.ascx" TagName="SiteHeader" TagPrefix="sh" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="headMenu" Runat="Server">
-    <sh:SiteHeader ID="SiteHeader" runat="server" />
-    <asp:HiddenField ID="sourceValue" runat="server"    ClientIDMode="Static" />
-    <asp:HiddenField ID="sourceRefValue" runat="server" ClientIDMode="Static" />
-    <asp:HiddenField ID="selectedDebtId" runat="server" ClientIDMode="Static" />
-    <asp:HiddenField ID="cnpin" runat="server" ClientIDMode="Static" />
-     <asp:HiddenField ID="uprn" runat="server" ClientIDMode="Static" />
-    <asp:HiddenField ID="userId" runat="server" ClientIDMode="Static" />
+    <sh:SiteHeader ID="SiteHeader"          runat="server" />
+    <asp:HiddenField ID="sourceValue"       runat="server" ClientIDMode="Static" />
+    <asp:HiddenField ID="sourceRefValue"    runat="server" ClientIDMode="Static" />
+    <asp:HiddenField ID="selectedDebtId"    runat="server" ClientIDMode="Static" />
+    <asp:HiddenField ID="cnpin"             runat="server" ClientIDMode="Static" />
+    <asp:HiddenField ID="uprn"              runat="server" ClientIDMode="Static" />
+    <asp:HiddenField ID="userId"            runat="server" ClientIDMode="Static" />
     <asp:HiddenField ID="debtRowTotalValue" runat="server" ClientIDMode="Static" />
+    <script src="Scripts/ckeditor/ckeditor.js"></script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="headInfo" Runat="Server">
     <am:ActionMenu ID="pageActionMenu" runat="server" />
@@ -114,6 +115,7 @@
                         </table>
                     </div>
                     <a data-toggle="modal" href="modals/CreateRecoveryCycle.html" data-target="#createRecoveryCycleModal" class="btn btn-outline btn-primary">Create Recovery Cycle</a>
+                    <a data-toggle="modal" href="modals/CreateDebtAction.html" data-target="#debtActionModal" class="btn btn-outline btn-primary">Add Debt Action</a>
                 </div>
                 <div class="tab-pane fade" id="payments">
                     <br />
@@ -294,7 +296,6 @@
 
 
                 </div>
-              
                 </div> 
             </div>
         </div>
@@ -340,6 +341,20 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="debtActionModal" tabindex="-1" role="dialog" aria-labelledby="debtActionModal" aria-hidden="true" >
+            <div class="modal-dialog" style="width:825px">
+                <div class="modal-content">
+                </div>
+            </div>
+        </div>
+    
+<%--        <div class="modal fade" id="templateDocumentModal" tabindex="-1" role="dialog" aria-labelledby="templateDocumentModal" aria-hidden="true" >
+            <div class="modal-dialog" style="width:825px">
+                <div class="modal-content">
+                </div>
+            </div>
+        </div>--%>
+
         <script type="text/javascript" charset="utf8" src="js/DebtView.js"></script>
 </asp:Content>
 

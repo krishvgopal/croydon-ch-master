@@ -46,6 +46,7 @@
                     <asp:ContentPlaceHolder id="headInfo" runat="server"></asp:ContentPlaceHolder>
                     <div id="side-nav-master" class="navbar-default navbar-static-side" role="navigation">
                         <div class="sidebar-collapse">
+                            <a href="#" onclick="displayError('New Message');">Show Alert</a>
                             <asp:ContentPlaceHolder id="menuSide" runat="server"></asp:ContentPlaceHolder>
                         </div>
                     </div>
@@ -57,14 +58,16 @@
                         </div>
                     </div>
                     <div class="row">
+                        
+                        <div class="alert alert-danger alert-dismissable" id="alertBox">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <p id="alertMessage"></p>
+                        </div>
+                        <div id="errors"></div>
+
                         <asp:ContentPlaceHolder id="pageBody" runat="server"></asp:ContentPlaceHolder>
                     </div>
                 </div>
-            </div>
-            
-            <div class="alert alert-danger alert-dismissable" id="alertBox" style="display: none">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                <p id="alertMessage"></p><a href="#" class="alert-link">Alert Link</a>
             </div>
             
         </form>

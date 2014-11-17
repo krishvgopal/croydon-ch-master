@@ -1,5 +1,7 @@
 $(function() {
     $('#side-menu').metisMenu();
+    // GLOBAL ERROR HANDLING
+    $("#alertBox").hide();
 });
 $(function() {
     $(window).bind("load resize", function() {
@@ -49,4 +51,11 @@ if (typeof console === "undefined" || typeof console.log === "undefined") {
     } else {
         console.log = function () { };
     }
+}
+window.displayError = function (message) {
+    $("#alertMessage").html("<p>" + message + "</p>");
+    $("#alertBox")
+      .clone()
+      .appendTo("#errors")
+      .show("slow");
 }

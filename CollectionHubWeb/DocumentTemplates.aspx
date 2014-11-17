@@ -38,12 +38,12 @@
 				</thead>
 			</table>
 			<br />
-			<a data-toggle="modal" href="modals/CreateNewTemplate.html"  data-target="#createTemplate" class="btn btn-outline btn-primary">Create New Template</a>
+			<a data-toggle="modal" href="modals/CreateNewTemplate.html" data-target="#createTemplate" class="btn btn-outline btn-primary">Create New Template</a>
 		</div>
 
 		<div class="col-lg-8" id="documentDetails">
-			<div id="templateName"          name="templateName"             contenteditable="true" style="display:inline-block;width:100%;height:40px;margin-bottom:15px"></div>
-			<div id="templateDescription"   name="templateDescription"      contenteditable="true" style="display:inline-block;width:100%;height:auto;"></div>
+			<div id="templateName"          name="templateName"             contenteditable="true" style="display:inline-block;width:100%;height:auto;margin-bottom:15px; border-bottom: 1px solid #B6B6B4"></div>
+			<div id="templateDescription"   name="templateDescription"      contenteditable="true" style="display:inline-block;width:100%;height:auto;min-height: 25px;"></div>
 			<textarea class="ckeditor"      name="templateDocumentContent"  ID="templateContent" ></textarea>
 			<hr />
 			<a href="#" onclick="saveTemplate();" class="btn btn-outline btn-primary">Save Template</a>
@@ -56,7 +56,7 @@
 			<div class="modal-content"></div>
 		</div>
 	</div>
-   
+  
 	<script type="text/javascript" charset="utf8" src="js/DocumentTemplates.js"></script>
 
 </asp:Content>

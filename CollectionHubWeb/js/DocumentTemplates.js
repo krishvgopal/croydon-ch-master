@@ -1,7 +1,4 @@
-﻿
-
-$("#documentDetails").hide();
-
+﻿$("#documentDetails").hide();
 
 CKEDITOR.replace('templateDocumentContent',
     {
@@ -9,8 +6,9 @@ CKEDITOR.replace('templateDocumentContent',
         width: 900
     });
 
-
-
+var editor = CKEDITOR.inline('templateName', {
+    removePlugins: 'toolbar'
+});
 
 
 refreshBatchProcessJobs();
@@ -68,10 +66,14 @@ function refreshTemplateDocument(templateId) {
             $("#templateName").attr('templateId', result.CHT_ID);
             $("#templateName").attr('ViewTable', result.CHT_ViewTable);
             $("#templateName").html('<h2>' + result.CHT_Name + '</h2>');
-            $("#templateDescription").html('<p><i>' + result.CHT_Notes + '</i></p>');
-            loadMergeView(result.CHT_ViewName);
-            CKEDITOR.instances['templateContent'].setData(result.CHT_Content);
 
+            if (result.CHT_Notes.length > 0) {
+                $("#templateDescription").html('<p><i>' + result.CHT_Notes + '</i></p>');
+            } else {
+                $("#templateDescription").html('<p><i>Click to edit</i></p>');
+            }
+
+            CKEDITOR.instances['templateContent'].setData(result.CHT_Content);
             // TODO: BETTER FIX THIS ISSUE
             $("#cke_22_text").css("width", "175px");
         }
@@ -83,15 +85,12 @@ function selectTemplate (templateId) {
     refreshTemplateDocument(templateId);
     $("html, body").animate({ scrollTop: 0 }, "slow");
 }
-
-function loadMergeView(viewName) {
-    
-}
-
 function saveTemplate() {
 
     var htmlValue = CKEDITOR.instances['templateContent'].getData();
     var htmlNotes = $("#templateDescription").text();
+    if (htmlNotes.toLowerCase() == 'click to edit') { htmlNotes = '';}
+
     //console.log("{'chtId':'" + $("#templateName").attr('templateId') + "','userId':'" + $("#UserSessionToken").val() + "','content':'" + htmlValue + "','notes':'" + htmlNotes + "'}");
     $.ajax({
         type: "POST",
@@ -101,7 +100,7 @@ function saveTemplate() {
         dataType: "json",
         success: function (result) {
             if (result.hasOwnProperty("d")) { result = result.d; }
-            if (result = true) {
+            if (result == true) {
                 refreshBatchProcessJobs();                
                 $("#documentDetails").hide();
                 $("#documentList").show();

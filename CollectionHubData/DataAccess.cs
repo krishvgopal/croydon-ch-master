@@ -51,6 +51,7 @@ namespace CollectionHubData
             }
             return returnvalue;
         }
+        
         public bool SetRecoveryCycle(int debtId, int recoveryCycleId, int userId, DateTime recoveryDateTime)
         {
             var returnvalue = false;
@@ -73,6 +74,7 @@ namespace CollectionHubData
             }
             return returnvalue;
         }
+        
         public bool CreateDebtGroup(string debtIdString, int userId, int partyPin)
         {
             var returnvalue = false;
@@ -137,6 +139,7 @@ namespace CollectionHubData
             }
             return returnvalue;
         }
+        
         public bool CreateDebtAttribute(int debtId, int userId, int attributeId, bool isCurrent, string attributeValue)
         {
             var returnvalue = false;
@@ -414,7 +417,7 @@ namespace CollectionHubData
             }
             return returnValue;
         }
-        public List<DebtItem> GetDebts(int pin)
+        public List<DebtItem>           GetDebts(int pin)
         {
             var returnValue = new List<DebtItem>();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
@@ -441,31 +444,7 @@ namespace CollectionHubData
 
             return returnValue;
         }
-        public List<ArrangementPaymentMethods> GetPaymenyMethodList()
-        {
-            var returnValue = new List<ArrangementPaymentMethods>();
-            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
-            {
-                sqlDataConnection.Open();
-                using (var sqlCommand = new SqlCommand("CHP_PAYMENT_METHODS_LIST", sqlDataConnection))
-                {
-                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-
-                    var dataReader = sqlCommand.ExecuteReader();
-
-                    if (dataReader.HasRows)
-                    {
-                        while (dataReader.Read())
-                        {
-                            returnValue.Add(new ArrangementPaymentMethods(dataReader));
-                        }
-                    }
-                }
-                sqlDataConnection.Close();
-            }
-            return returnValue;
-        }
-        public List<DebtNote> GetDebtNotes(int debtId)
+        public List<DebtNote>           GetDebtNotes(int debtId)
         {
             var returnValue = new List<DebtNote>();
             using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
@@ -490,7 +469,32 @@ namespace CollectionHubData
             }
             return returnValue;
         }
-        public List<FullNameFullAddressSearchResults> SearchAddress(string firstName, string lastName)
+        
+        public List<ArrangementPaymentMethods>          GetPaymenyMethodList()
+        {
+            var returnValue = new List<ArrangementPaymentMethods>();
+            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            {
+                sqlDataConnection.Open();
+                using (var sqlCommand = new SqlCommand("CHP_PAYMENT_METHODS_LIST", sqlDataConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    var dataReader = sqlCommand.ExecuteReader();
+
+                    if (dataReader.HasRows)
+                    {
+                        while (dataReader.Read())
+                        {
+                            returnValue.Add(new ArrangementPaymentMethods(dataReader));
+                        }
+                    }
+                }
+                sqlDataConnection.Close();
+            }
+            return returnValue;
+        }
+        public List<FullNameFullAddressSearchResults>   SearchAddress(string firstName, string lastName)
         {
             var returnValue = new List<FullNameFullAddressSearchResults>();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
@@ -526,18 +530,8 @@ namespace CollectionHubData
 
             return returnValue;
         }
-        public List<SampleData> GetSampleData(string fixedValue, int count)
-        {
-            var returnValue = new List<SampleData>();
-
-            for (var i = 0; i < count; i++)
-            {
-                returnValue.Add(new SampleData(fixedValue + "-" + i.ToString()));
-            }
-
-            return returnValue;
-        }
-        public List<RecoveryCycleItem> GetRecoveryCycleHistory(int debtId)
+       
+        public List<RecoveryCycleItem>  GetRecoveryCycleHistory(int debtId)
         {
             var returnValue = new List<RecoveryCycleItem>();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
@@ -561,7 +555,7 @@ namespace CollectionHubData
             sqlDataConnection.Close();
             return returnValue;
         }
-        public List<RecoveryCycle> GetRecoveryCycles()
+        public List<RecoveryCycle>      GetRecoveryCycles()
         {
             var returnValue = new List<RecoveryCycle>();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
@@ -586,7 +580,7 @@ namespace CollectionHubData
 
             return returnValue;
         }
-        public List<DebtItem> GetFrequencyListGetDebts(int pin)
+        public List<DebtItem>           GetFrequencyListGetDebts(int pin)
         {
             var returnValue = new List<DebtItem>();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
@@ -614,7 +608,10 @@ namespace CollectionHubData
 
             return returnValue;
         }
-        public List<DebtAttribute> GetDebtAttribute(int debtId)
+
+        #region ATTRIBUTES
+
+        public List<DebtAttribute>      GetDebtAttribute(int debtId)
         {
             var returnValue = new List<DebtAttribute>();
             using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
@@ -639,7 +636,7 @@ namespace CollectionHubData
             }
             return returnValue;
         }
-        public List<PersonAttribute> GetPersonAttribute(int partyPin)
+        public List<PersonAttribute>    GetPersonAttribute(int partyPin)
         {
             var returnValue = new List<PersonAttribute>();
             using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
@@ -664,7 +661,7 @@ namespace CollectionHubData
             }
             return returnValue;
         }
-        public List<PersonAttribute> GetCurrentAttribute(int partyPin)
+        public List<PersonAttribute>    GetCurrentAttribute(int partyPin)
         {
             var returnValue = new List<PersonAttribute>();
             using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
@@ -689,7 +686,7 @@ namespace CollectionHubData
             }
             return returnValue;
         }
-        public List<AttributeItem> GetAttributeList(bool listDebtAttributes, bool listPersonAttributes)
+        public List<AttributeItem>      GetAttributeList(bool listDebtAttributes, bool listPersonAttributes)
         {
             var returnValue = new List<AttributeItem>();
             using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
@@ -715,7 +712,10 @@ namespace CollectionHubData
             }
             return returnValue;
         }
-        public List<Payment> GetPaymentsByDebtId(int debtId)
+        
+        #endregion
+
+        public List<Payment>            GetPaymentsByDebtId(int debtId)
         {
             var returnValue = new List<Payment>();
             using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
@@ -740,7 +740,7 @@ namespace CollectionHubData
             }
             return returnValue;
         }
-        public List<DebtParties> GetPartiesByDebtId(int debtId)
+        public List<DebtParties>        GetPartiesByDebtId(int debtId)
         {
             var returnValue = new List<DebtParties>();
             using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
@@ -765,7 +765,7 @@ namespace CollectionHubData
             }
             return returnValue;
         }
-        public List<LinkedAddress> GetLinkedAddresses(int partyPin)
+        public List<LinkedAddress>      GetLinkedAddresses(int partyPin)
         {
             var returnValue = new List<LinkedAddress>();
             using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
@@ -790,7 +790,7 @@ namespace CollectionHubData
             }
             return returnValue;   
         }
-        public List<Arrangement> GetArrangements(int debtId)
+        public List<Arrangement>        GetArrangements(int debtId)
         {
             var returnValue = new List<Arrangement>();
             using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
@@ -815,7 +815,7 @@ namespace CollectionHubData
             }
             return returnValue;
         }
-        public List<MatchList> GetMatchListByPin(int pin)
+        public List<MatchList>          GetMatchListByPin(int pin)
         {
             var returnValue = new List<MatchList>();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
@@ -839,7 +839,7 @@ namespace CollectionHubData
             sqlDataConnection.Close();
             return returnValue;
         }
-        public List<MisMatchList> GetMisMatchListByPin(int pin)
+        public List<MisMatchList>       GetMisMatchListByPin(int pin)
         {
             var returnValue = new List<MisMatchList>();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
@@ -865,101 +865,8 @@ namespace CollectionHubData
 
             return returnValue;
         }
-        public List<BatchProcessHistory> GetBatchProcessHistory()
-        {
-            var returnValue = new List<BatchProcessHistory>();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
-
-            sqlDataConnection.Open();
-            using (var sqlCommand = new SqlCommand("CHP_BATCH_PROCESS_HISTORY", sqlDataConnection))
-            {
-                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-
-                var dataReader = sqlCommand.ExecuteReader();
-
-                if (dataReader.HasRows)
-                {
-                    while (dataReader.Read())
-                    {
-                        returnValue.Add(new BatchProcessHistory(dataReader));
-                    }
-                }
-            }
-            sqlDataConnection.Close();
-            return returnValue;
-        }
-        public List<BatchProcess> GetBatchProcess(int bp_id)
-        {
-            var returnValue = new List<BatchProcess>();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
-
-            sqlDataConnection.Open();
-            using (var sqlCommand = new SqlCommand("CHP_BATCH_PROCESS_byId", sqlDataConnection))
-            {
-                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                sqlCommand.Parameters.Add(new SqlParameter("bp_id", bp_id));
-
-                var dataReader = sqlCommand.ExecuteReader();
-
-                if (dataReader.HasRows)
-                {
-                    while (dataReader.Read())
-                    {
-                        returnValue.Add(new BatchProcess(dataReader));
-                    }
-                }
-            }
-            sqlDataConnection.Close();
-            return returnValue;
-        }
-        public List<BatchProcessJobs> GetBatchProcessJobs()
-        {
-            var returnValue = new List<BatchProcessJobs>();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
-
-            sqlDataConnection.Open();
-            using (var sqlCommand = new SqlCommand("CHP_BATCH_PROCESS_LIST", sqlDataConnection))
-            {
-                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-
-                var dataReader = sqlCommand.ExecuteReader();
-
-                if (dataReader.HasRows)
-                {
-                    while (dataReader.Read())
-                    {
-                        returnValue.Add(new BatchProcessJobs(dataReader));
-                    }
-                }
-            }
-            sqlDataConnection.Close();
-            return returnValue;
-        }
-        public List<BatchProcessFields> GetBatchProcessFields(int bp_id)
-        {
-            var returnValue = new List<BatchProcessFields>();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
-
-            sqlDataConnection.Open();
-            using (var sqlCommand = new SqlCommand("CHP_BATCH_PROCESS_Fields", sqlDataConnection))
-            {
-                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                sqlCommand.Parameters.Add(new SqlParameter("bp_id", bp_id));
-
-                var dataReader = sqlCommand.ExecuteReader();
-
-                if (dataReader.HasRows)
-                {
-                    while (dataReader.Read())
-                    {
-                        returnValue.Add(new BatchProcessFields(dataReader));
-                    }
-                }
-            }
-            sqlDataConnection.Close();
-            return returnValue;
-        }
-        public List<PersonDetails> GetPersonDetails(int pin, string uprn)
+        
+        public List<PersonDetails>      GetPersonDetails(int pin, string uprn)
         {
             var returnValue = new List<PersonDetails>();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
@@ -984,7 +891,7 @@ namespace CollectionHubData
             sqlDataConnection.Close();
             return returnValue;
         }
-        public DebtSearchResult DebtSearch(decimal amountFrom, decimal amountTo, int debtStreamCount, int includesStreamCode, int lastPaymentCode, int debtAgeCode)
+        public DebtSearchResult         DebtSearch(decimal amountFrom, decimal amountTo, int debtStreamCount, int includesStreamCode, int lastPaymentCode, int debtAgeCode)
         {
             var returnValue = new DebtSearchResult();
             using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
@@ -1042,7 +949,7 @@ namespace CollectionHubData
             }
             return returnValue;
         }
-        public DebtAddress GetAddressForDebt(string pin, string uprn)
+        public DebtAddress              GetAddressForDebt(string pin, string uprn)
         {
             var returnValue = new DebtAddress();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
@@ -1177,8 +1084,19 @@ namespace CollectionHubData
                 return "0";
             }
         }
+        public List<SampleData> GetSampleData(string fixedValue, int count)
+        {
+            var returnValue = new List<SampleData>();
 
-        #endregion
+            for (var i = 0; i < count; i++)
+            {
+                returnValue.Add(new SampleData(fixedValue + "-" + i.ToString()));
+            }
+
+            return returnValue;
+        }
+
+        #endregion      
 
         #region BATCHES
 
@@ -1202,6 +1120,100 @@ namespace CollectionHubData
             return returnvalue;
         }
 
+        public List<BatchProcessHistory> GetBatchProcessHistory()
+        {
+            var returnValue = new List<BatchProcessHistory>();
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CHP_BATCH_PROCESS_HISTORY", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add(new BatchProcessHistory(dataReader));
+                    }
+                }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
+        public List<BatchProcess> GetBatchProcess(int bp_id)
+        {
+            var returnValue = new List<BatchProcess>();
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CHP_BATCH_PROCESS_byId", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("bp_id", bp_id));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add(new BatchProcess(dataReader));
+                    }
+                }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
+        public List<BatchProcessJobs> GetBatchProcessJobs()
+        {
+            var returnValue = new List<BatchProcessJobs>();
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CHP_BATCH_PROCESS_LIST", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add(new BatchProcessJobs(dataReader));
+                    }
+                }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
+        public List<BatchProcessFields> GetBatchProcessFields(int bp_id)
+        {
+            var returnValue = new List<BatchProcessFields>();
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CHP_BATCH_PROCESS_Fields", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("bp_id", bp_id));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add(new BatchProcessFields(dataReader));
+                    }
+                }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
         public List<BatchRunHistory> GetBatchRunHistory()
         {
             var returnValue = new List<BatchRunHistory>();
@@ -1712,6 +1724,29 @@ namespace CollectionHubData
             sqlDataConnection.Close();
             return returnValue;
         }
-    
+        public List<TreatmentItems> GetTreatmentsForGroup(string groupName)
+        {
+            var returnValue = new List<TreatmentItems>();
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CH_Treatment_List", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("GroupName", groupName));
+               
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add( new TreatmentItems(dataReader));
+                    }
+                }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
     }
 }

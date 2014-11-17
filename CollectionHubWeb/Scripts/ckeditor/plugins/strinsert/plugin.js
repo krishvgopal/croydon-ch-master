@@ -1,12 +1,3 @@
-/**
- * @license Copyright © 2013 Stuart Sillitoe <stuart@vericode.co.uk>
- * This work is mine, and yours. You can modify it as you wish.
- *
- * Stuart Sillitoe
- * stuartsillitoe.co.uk
- *
- */
-
 CKEDITOR.plugins.add('strinsert',
 {
     requires : ['richcombo'],
@@ -28,7 +19,7 @@ CKEDITOR.plugins.add('strinsert',
             init: function () {
 
                 var objectPass = this;
-                var editorId = editor.ui.editor.name;
+                //var editorId = editor.ui.editor.name;
           
                 this.startGroup("Insert Merge Field");
                 

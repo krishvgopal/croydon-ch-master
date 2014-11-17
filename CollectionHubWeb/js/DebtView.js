@@ -750,6 +750,54 @@ function refresMisMisMatchList(partyPin) {
         }
     });
 }
+function refreshDebtActionTabs() {
+
+    var activeHtml = 'class="active"';
+    var lineItem = '';
+
+    $.ajax({
+        type: "POST",
+        async: false,
+        url: "DataService.aspx/GetTreatmentGroups",
+        data: "{}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function(result) {
+            
+            if (result.hasOwnProperty("d")) { result = result.d; }
+           
+            $.each(result, function(index, value) {
+                lineItem = lineItem + '<li ' + activeHtml  + '> <a href="#debtRecoveryTab_' + value + '" data-toggle="tab">' + value + '</a></li>';
+                activeHtml = '';
+                refreshDebtActionItems(value);
+            });
+            $("#debtActionTabMenu").append('<ul class="nav nav-tabs">' + lineItem + '</ul>');
+
+            // TODO : REMOVE THIS NASTY HACK
+            var v = $("#debtActionTabPanels").html();
+            $("#debtActionTabPanels").html('<div class="tab-content">' + v + '</div>');
+
+        }
+    });
+}
+function refreshDebtActionItems(groupName) {
+    var lineItem = '';
+    $.ajax({
+        type: "POST",
+        async: false,
+        url: "DataService.aspx/GetTreatmentsForGroup",
+        data: "{'viewName':'" + groupName + "'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            if (result.hasOwnProperty("d")) { result = result.d; }
+            $.each(result, function (index, value) {
+                lineItem = lineItem + '<p><a href="#" onclick="createDebtAction(' + value.TemplateId + ');">' + value.ItemName + '</a></p>';
+            });
+            $("#debtActionTabPanels").append('<div class="tab-pane fade in active" id="debtRecoveryTab_' + groupName + '"><div style="padding-top:15px">' + lineItem + '</div></div>');
+        }
+    });
+}
 function linkMatchedResult(matchId) {
     var sourcePin = $("#cnpin").val();
     $.ajax({
@@ -983,6 +1031,16 @@ function ungroupDebts() {
         }
     });
     $('#ungroupDebtModal').modal('hide');
+}
+
+function createDebtAction(templateId) {
+
+    //fsalert("TemplateId - " + templateId);
+    $("#documentSelection").hide();
+
+    
+
+    $("#documentEdit").show();
 }
 
 Array.prototype.contains = function (v) {
