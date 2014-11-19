@@ -221,7 +221,6 @@ function refreshDebtsList() {
         }
     });
 }
-
 function refreshSingleDebtView() {
     var showCleared = 'false';
     if ($("#showCleared").val() == 2) { showCleared = 'true'; }
@@ -792,12 +791,13 @@ function refreshDebtActionItems(groupName) {
         success: function (result) {
             if (result.hasOwnProperty("d")) { result = result.d; }
             $.each(result, function (index, value) {
-                lineItem = lineItem + '<p><a href="#" onclick="createDebtAction(' + value.TemplateId + ');">' + value.ItemName + '</a></p>';
+                lineItem = lineItem + '<p><a href="#" onclick="createDebtAction(' + value.TemplateItemId + ',' + value.TemplateId + ');">' + value.ItemName + '</a></p>';
             });
             $("#debtActionTabPanels").append('<div class="tab-pane fade in active" id="debtRecoveryTab_' + groupName + '"><div style="padding-top:15px">' + lineItem + '</div></div>');
         }
     });
 }
+
 function linkMatchedResult(matchId) {
     var sourcePin = $("#cnpin").val();
     $.ajax({
@@ -967,7 +967,7 @@ function doProgress(resultLength, controlName) {
     var fontWeight      = 'normal';
     progressValue = progressValue + progressInterval;
 
-    console.log(controlName + ' - ' + progressValue + ' - ' + resultLength + ' - ' + fontWeight);
+    //console.log(controlName + ' - ' + progressValue + ' - ' + resultLength + ' - ' + fontWeight);
     
     if (resultLength > 0)                       {  fontWeight = 'bold'; }
         
@@ -975,14 +975,14 @@ function doProgress(resultLength, controlName) {
     $("#loadProgress").css("width", progressValue + "%");
 
     if (progressValue <= 0) {
-        $("#loadProgress").hide();
+        $("#loadProgress").hide("slow");
     }
     if (progressValue >= 100) {
         setTimeout(function () { $("#loadProgress").hide(); progressInterval = 10; progressValue = 0; }, 1000);
     }
 
     if (progressValue > 0) {
-        $("#loadProgress").show();
+        $("#loadProgress").show("slow");
     }
 }
 function groupDebts() {
@@ -1006,7 +1006,6 @@ function groupDebts() {
             alert(error);
         }
     });
-
     $('#myModal').modal('hide');
 }
 function ungroupDebts() {
@@ -1032,30 +1031,44 @@ function ungroupDebts() {
     });
     $('#ungroupDebtModal').modal('hide');
 }
-
-function createDebtAction(templateId) {
-
-    //fsalert("TemplateId - " + templateId);
+function createDebtAction(templateItemId, templateId) {
     $("#documentSelection").hide();
-
-    
-
+    $("#loading").show();
+    $.ajax({
+        type: "POST",
+        url: "DocumentService.aspx/MergeDocument",
+        data: "{'documentTemplateId':'" + templateItemId + "','templateId':'" + templateId + "','userId':'" + getUserId() + "','pin':'" + $("#cnpin").val() + "','uprn':'" + $("#uprn").val() + "'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            CKEDITOR.instances['editDocumentContent'].setData(result.d);
+            $("#editDocumentContent").attr('templateItemId', templateItemId);
+            $("#loading").hide();
+            $("#editor").show();
+        },
+        failure: function (error) {
+            alert(error);
+        }
+    });
     $("#documentEdit").show();
 }
+function saveDocument(actionId) {
 
-Array.prototype.contains = function (v) {
-    for (var i = 0; i < this.length; i++) {
-        if (this[i] === v) return true;
-    }
-    return false;
-};
-Array.prototype.unique = function () {
-    var arr = [];
-    for (var i = 0; i < this.length; i++) {
-        if (!arr.contains(this[i])) {
-            arr.push(this[i]);
+    var documentName = "test document name";
+    var documentContent = CKEDITOR.instances['editDocumentContent'].getData();
+    var debtId = $("#selectedDebtId").val();
+
+    $.ajax({
+        type: "POST",
+        url: "DocumentService.aspx/SaveDocument",
+        data: "{'documentTemplateId':'" + $("#editDocumentContent").attr('templateItemId') + "','documentName':'" + documentName + "','documentContent':'" + documentContent + "','actionId':'" + actionId + "','userId':'" + getUserId() + "','pin':'" + $("#cnpin").val() + "','uprn':'" + $("#uprn").val() + "','debtId':'" + debtId + "'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            alert(result.d);
+        },
+        failure: function (error) {
+            alert(error);
         }
-    }
-    return arr;
+    });
 }
-

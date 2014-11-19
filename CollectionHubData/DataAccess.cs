@@ -1567,7 +1567,7 @@ namespace CollectionHubData
 
                 var dataReader = sqlCommand.ExecuteScalar();
 
-                sqlCommand.ExecuteNonQuery();
+                //sqlCommand.ExecuteNonQuery();
 
                 returnValue = (int)returnParameter.Value;
             }
@@ -1698,9 +1698,7 @@ namespace CollectionHubData
             sqlDataConnection.Close();
             return returnValue;
         }
-
         #endregion
-
         public List<string> GetTreatmentGroups()
         {
             var returnValue = new List<string>();
@@ -1744,6 +1742,62 @@ namespace CollectionHubData
                         returnValue.Add( new TreatmentItems(dataReader));
                     }
                 }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
+        public List<MergeValue> GetMergeValues(int userId, string viewName, string pin, string uprn)
+        {
+            var returnValue = new List<MergeValue>();
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CH_TEMPLATES_MERGE_LIST", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("UserID", userId));
+                sqlCommand.Parameters.Add(new SqlParameter("ViewName", viewName));
+                sqlCommand.Parameters.Add(new SqlParameter("PIN", pin));
+                sqlCommand.Parameters.Add(new SqlParameter("uprn", uprn));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add(new MergeValue(dataReader));
+                    }
+                }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
+        public bool SaveDocument(int userId, int templateId, string documentName, string documentContent, byte[] documentBody, int actionId, string pin, string uprn, int debtId)
+        {
+            var returnValue = false;
+            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CH_TEMPLATES_ACTION_SAVE", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("CH_DOCUMENT_TEMPLATEID",    templateId));
+                sqlCommand.Parameters.Add(new SqlParameter("CH_DOCUMENT_TITLE",         documentName));
+                sqlCommand.Parameters.Add(new SqlParameter("CH_DOCUMENT_CONTENT",       documentContent));
+                sqlCommand.Parameters.Add(new SqlParameter("CH_DOCUMENT_ACTION",        actionId));
+                sqlCommand.Parameters.Add(new SqlParameter("CH_DOCUMENT_PIN",           pin));
+                sqlCommand.Parameters.Add(new SqlParameter("CH_DOCUMENT_UPRN",          uprn));
+                sqlCommand.Parameters.Add(new SqlParameter("CH_DOCUMENT_DEBTID",        debtId));
+                sqlCommand.Parameters.Add(new SqlParameter("CH_DOCUMENT_USERID",        userId));
+                sqlCommand.Parameters.Add(new SqlParameter("CH_DOCUMENT_BODY",          documentBody));
+
+                SqlParameter returnParameter = sqlCommand.Parameters.Add("RetVal",      SqlDbType.Int);
+                returnParameter.Direction = ParameterDirection.ReturnValue;
+
+                sqlCommand.ExecuteScalar();
+
+                if ((int)returnParameter.Value > 0) { returnValue = true; }
             }
             sqlDataConnection.Close();
             return returnValue;

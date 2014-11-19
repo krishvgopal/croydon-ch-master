@@ -4,7 +4,7 @@
 <%@ Register Src="~/Common/SiteHeader.ascx" TagName="SiteHeader" TagPrefix="sh" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="headMenu" Runat="Server">
-    <sh:SiteHeader ID="SiteHeader"          runat="server" />
+    <sh:SiteHeader      ID="SiteHeader"          runat="server" />
     <asp:HiddenField ID="sourceValue"       runat="server" ClientIDMode="Static" />
     <asp:HiddenField ID="sourceRefValue"    runat="server" ClientIDMode="Static" />
     <asp:HiddenField ID="selectedDebtId"    runat="server" ClientIDMode="Static" />
@@ -347,14 +347,6 @@
                 </div>
             </div>
         </div>
-    
-<%--        <div class="modal fade" id="templateDocumentModal" tabindex="-1" role="dialog" aria-labelledby="templateDocumentModal" aria-hidden="true" >
-            <div class="modal-dialog" style="width:825px">
-                <div class="modal-content">
-                </div>
-            </div>
-        </div>--%>
-
         <script type="text/javascript" charset="utf8" src="js/DebtView.js"></script>
 </asp:Content>
 
