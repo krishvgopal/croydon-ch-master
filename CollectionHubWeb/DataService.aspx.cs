@@ -142,12 +142,12 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
-    public static List<FullNameFullAddressSearchResults> SearchFullNameFullAddress(string firstName, string lastName)
+    public static List<FullNameFullAddressSearchResults> SearchFullNameFullAddress(string firstName, string lastName, string nino, string dob, string address, string street, string postCode)
     {
         var returnData = new List<FullNameFullAddressSearchResults>();
         var dataAccess = new CollectionHubData.DataAccess();
 
-        returnData = dataAccess.SearchAddress(firstName, lastName);
+        returnData = dataAccess.SearchAddress(firstName, lastName, nino, dob, address, street, postCode);
 
         return returnData;
     }

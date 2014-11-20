@@ -26,12 +26,6 @@
     </div>
 </asp:Content>
 <asp:Content ID="Content5" ContentPlaceHolderID="pageBody" Runat="Server">
-     
-    <div class="progress" style="margin: -15px -15px 15px -15px;height:5px">
-        <div class="progress-bar" id="loadProgress" role="progressbar" style="width:0%;">
-        </div>
-    </div>
-    
     <div class="row">
         <div class="col-lg-12">
             <div style="border-bottom: 1px solid rgb(215,229,223); height:90px" > 

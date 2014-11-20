@@ -52,15 +52,6 @@ if (typeof console === "undefined" || typeof console.log === "undefined") {
         console.log = function () { };
     }
 }
-window.displayError = function (message) {
-
-    $("#alertMessage").html("<p>" + message + "</p>");
-    $("#alertBox")
-      .clone()
-      .appendTo("#errors")
-      .css("visibility", "visible")
-      .show("slow");
-}
 Array.prototype.contains = function (v) {
     for (var i = 0; i < this.length; i++) {
         if (this[i] === v) return true;
@@ -76,4 +67,28 @@ Array.prototype.unique = function () {
     }
     return arr;
 }
+window.getUUID = (function() {
+    function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+                   .toString(16)
+                   .substring(1);
+    }
+    return function() {
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+               s4() + '-' + s4() + s4() + s4();
+    };
+})();
+window.displayError = function (message) {
+    var newId = getUUID();
+    $("#alertMessage").html("<p>" + message + "</p>");
+    $("#alertBox")
+      .clone()
+      .appendTo("#errors")
+      .css("visibility", "visible")
+      .attr("id", newId)
+      .show("slow");
 
+    setTimeout(function () {
+        $("#" + newId).hide("slow");
+    }, 5000);
+}

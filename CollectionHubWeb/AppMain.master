@@ -35,7 +35,10 @@
         <form id="mainForm" runat="server">
             <asp:HiddenField runat="server" ID="UserSessionToken" />
             <div id="wrapper">
-                <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0">
+                <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0px">
+                    <div class="progress" style="margin: 0px 0px 0px 0px;height:5px;width:100%;">
+                        <div class="progress-bar" id="loadProgress" role="progressbar" style="width:0%;"></div>
+                    </div>
                     <div class="navbar-header">
                         <asp:ContentPlaceHolder id="headMenu" runat="server"></asp:ContentPlaceHolder>
                     </div>
@@ -49,16 +52,16 @@
                 </nav>
                 <div id="page-wrapper">
                     <div class="row">
-                        <div class="col-lg-12">
-                            <asp:ContentPlaceHolder id="pageTitle" runat="server"></asp:ContentPlaceHolder>
-                        </div>
-                    </div>
-                    <div class="row">
                         <div class="alert alert-danger alert-dismissable" id="alertBox" style="visibility: hidden">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                             <p id="alertMessage"></p>
                         </div>
                         <div id="errors"></div>
+                        <div class="col-lg-12">
+                            <asp:ContentPlaceHolder id="pageTitle" runat="server"></asp:ContentPlaceHolder>
+                        </div>
+                    </div>
+                    <div class="row">
                         <asp:ContentPlaceHolder id="pageBody" runat="server"></asp:ContentPlaceHolder>
                     </div>
                 </div>

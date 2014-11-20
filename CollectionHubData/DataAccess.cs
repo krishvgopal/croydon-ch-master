@@ -494,7 +494,7 @@ namespace CollectionHubData
             }
             return returnValue;
         }
-        public List<FullNameFullAddressSearchResults>   SearchAddress(string firstName, string lastName)
+        public List<FullNameFullAddressSearchResults>   SearchAddress(string firstName, string lastName, string nino, string dob, string address, string street, string postcode)
         {
             var returnValue = new List<FullNameFullAddressSearchResults>();
             var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
@@ -508,11 +508,11 @@ namespace CollectionHubData
                 sqlCommand.Parameters.Add(new SqlParameter("LASTNAME", lastName));
                 //sqlCommand.Parameters.Add(new SqlParameter("MIDNAME", DBNull.Value));
                 //sqlCommand.Parameters.Add(new SqlParameter("ORGNAME", DBNull.Value));
-                //sqlCommand.Parameters.Add(new SqlParameter("DOB", DBNull.Value));
-                //sqlCommand.Parameters.Add(new SqlParameter("NINO", DBNull.Value));
-                //sqlCommand.Parameters.Add(new SqlParameter("ADDRNUMBER", DBNull.Value));
-                //sqlCommand.Parameters.Add(new SqlParameter("ADDRNAME", DBNull.Value));
-                //sqlCommand.Parameters.Add(new SqlParameter("ADDRPOSTCODE", DBNull.Value));
+                sqlCommand.Parameters.Add(new SqlParameter("DOB", dob));
+                sqlCommand.Parameters.Add(new SqlParameter("NINO", nino));
+                sqlCommand.Parameters.Add(new SqlParameter("ADDRNUMBER", address));
+                sqlCommand.Parameters.Add(new SqlParameter("ADDRNAME", street));
+                sqlCommand.Parameters.Add(new SqlParameter("ADDRPOSTCODE", postcode));
 
                 var dataReader = sqlCommand.ExecuteReader();
 

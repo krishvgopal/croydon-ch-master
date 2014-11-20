@@ -44,7 +44,7 @@ public partial class DocumentService : System.Web.UI.Page
 
         b.InsertHtml(documentContent);
         d.Save(stream, SaveFormat.Doc);
-        d.Save("new_doc_" + Guid.NewGuid().ToString() + ".doc" );
+        //d.Save("new_doc_" + Guid.NewGuid().ToString() + ".doc" );
         
         stream.Position = 0;
 

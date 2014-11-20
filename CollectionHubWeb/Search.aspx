@@ -36,31 +36,31 @@
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label>NINO</label>
-                        <input class="form-control-compact">
+                        <input class="form-control-compact" id="nino" name="nino">
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label>D.O.B.</label>
-                        <input class="form-control-compact">
+                        <input class="form-control-compact" id="dob" name="dob">
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label>Address</label>
-                        <input class="form-control-compact">
+                        <input class="form-control-compact" id="address" name="address">
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label>Street</label>
-                        <input class="form-control-compact">
+                        <input class="form-control-compact" id="street" name="street">
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label>Postcode</label>
-                        <input class="form-control-compact">
+                        <input class="form-control-compact" id="postcode" name="postcode">
                     </div>
                 </div>
                 <div style="clear:both;"></div>
