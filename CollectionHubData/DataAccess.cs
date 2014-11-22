@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text;
@@ -8,15 +9,14 @@ namespace CollectionHubData
 {
     public class DataAccess
     {
-        private const string CONNECTION_STRING = "Data Source=192.168.1.10;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=HubAdmin;Password=Croydon#;Connection Timeout=60";
-        //private const string CONNECTION_STRING = "Data Source=HIT-DEV-02\\SQL14;Initial Catalog=COLHUBCOPY;Persist Security Info=True;User ID=sa;Password=bakeryCakes1;Connection Timeout=30";
-
-        
-
+        private string GetConnectionString()
+        {
+            return ConfigurationManager.ConnectionStrings["CONNECTION_STRING_CONFIG"].ToString() ;
+        }
         public bool RemoveMatch(int matchId)
         {
             var returnvalue = false;
-            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            using (var sqlDataConnection = new SqlConnection(GetConnectionString()))
             {
                 sqlDataConnection.Open();
                 using (var sqlCommand = new SqlCommand("[CH_NAMES_UNLINK]", sqlDataConnection))
@@ -34,7 +34,7 @@ namespace CollectionHubData
         public bool CreateMatch(int matchId, string pin, string userId)
         {
             var returnvalue = false;
-            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            using (var sqlDataConnection = new SqlConnection(GetConnectionString()))
             {
                 sqlDataConnection.Open();
                 using (var sqlCommand = new SqlCommand("[CH_NAMES_LINK]", sqlDataConnection))
@@ -55,7 +55,7 @@ namespace CollectionHubData
         public bool SetRecoveryCycle(int debtId, int recoveryCycleId, int userId, DateTime recoveryDateTime)
         {
             var returnvalue = false;
-            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            using (var sqlDataConnection = new SqlConnection(GetConnectionString()))
             {
                 sqlDataConnection.Open();
                 using (var sqlCommand = new SqlCommand("CHP_RECOVERY_HISTORY_CREATE", sqlDataConnection))
@@ -78,7 +78,7 @@ namespace CollectionHubData
         public bool CreateDebtGroup(string debtIdString, int userId, int partyPin)
         {
             var returnvalue = false;
-            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            using (var sqlDataConnection = new SqlConnection(GetConnectionString()))
             {
                 sqlDataConnection.Open();
                 using (var sqlCommand = new SqlCommand("[CHP_DEBTGROUP_CREATE]", sqlDataConnection))
@@ -98,7 +98,7 @@ namespace CollectionHubData
         public bool RemoveDebtGroup(int debtId)
         {
             var returnvalue = false;
-            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            using (var sqlDataConnection = new SqlConnection(GetConnectionString()))
             {
                 sqlDataConnection.Open();
                 using (var sqlCommand = new SqlCommand("[CHP_DEBTGROUP_DELETE]", sqlDataConnection))
@@ -121,7 +121,7 @@ namespace CollectionHubData
         public bool CreateNote(int debtId, int userId, string noteText)
         {
             var returnvalue = false;
-            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            using (var sqlDataConnection = new SqlConnection(GetConnectionString()))
             {
                 sqlDataConnection.Open();
                 using (var sqlCommand = new SqlCommand("CH_DEBT_NOTE_CREATE", sqlDataConnection))
@@ -143,7 +143,7 @@ namespace CollectionHubData
         public bool CreateDebtAttribute(int debtId, int userId, int attributeId, bool isCurrent, string attributeValue)
         {
             var returnvalue = false;
-            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            using (var sqlDataConnection = new SqlConnection(GetConnectionString()))
             {
                 sqlDataConnection.Open();
                 using (var sqlCommand = new SqlCommand("CH_DEBT_ATTRIBUTE_CREATE", sqlDataConnection))
@@ -166,7 +166,7 @@ namespace CollectionHubData
         public bool CreatePersonAttribute(int sourceRef, int userId, int attributeId, bool isCurrent, string attributeValue)
         {
             var returnvalue = false;
-            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            using (var sqlDataConnection = new SqlConnection(GetConnectionString()))
             {
                 sqlDataConnection.Open();
                 using (var sqlCommand = new SqlCommand("CH_PERSON_ATTRIBUTE_CREATE", sqlDataConnection))
@@ -189,7 +189,7 @@ namespace CollectionHubData
         public bool SetPersonAttributeCurrent(int personAttributeId)
         {
             var returnvalue = false;
-            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            using (var sqlDataConnection = new SqlConnection(GetConnectionString()))
             {
                 sqlDataConnection.Open();
                 using (var sqlCommand = new SqlCommand("CH_SET_PERSON_ATTRIBUTE_CURRENT", sqlDataConnection))
@@ -216,7 +216,7 @@ namespace CollectionHubData
                                       int agm_Created_By, DateTime? agm_agreement_date, DateTime? agm_payment_date, DateTime? agm_starting_from_date)
         {
 
-            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            using (var sqlDataConnection = new SqlConnection(GetConnectionString()))
             {
                 sqlDataConnection.Open();
                 using (var sqlCommand = new SqlCommand("[CHP_Arrangement_INSERT]", sqlDataConnection))
@@ -273,7 +273,7 @@ namespace CollectionHubData
         public string GetDashboardDataPercentByYear(int sourceId, int historic)
         {
             var returnValue = "";
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("CH_DASHBOARD_PERCENT_BY_FYEAR", sqlDataConnection))
@@ -309,7 +309,7 @@ namespace CollectionHubData
         public string GetDashboardDataAmountByYear(int sourceId, int historic)
         {
             var returnValue = "";
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("CH_DASHBOARD_AMOUNT_BY_FYEAR", sqlDataConnection))
@@ -350,7 +350,7 @@ namespace CollectionHubData
         public string GetDashboardDataBalanceByYear(int sourceId, int historic)
         {
             var returnValue = "";
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("CH_DASHBOARD_BALANCE_BY_FYEAR", sqlDataConnection))
@@ -396,7 +396,7 @@ namespace CollectionHubData
         public List<ArrangementFrequencyItem> GetFrequencyList()
         {
             var returnValue = new List<ArrangementFrequencyItem>();
-            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            using (var sqlDataConnection = new SqlConnection(GetConnectionString()))
             {
                 sqlDataConnection.Open();
                 using (var sqlCommand = new SqlCommand("CHP_PAYMENT_FREQ_LIST", sqlDataConnection))
@@ -420,7 +420,7 @@ namespace CollectionHubData
         public List<DebtItem>           GetDebts(int pin)
         {
             var returnValue = new List<DebtItem>();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("CHP_GETPERSONDEBTS_byPIN", sqlDataConnection))
@@ -447,7 +447,7 @@ namespace CollectionHubData
         public List<DebtNote>           GetDebtNotes(int debtId)
         {
             var returnValue = new List<DebtNote>();
-            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            using (var sqlDataConnection = new SqlConnection(GetConnectionString()))
             {
                 sqlDataConnection.Open();
                 using (var sqlCommand = new SqlCommand("CH_DEBT_NOTES_LIST", sqlDataConnection))
@@ -473,7 +473,7 @@ namespace CollectionHubData
         public List<ArrangementPaymentMethods>          GetPaymenyMethodList()
         {
             var returnValue = new List<ArrangementPaymentMethods>();
-            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            using (var sqlDataConnection = new SqlConnection(GetConnectionString()))
             {
                 sqlDataConnection.Open();
                 using (var sqlCommand = new SqlCommand("CHP_PAYMENT_METHODS_LIST", sqlDataConnection))
@@ -497,7 +497,7 @@ namespace CollectionHubData
         public List<FullNameFullAddressSearchResults>   SearchAddress(string firstName, string lastName, string nino, string dob, string address, string street, string postcode)
         {
             var returnValue = new List<FullNameFullAddressSearchResults>();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("FULLNAME_FULLADDRESS_SEARCH", sqlDataConnection))
@@ -534,7 +534,7 @@ namespace CollectionHubData
         public List<RecoveryCycleItem>  GetRecoveryCycleHistory(int debtId)
         {
             var returnValue = new List<RecoveryCycleItem>();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("CHP_RECOVERY_HISTORY_SELECT", sqlDataConnection))
@@ -558,7 +558,7 @@ namespace CollectionHubData
         public List<RecoveryCycle>      GetRecoveryCycles()
         {
             var returnValue = new List<RecoveryCycle>();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("CHP_RECOVERY_CYCLE_LIST", sqlDataConnection))
@@ -583,7 +583,7 @@ namespace CollectionHubData
         public List<DebtItem>           GetFrequencyListGetDebts(int pin)
         {
             var returnValue = new List<DebtItem>();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("CHP_GETPERSONDEBTS_byPIN", sqlDataConnection))
@@ -614,7 +614,7 @@ namespace CollectionHubData
         public List<DebtAttribute>      GetDebtAttribute(int debtId)
         {
             var returnValue = new List<DebtAttribute>();
-            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            using (var sqlDataConnection = new SqlConnection(GetConnectionString()))
             {
                 sqlDataConnection.Open();
                 using (var sqlCommand = new SqlCommand("CH_DEBT_ATTRIBUTES_LIST", sqlDataConnection))
@@ -639,7 +639,7 @@ namespace CollectionHubData
         public List<PersonAttribute>    GetPersonAttribute(int partyPin)
         {
             var returnValue = new List<PersonAttribute>();
-            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            using (var sqlDataConnection = new SqlConnection(GetConnectionString()))
             {
                 sqlDataConnection.Open();
                 using (var sqlCommand = new SqlCommand("CH_PERSON_ATTRIBUTES_LIST", sqlDataConnection))
@@ -664,7 +664,7 @@ namespace CollectionHubData
         public List<PersonAttribute>    GetCurrentAttribute(int partyPin)
         {
             var returnValue = new List<PersonAttribute>();
-            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            using (var sqlDataConnection = new SqlConnection(GetConnectionString()))
             {
                 sqlDataConnection.Open();
                 using (var sqlCommand = new SqlCommand("CH_CURRENT_ATTRIBUTES_LIST", sqlDataConnection))
@@ -689,7 +689,7 @@ namespace CollectionHubData
         public List<AttributeItem>      GetAttributeList(bool listDebtAttributes, bool listPersonAttributes)
         {
             var returnValue = new List<AttributeItem>();
-            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            using (var sqlDataConnection = new SqlConnection(GetConnectionString()))
             {
                 sqlDataConnection.Open();
                 using (var sqlCommand = new SqlCommand("CH_GET_ATTRIBUTES", sqlDataConnection))
@@ -718,7 +718,7 @@ namespace CollectionHubData
         public List<Payment>            GetPaymentsByDebtId(int debtId)
         {
             var returnValue = new List<Payment>();
-            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            using (var sqlDataConnection = new SqlConnection(GetConnectionString()))
             {
                 sqlDataConnection.Open();
                 using (var sqlCommand = new SqlCommand("CHP_PAYMENTS_byDebtId", sqlDataConnection))
@@ -743,7 +743,7 @@ namespace CollectionHubData
         public List<DebtParties>        GetPartiesByDebtId(int debtId)
         {
             var returnValue = new List<DebtParties>();
-            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            using (var sqlDataConnection = new SqlConnection(GetConnectionString()))
             {
                 sqlDataConnection.Open();
                 using (var sqlCommand = new SqlCommand("CHP_PARTIES_ByDebt", sqlDataConnection))
@@ -768,7 +768,7 @@ namespace CollectionHubData
         public List<LinkedAddress>      GetLinkedAddresses(int partyPin)
         {
             var returnValue = new List<LinkedAddress>();
-            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            using (var sqlDataConnection = new SqlConnection(GetConnectionString()))
             {
                 sqlDataConnection.Open();
                 using (var sqlCommand = new SqlCommand("[CH_ADDRESS_LIST]", sqlDataConnection))
@@ -793,7 +793,7 @@ namespace CollectionHubData
         public List<Arrangement>        GetArrangements(int debtId)
         {
             var returnValue = new List<Arrangement>();
-            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            using (var sqlDataConnection = new SqlConnection(GetConnectionString()))
             {
                 sqlDataConnection.Open();
                 using (var sqlCommand = new SqlCommand("CHP_ARRANGEMENTS_BY_DEBTID", sqlDataConnection))
@@ -818,7 +818,7 @@ namespace CollectionHubData
         public List<MatchList>          GetMatchListByPin(int pin)
         {
             var returnValue = new List<MatchList>();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("CHP_MatchList_byPIN", sqlDataConnection))
@@ -842,7 +842,7 @@ namespace CollectionHubData
         public List<MisMatchList>       GetMisMatchListByPin(int pin)
         {
             var returnValue = new List<MisMatchList>();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("CHP_MisMatchList_byPIN", sqlDataConnection))
@@ -869,7 +869,7 @@ namespace CollectionHubData
         public List<PersonDetails>      GetPersonDetails(int pin, string uprn)
         {
             var returnValue = new List<PersonDetails>();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open(); // CHP_GetNameAddress_byPIN // CHP_PersonDetails_byPIN
             using (var sqlCommand = new SqlCommand("CHP_GetNameAddress_byPIN", sqlDataConnection))
@@ -894,7 +894,7 @@ namespace CollectionHubData
         public DebtSearchResult         DebtSearch(decimal amountFrom, decimal amountTo, int debtStreamCount, int includesStreamCode, int lastPaymentCode, int debtAgeCode)
         {
             var returnValue = new DebtSearchResult();
-            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            using (var sqlDataConnection = new SqlConnection(GetConnectionString()))
             {
                 sqlDataConnection.Open();
                 using (var sqlCommand = new SqlCommand("CH_TOTALS_COUNT", sqlDataConnection))
@@ -952,7 +952,7 @@ namespace CollectionHubData
         public DebtAddress              GetAddressForDebt(string pin, string uprn)
         {
             var returnValue = new DebtAddress();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("CHP_GetNameAddress_byPIN", sqlDataConnection))
@@ -986,7 +986,7 @@ namespace CollectionHubData
         public UserData AuthenticateUser(string loginName, string passwordHash)
         {
             UserData returnValue = null;
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("CH_AUTHENTICATE_USER", sqlDataConnection))
@@ -1103,7 +1103,7 @@ namespace CollectionHubData
         public bool SaveBatchIncludeStatus(int recordIdentifier, bool includeInBatch)
         {
             var returnvalue = false;
-            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            using (var sqlDataConnection = new SqlConnection(GetConnectionString()))
             {
                 sqlDataConnection.Open();
                 using (var sqlCommand = new SqlCommand("[CH_SET_BATCH_INCLUDE_STATUS]", sqlDataConnection))
@@ -1123,7 +1123,7 @@ namespace CollectionHubData
         public List<BatchProcessHistory> GetBatchProcessHistory()
         {
             var returnValue = new List<BatchProcessHistory>();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("CHP_BATCH_PROCESS_HISTORY", sqlDataConnection))
@@ -1146,7 +1146,7 @@ namespace CollectionHubData
         public List<BatchProcess> GetBatchProcess(int bp_id)
         {
             var returnValue = new List<BatchProcess>();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("CHP_BATCH_PROCESS_byId", sqlDataConnection))
@@ -1170,7 +1170,7 @@ namespace CollectionHubData
         public List<BatchProcessJobs> GetBatchProcessJobs()
         {
             var returnValue = new List<BatchProcessJobs>();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("CHP_BATCH_PROCESS_LIST", sqlDataConnection))
@@ -1193,7 +1193,7 @@ namespace CollectionHubData
         public List<BatchProcessFields> GetBatchProcessFields(int bp_id)
         {
             var returnValue = new List<BatchProcessFields>();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("CHP_BATCH_PROCESS_Fields", sqlDataConnection))
@@ -1217,7 +1217,7 @@ namespace CollectionHubData
         public List<BatchRunHistory> GetBatchRunHistory()
         {
             var returnValue = new List<BatchRunHistory>();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("CH_BATCH_RUNS_LIST", sqlDataConnection))
@@ -1240,7 +1240,7 @@ namespace CollectionHubData
         public List<BatchProcessResult> GetBatchProcessResults(int batchProcessId)
         {
             var returnValue = new List<BatchProcessResult>();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("CH_BATCH_RESULTS_LIST", sqlDataConnection))
@@ -1264,7 +1264,7 @@ namespace CollectionHubData
         public BatchProcessParentHeader GetBatchProcessParentHeader(int batchRunId)
         {
             var returnValue = new BatchProcessParentHeader();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("CH_BATCH_GET_PARENT_HEADER", sqlDataConnection))
@@ -1288,7 +1288,7 @@ namespace CollectionHubData
         public BatchProcessParentFields GetBatchProcessParentFields(int batchRunId)
         {
             var returnValue = new BatchProcessParentFields();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("CH_BATCH_GET_PARENT_FIELDS", sqlDataConnection))
@@ -1312,7 +1312,7 @@ namespace CollectionHubData
         public List<BatchProcessFieldsFromRun> GetBatchProcessFieldsFromRun(int batchid)
         {
             var returnValue = new List<BatchProcessFieldsFromRun>();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("CHP_BATCH_PROCESS_Fields_FromRun", sqlDataConnection))
@@ -1346,7 +1346,7 @@ namespace CollectionHubData
             BatchProcess batchProcess = GetBatchProcess(batchId)[0];
             List<BatchProcessFields> processFields = GetBatchProcessFields(batchId);
 
-            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            using (var sqlDataConnection = new SqlConnection(GetConnectionString()))
             {
                 sqlDataConnection.Open();
                 using (var sqlCommand = new SqlCommand(batchProcess.Procedure, sqlDataConnection))
@@ -1437,7 +1437,7 @@ namespace CollectionHubData
         public List<BatchRecords> GetBatchRunRecords(int batchRunId)
         {
             List<BatchRecords> returnValue = new List<BatchRecords>();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("CH_BATCH_LIST", sqlDataConnection))
@@ -1463,7 +1463,7 @@ namespace CollectionHubData
         public bool DeactivateBatch(int batchRunId)
         {
             bool returnValue = false;
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("CH_BATCH_RUNS_DEACTIVATE", sqlDataConnection))
@@ -1482,7 +1482,7 @@ namespace CollectionHubData
         public bool ActivateBatch(int batchRunId, string batchName)
         {
             bool returnValue = false;
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("[CH_BATCH_RUNS_ACTIVATE]", sqlDataConnection))
@@ -1502,7 +1502,7 @@ namespace CollectionHubData
         public string GetBatchName(int batchId)
         {
             string returnValue = String.Empty;
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("[CH_BATCH_RUNS_GETNAME]", sqlDataConnection))
@@ -1528,7 +1528,7 @@ namespace CollectionHubData
         public List<DocumentTemplates> GetDocumentTemplates(int userId)
         {
             var returnValue = new List<DocumentTemplates>();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("CH_TEMPLATES_LIST", sqlDataConnection))
@@ -1552,7 +1552,7 @@ namespace CollectionHubData
         public int CreateNewDocumentTemplate(int userId, string documentName, string viewName)
         {
             var returnValue = -1;
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("CH_TEMPLATES_ADD", sqlDataConnection))
@@ -1577,7 +1577,7 @@ namespace CollectionHubData
         public DocumentTemplate GetDocumentTemplate(int templateId)
         {
             var returnValue = new DocumentTemplate();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("CH_TEMPLATES_SELECT", sqlDataConnection))
@@ -1601,7 +1601,7 @@ namespace CollectionHubData
         public bool SaveTemplateContent(int chtId, int userId, string content, string notes)
         {
             var returnvalue = false;
-            using (var sqlDataConnection = new SqlConnection(CONNECTION_STRING))
+            using (var sqlDataConnection = new SqlConnection(GetConnectionString()))
             {
                 sqlDataConnection.Open();
                 using (var sqlCommand = new SqlCommand("CH_TEMPLATES_UPDATE", sqlDataConnection))
@@ -1629,7 +1629,7 @@ namespace CollectionHubData
         public List<MergeFieldItem> GetMergeFieldItems(string tableName)
         {
             var returnValue = new List<MergeFieldItem>();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("SYS_FIELD_LIST", sqlDataConnection))
@@ -1654,7 +1654,7 @@ namespace CollectionHubData
         public List<DataMergeSource> GetDataMergeOptions()
         {
             var returnValue = new List<DataMergeSource>();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("CH_CORRES_VIEWS_LIST", sqlDataConnection))
@@ -1677,7 +1677,7 @@ namespace CollectionHubData
         public List<DataMergeFields> GetDataMergeFields(string viewName)
         {
             var returnValue = new List<DataMergeFields>();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("SYS_FIELD_LIST", sqlDataConnection))
@@ -1702,7 +1702,7 @@ namespace CollectionHubData
         public List<string> GetTreatmentGroups()
         {
             var returnValue = new List<string>();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("CH_TREATMENT_GROUP_LIST", sqlDataConnection))
@@ -1725,7 +1725,7 @@ namespace CollectionHubData
         public List<TreatmentItems> GetTreatmentsForGroup(string groupName)
         {
             var returnValue = new List<TreatmentItems>();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("CH_Treatment_List", sqlDataConnection))
@@ -1749,7 +1749,7 @@ namespace CollectionHubData
         public List<MergeValue> GetMergeValues(int userId, string viewName, string pin, string uprn)
         {
             var returnValue = new List<MergeValue>();
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("CH_TEMPLATES_MERGE_LIST", sqlDataConnection))
@@ -1776,7 +1776,7 @@ namespace CollectionHubData
         public bool SaveDocument(int userId, int templateId, string documentName, string documentContent, byte[] documentBody, int actionId, string pin, string uprn, int debtId)
         {
             var returnValue = false;
-            var sqlDataConnection = new SqlConnection(CONNECTION_STRING);
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("CH_TEMPLATES_ACTION_SAVE", sqlDataConnection))

@@ -367,7 +367,6 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-
     [WebMethod]
     public static bool SaveTemplateContent(int chtId, int userId, string content, string notes)
     {
@@ -378,7 +377,6 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-
     [WebMethod]
     public static int SaveBatchParameters(int batchId, int userId, string base64String)
     {
