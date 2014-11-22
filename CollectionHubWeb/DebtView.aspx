@@ -87,7 +87,6 @@
                 <li><a href="#person"       data-toggle="tab"  id="arefPersonAttributes">Person Attributes</a></li>
                 <li><a href="#notes"        data-toggle="tab"  id="arefNotes">Notes</a></li>
                 <li><a href="#current"      data-toggle="tab"  id="arefCurrentAttributes">Current Attributes</a>
-                <li><a href="#addresses"    data-toggle="tab"  id="arefRelatedAddresses">Related Addresses</a>
                 <li><a href="#matchTab1"    data-toggle="tab"  id="arefMatches">Matches</a>
                 </li>
             </ul>
@@ -225,20 +224,6 @@
                         </table>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="addresses">
-                    <br />
-                    <div class="table-responsive">
-                        <table class="table table-striped table-bordered table-hover" id="tableAddress">
-                            <thead>
-                                <tr>
-                                    <th class="address">Full Address</th>
-                                    <th class="from_date">From Date</th>
-                                    <th class="until_date">Until Date</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                </div> 
                 <div class="tab-pane fade" id="matchTab1">
                     <table class="table compact table-striped table-bordered table-hover" id="dataTablePersonDetails">
                         <thead>

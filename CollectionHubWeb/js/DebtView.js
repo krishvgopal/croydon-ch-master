@@ -239,7 +239,7 @@ function refreshSingleDebtView() {
 
             refreshPersonAttributes(sourcePin);
             refreshCurrentAttributes(sourcePin);
-            refreshAddresses(sourcePin);
+            //refreshAddresses(sourcePin);
             refresMatchList(sourcePin);
             refresMisMisMatchList(sourcePin);
             refreshPersonDetails(sourcePin, uprn);
@@ -525,58 +525,58 @@ function refreshCurrentAttributes(partyPin) {
         }
     });
 }
-function refreshAddresses(partyPin) {
-    $.ajax({
-        type: "POST",
-        url: "DataService.aspx/GetLinkedAddress",
-        data: "{'sourcePin':'" + partyPin + "'}",
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (result) {
-            doProgress(result.d.length, 'arefRelatedAddresses');
-            if (result.hasOwnProperty("d")) { result = result.d; }
-            $("#tableAddress").dataTable({
-                "destroy": true,
-                "aaData": result,
-                aoColumns: [
-                    { mData: 'Address' },
-                    { mData: 'FromDate' },
-                    { mData: 'UntilDate' }],
-                "aoColumnDefs": [
-                     {
-                         "sTitle": "Address"
-                        , "aTargets": ["address"]
-                        , "mRender": function (value, type, full) {
-                             return value;
-                         }
-                     },{
-                         "sTitle": "From Date"
-                        , "aTargets": ["from_date"]
-                        , "mRender": function (value, type, full) {
-                             if (value != null) {
-                                 var dtStart = new Date(parseInt(value.substr(6)));
-                                 var dtStartWrapper = moment(dtStart);
-                                 return dtStartWrapper.format('DD/MM/YYYY');
-                             } else {return '';}
-                         }
-                     },{
-                         "sTitle": "Until Date"
-                        , "aTargets": ["until_date"]
-                        , "mRender": function (value, type, full) {
-                             if (value != null) {
-                                 var dtStart = new Date(parseInt(value.substr(6)));
-                                 var dtStartWrapper = moment(dtStart);
-                                 return dtStartWrapper.format('DD/MM/YYYY');
-                             } else {return '';}
-                         }
-                     },
-                    { "width": "*%",    "targets": 0 },
-                    { "width": "150px", "targets": 1 },
-                    { "width": "150px", "targets": 2 }]
-            });
-        }
-    });
-}
+//function refreshAddresses(partyPin) {
+//    $.ajax({
+//        type: "POST",
+//        url: "DataService.aspx/GetLinkedAddress",
+//        data: "{'sourcePin':'" + partyPin + "'}",
+//        contentType: "application/json; charset=utf-8",
+//        dataType: "json",
+//        success: function (result) {
+//            doProgress(result.d.length, 'arefRelatedAddresses');
+//            if (result.hasOwnProperty("d")) { result = result.d; }
+//            $("#tableAddress").dataTable({
+//                "destroy": true,
+//                "aaData": result,
+//                aoColumns: [
+//                    { mData: 'Address' },
+//                    { mData: 'FromDate' },
+//                    { mData: 'UntilDate' }],
+//                "aoColumnDefs": [
+//                     {
+//                         "sTitle": "Address"
+//                        , "aTargets": ["address"]
+//                        , "mRender": function (value, type, full) {
+//                             return value;
+//                         }
+//                     },{
+//                         "sTitle": "From Date"
+//                        , "aTargets": ["from_date"]
+//                        , "mRender": function (value, type, full) {
+//                             if (value != null) {
+//                                 var dtStart = new Date(parseInt(value.substr(6)));
+//                                 var dtStartWrapper = moment(dtStart);
+//                                 return dtStartWrapper.format('DD/MM/YYYY');
+//                             } else {return '';}
+//                         }
+//                     },{
+//                         "sTitle": "Until Date"
+//                        , "aTargets": ["until_date"]
+//                        , "mRender": function (value, type, full) {
+//                             if (value != null) {
+//                                 var dtStart = new Date(parseInt(value.substr(6)));
+//                                 var dtStartWrapper = moment(dtStart);
+//                                 return dtStartWrapper.format('DD/MM/YYYY');
+//                             } else {return '';}
+//                         }
+//                     },
+//                    { "width": "*%",    "targets": 0 },
+//                    { "width": "150px", "targets": 1 },
+//                    { "width": "150px", "targets": 2 }]
+//            });
+//        }
+//    });
+//}
 function refreshPersonDetails(partyPin, uprn) {
     $.ajax({
         type: "POST",
