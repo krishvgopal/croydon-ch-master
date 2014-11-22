@@ -1,4 +1,11 @@
-$(function() {
+
+var navFat = '225px';
+var navThin = '45px';
+
+//var navFat = '225px';
+//var navThin = '175px';
+
+$(function () {
     $('#side-menu').metisMenu();
     // GLOBAL ERROR HANDLING
     $("#alertBox").hide();
@@ -92,3 +99,30 @@ window.displayError = function (message) {
         $("#" + newId).hide("slow");
     }, 5000);
 }
+window.toggleNavigation = function () {
+
+    var currentValue = $("#resizeContainer").attr("class");
+
+    if (currentValue == 'fa fa-expand') {
+        $("#page-wrapper").css({ 'margin': '0px 0px 0px ' + navFat });
+        $("#side-nav-master").css({ 'width': navFat });
+        $("#resizeContainer").attr('class', 'fa fa-compress');
+
+        $("a[name='menuList']").each(function (index) {
+            var newTextImage = '<i class="fa ' + $(this).attr('thisFA') + ' fa-fw"></i>';
+            var newTextTitle = $(this).attr('thisLabel');
+            $(this).html(newTextImage + newTextTitle);
+        });
+
+    } else {
+        $("#page-wrapper").css({ 'margin': '0px 0px 0px ' + navThin });
+        $("#side-nav-master").css({ 'width': navThin });
+        $("#resizeContainer").attr('class', 'fa fa-expand');
+
+        $("a[name='menuList']").each(function (index) {
+            var newTextImage = '<i class="fa ' + $(this).attr('thisFA') + ' fa-fw"></i>';
+            //fsvar newTextTitle = $(this).attr('thisLabel');
+            $(this).html(newTextImage);
+        });
+    }
+};

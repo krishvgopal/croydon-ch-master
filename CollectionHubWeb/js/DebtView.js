@@ -1,5 +1,5 @@
 ﻿$("#showClearedLoadingImage").hide();
-var progressInterval    = 20;
+var progressInterval    = 25;
 var progressValue       = 0;
 
 $(function () {
@@ -239,7 +239,6 @@ function refreshSingleDebtView() {
 
             refreshPersonAttributes(sourcePin);
             refreshCurrentAttributes(sourcePin);
-            //refreshAddresses(sourcePin);
             refresMatchList(sourcePin);
             refresMisMisMatchList(sourcePin);
             refreshPersonDetails(sourcePin, uprn);
@@ -525,58 +524,7 @@ function refreshCurrentAttributes(partyPin) {
         }
     });
 }
-//function refreshAddresses(partyPin) {
-//    $.ajax({
-//        type: "POST",
-//        url: "DataService.aspx/GetLinkedAddress",
-//        data: "{'sourcePin':'" + partyPin + "'}",
-//        contentType: "application/json; charset=utf-8",
-//        dataType: "json",
-//        success: function (result) {
-//            doProgress(result.d.length, 'arefRelatedAddresses');
-//            if (result.hasOwnProperty("d")) { result = result.d; }
-//            $("#tableAddress").dataTable({
-//                "destroy": true,
-//                "aaData": result,
-//                aoColumns: [
-//                    { mData: 'Address' },
-//                    { mData: 'FromDate' },
-//                    { mData: 'UntilDate' }],
-//                "aoColumnDefs": [
-//                     {
-//                         "sTitle": "Address"
-//                        , "aTargets": ["address"]
-//                        , "mRender": function (value, type, full) {
-//                             return value;
-//                         }
-//                     },{
-//                         "sTitle": "From Date"
-//                        , "aTargets": ["from_date"]
-//                        , "mRender": function (value, type, full) {
-//                             if (value != null) {
-//                                 var dtStart = new Date(parseInt(value.substr(6)));
-//                                 var dtStartWrapper = moment(dtStart);
-//                                 return dtStartWrapper.format('DD/MM/YYYY');
-//                             } else {return '';}
-//                         }
-//                     },{
-//                         "sTitle": "Until Date"
-//                        , "aTargets": ["until_date"]
-//                        , "mRender": function (value, type, full) {
-//                             if (value != null) {
-//                                 var dtStart = new Date(parseInt(value.substr(6)));
-//                                 var dtStartWrapper = moment(dtStart);
-//                                 return dtStartWrapper.format('DD/MM/YYYY');
-//                             } else {return '';}
-//                         }
-//                     },
-//                    { "width": "*%",    "targets": 0 },
-//                    { "width": "150px", "targets": 1 },
-//                    { "width": "150px", "targets": 2 }]
-//            });
-//        }
-//    });
-//}
+
 function refreshPersonDetails(partyPin, uprn) {
     $.ajax({
         type: "POST",
@@ -797,7 +745,6 @@ function refreshDebtActionItems(groupName) {
         }
     });
 }
-
 function linkMatchedResult(matchId) {
     var sourcePin = $("#cnpin").val();
     $.ajax({
@@ -832,6 +779,7 @@ function unlinkMatchedResult(matchId)
         }
     });
 }
+
 function createNote() {
     $.ajax({
         type: "POST",
@@ -924,6 +872,59 @@ function createRecoveryCycle() {
         }
     });
 }
+function createDebtAction(templateItemId, templateId) {
+    $("#documentSelection").hide();
+    $("#loading").show();
+    $.ajax({
+        type: "POST",
+        url: "DocumentService.aspx/MergeDocument",
+        data: "{'documentTemplateId':'" + templateItemId + "','templateId':'" + templateId + "','userId':'" + getUserId() + "','pin':'" + $("#cnpin").val() + "','uprn':'" + $("#uprn").val() + "'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            CKEDITOR.instances['editDocumentContent'].setData(result.d);
+            $("#editDocumentContent").attr('templateItemId', templateItemId);
+            $("#loading").hide();
+            $("#editor").show();
+        },
+        failure: function (error) {
+            alert(error);
+        }
+    });
+    $("#documentEdit").show();
+}
+
+
+
+function createAgreement(agm_start_date, agm_frequency, agm_day_of_month, agm_day_of_week, agm_start_amount, agm_installment_amount, agm_number_installment, agm_payment_method, agm_agreed_amount, agm_totaldebt_amount, agm_last_amount, agm_agreement_date, agm_payment_date, agm_starting_from_date) {
+    //$("#documentSelection").hide();
+    //$("#loading").show();
+
+    console.log("{'agm_pin':'" + $("#cnpin").val() + "', 'agm_cd_id':'" + $("#selectedDebtId").val() + "', 'agm_start_date':'" + agm_start_date + "', 'agm_frequency':'" + agm_frequency + "', 'agm_day_of_month':'" + agm_day_of_month + "', 'agm_day_of_week':'" + agm_day_of_week + "', 'agm_start_amount':'" + agm_start_amount + "', 'agm_installment_amount':'" + agm_installment_amount + "', 'agm_number_installment':'" + agm_number_installment + "', 'agm_payment_method':'" + agm_payment_method + "', 'agm_agreed_amount':'" + agm_agreed_amount + "', 'agm_totaldebt_amount':'" + agm_totaldebt_amount + "', 'agm_last_amount':'" + agm_last_amount + "', 'agm_Created_By':'" + getUserId() + "', 'agm_agreement_date':'" + agm_agreement_date + "', 'agm_payment_date':'" + agm_payment_date + "', 'agm_starting_from_date':'" + agm_starting_from_date + "'}");
+
+    return;
+
+    $.ajax({
+        type: "POST",
+        url: "DataService.aspx/CreateArrangement",
+        data: "{'agm_pin':'" + $("#cnpin").val() + "', 'agm_cd_id':'" + $("#selectedDebtId").val() + "', 'agm_start_date':'" + agm_start_date + "', 'agm_frequency':'" + agm_frequency + "', 'agm_day_of_month':'" + agm_day_of_month + "', 'agm_day_of_week':'" + agm_day_of_week + "', 'agm_start_amount':'" + agm_start_amount + "', 'agm_installment_amount':'" + agm_installment_amount + "', 'agm_number_installment':'" + agm_number_installment + "', 'agm_payment_method':'" + agm_payment_method + "', 'agm_agreed_amount':'" + agm_agreed_amount + "', 'agm_totaldebt_amount':'" + agm_totaldebt_amount + "', 'agm_last_amount':'" + agm_last_amount + "', 'agm_Created_By':'" + getUserId() + "', 'agm_agreement_date':'" + agm_agreement_date + "', 'agm_payment_date':'" + agm_payment_date + "', 'agm_starting_from_date':'" + agm_starting_from_date + "'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            //CKEDITOR.instances['editDocumentContent'].setData(result.d);  cnpin
+            //$("#editDocumentContent").attr('templateItemId', templateItemId);
+            //$("#loading").hide();
+            //$("#editor").show();
+        },
+        failure: function (error) {
+            alert(error);
+        }
+    });
+    //$("#documentEdit").show();
+}
+
+// {'agm_pin':'', 'agm_cd_id':'', 'agm_start_date':'', 'agm_frequency':'', 'agm_day_of_month':'', 'agm_day_of_week':'', 'agm_start_amount':'', 'agm_installment_amount':'', 'agm_number_installment':'', 'agm_payment_method':'', 'agm_agreed_amount':'', 'agm_totaldebt_amount':'', 'agm_last_amount':'', 'agm_Created_By':'', 'agm_agreement_date':'', 'agm_payment_date':'', 'agm_starting_from_date':''}
+
 function setCurrent(id) {
     $.ajax({
         type: "POST",
@@ -953,6 +954,7 @@ function setTagIndicator(resultLength, controlName) {
     }
 
 }
+
 function updateProgressBar(percentage) {
     if (percentage == 0) {
         $("#loadProgress").hide();
@@ -985,6 +987,7 @@ function doProgress(resultLength, controlName) {
         $("#loadProgress").show("slow");
     }
 }
+
 function groupDebts() {
     var debtIdString = '';
     $(".debtGroupItems:checked").each(function () { debtIdString = debtIdString + $(this).attr("debtGroupDebtId") + ','; });
@@ -1031,27 +1034,7 @@ function ungroupDebts() {
     });
     $('#ungroupDebtModal').modal('hide');
 }
-function createDebtAction(templateItemId, templateId) {
-    $("#documentSelection").hide();
-    $("#loading").show();
-    $.ajax({
-        type: "POST",
-        url: "DocumentService.aspx/MergeDocument",
-        data: "{'documentTemplateId':'" + templateItemId + "','templateId':'" + templateId + "','userId':'" + getUserId() + "','pin':'" + $("#cnpin").val() + "','uprn':'" + $("#uprn").val() + "'}",
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (result) {
-            CKEDITOR.instances['editDocumentContent'].setData(result.d);
-            $("#editDocumentContent").attr('templateItemId', templateItemId);
-            $("#loading").hide();
-            $("#editor").show();
-        },
-        failure: function (error) {
-            alert(error);
-        }
-    });
-    $("#documentEdit").show();
-}
+
 function saveDocument(actionId) {
 
     var documentName = "test document name";

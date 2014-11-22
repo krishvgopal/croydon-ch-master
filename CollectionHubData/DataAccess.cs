@@ -219,7 +219,7 @@ namespace CollectionHubData
             using (var sqlDataConnection = new SqlConnection(GetConnectionString()))
             {
                 sqlDataConnection.Open();
-                using (var sqlCommand = new SqlCommand("[CHP_Arrangement_INSERT]", sqlDataConnection))
+                using (var sqlCommand = new SqlCommand("CHP_Arrangement_INSERT", sqlDataConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add(new SqlParameter("agm_pin",                   agm_pin));

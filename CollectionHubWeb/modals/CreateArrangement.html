@@ -149,7 +149,7 @@
             <div class="modal-footer" style="width:100%;clear:both;margin-top:440px">
                 <button type="button" class="btn btn-default" onclick="showSchedule();">Test</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" onclick="createDebtAttribute();" id="formCreate">Create Arrangement</button>
+                <button type="button" class="btn btn-primary" onclick="createArrangementWrapper();" id="formCreate">Create Arrangement</button>
             </div>
         </div>
 
@@ -169,94 +169,23 @@
                 <tbody></tbody>
             </table>
 
-
             <div class="modal-footer" style="width:100%;clear:both;margin-top:440px">
                 <button type="button" class="btn btn-default" onclick="showArrangement();">Back</button>
-                <button type="button" class="btn btn-primary" onclick="createDebtAttribute();" id="formCreate">Create Arrangement</button>
+                <button type="button" class="btn btn-primary" onclick="createArrangementWrapper();" id="formCreate">Create Arrangement</button>
             </div>
+
         </div>
 
     </div>
 
     <script>
 
-            function insertRow(columnA, columnB, style) {
-
-                //console.log( columnA + ' ' + columnB + ' ' + style );
-
-                var table = document.getElementById("paymentSchedule");
-                var row = table.insertRow(1);
-                var cell1 = row.insertCell(0);
-                var cell2 = row.insertCell(1);
-
-                if (style != '') {
-                    cell1.innerHTML = '<i>' + columnA + '</i>';
-                    cell2.innerHTML = columnB;
-                } else {
-                    cell1.innerHTML = columnA;
-                    cell2.innerHTML = columnB;
-                }
-            }
-            function showSchedule() {
-
-                $("#paymentSchedule:not(:first)").remove();
-
-                var instalmentFrequency = $("#agmNumberOfInstallments").val();
-                var instalmentAmount = $("#agmInstallmentAmount").val();
-
-                var paymentStartDate = $("#agmPaymentDate").val();
-
-                var firstPaymentDate = $("#agmStartDate").val();
-                var initialAmount = $("#agmStartAmount").val();
-                var lastAmount = $("#agmLastAmount").val();
-                var monthDay = $("#agmDayOfMonth").val();
-                var weekDay = $("#agmDayOfWeek").val();
-                var today = formatDate();
-                // HANDLE INITIAL PAYMENTS - SHOW IN BOLD OUTSIDE OF TABLE?
-
-                // HANDLE MONTHLIES HERE
-                for (var i = 0; i < instalmentFrequency; i++) {
-
-                    console.log('___1 ' + firstPaymentDate);
-
-                    var newScheduleDate = moment(paymentStartDate).add(i, 'months').format('DD/MM/YYYY');
-
-                    if (i == (instalmentFrequency - 1)) {
-                        
-                        console.log('___A ' + i + ' - ' + newScheduleDate);
-                        insertRow(newScheduleDate, lastAmount, '');
-                    } else {
-
-                        console.log('___B ' + i + ' - ' + newScheduleDate);
-                        insertRow(newScheduleDate, instalmentAmount, 'i');
-                    }
-                }
-
-                //// WEEKLY
-                //if (selectedIndex == 1) {
-                //}
-
-                //// MONTHLY
-                //if (selectedIndex == 2) {
-                //}
-
-                //if (selectedIndex == 3) {
-                //    // ONE OFF PAYMENT
-                //}
-
-                $('#arrangementScreen').hide();
-                $('#scheduleScreen').show();
-            }
-            function showArrangement() {
-                $('#scheduleScreen').hide();
-                $('#arrangementScreen').show();
-            }
-
             var currentDate = formatDate();
-            console.log('SELECTED_DEBT_VALUE: ' + $('#debtRowTotalValue').val() + ', CURRENT_DATE: ' + currentDate);
+
+            //  agm_pin, agm_cd_id, agm_start_date, agm_frequency, agm_day_of_month, agm_day_of_week, agm_start_amount, agm_installment_amount, agm_number_installment, agm_payment_method, agm_agreed_amount, agm_totaldebt_amount, agm_last_amount, agm_Created_By, agm_agreement_date, agm_payment_date, agm_starting_from_date
+
             refreshForm();
 
-            //$('#agmTotalDebtAmount').val(1111);
             $('#agmTotalDebtAmount').val($('#debtRowTotalValue').val());
             $('#agmAgreedAmount').val($('#debtRowTotalValue').val());
             $("#agmNumberOfInstallments").val('1');
@@ -291,23 +220,19 @@
                 if (installmentAmount == 'undefined') { $("#agmInstallmentAmount").val('0'); }
                 if (agreedAmount == 'undefined') { $("#agmAgreedAmountagmLastAmount").val('0'); }
 
-                console.log("[AGREED_AMOUNT:" + agreedAmount + ", INSTALLMENT_AMOUNT:" + installmentAmount + ", INSTALLMENT_COUNT:" + installmentCount + ", PAID_UPFRONT:" + deposit + ", LAST_AMOUNT:" + lastAmount + "]");
+                //console.log("[AGREED_AMOUNT:" + agreedAmount + ", INSTALLMENT_AMOUNT:" + installmentAmount + ", INSTALLMENT_COUNT:" + installmentCount + ", PAID_UPFRONT:" + deposit + ", LAST_AMOUNT:" + lastAmount + "]");
 
                 // INSTALLMENT AMOUNT
                 if (callingId == 2) {
-
                     var toClear = (agreedAmount - deposit);
                     var rawInstall = toClear / installmentAmount;
                     var cleanInstall = rawInstall.toFixed(0);
                     var cleanAllItem = cleanInstall * installmentAmount;
                     var leftOver = agreedAmount - cleanAllItem;
-
-                    console.log("[TO_CLEAR:" + toClear + ", RAW_INSTALLMENT_AMOUNT:" + rawInstall + ", CLEAN_INSTALLMENT_COUNT:" + cleanInstall + ", CLEAN_INSTALLMENT_AMOUNT:" + cleanAllItem + ", LAST_PAYMENT:" + leftOver + "]");
-
+                    //console.log("[TO_CLEAR:" + toClear + ", RAW_INSTALLMENT_AMOUNT:" + rawInstall + ", CLEAN_INSTALLMENT_COUNT:" + cleanInstall + ", CLEAN_INSTALLMENT_AMOUNT:" + cleanAllItem + ", LAST_PAYMENT:" + leftOver + "]");
                     $("#agmNumberOfInstallments").val(cleanInstall);
                     $("#agmLastAmount").val(leftOver);
                 }
-
                 // NUMBER OF INSTALLMENTS
                 if (callingId == 3 || callingId == 1) {
                     var rawCalculation = (agreedAmount - deposit) / installmentCount; // 176.833 = (1111 - 50) / 12
@@ -316,7 +241,7 @@
                     var rawDifference = (agreedAmount - deposit) - cleanInstallments; // 0.019999
                     var cleanDifference = +rawDifference.toFixed(2); // 0.02
                     var firstPayment = cleanDifference + cleanCalculation; // Initial  amount includes the difference
-                    console.log("[rawCalculation:" + rawCalculation + ", cleanCalculation:" + cleanCalculation + ", cleanInstallments:" + cleanInstallments + ", rawDifference:" + rawDifference + ", cleanDifference:" + cleanDifference + ", firstPayment:" + firstPayment + "]");
+                    //console.log("[rawCalculation:" + rawCalculation + ", cleanCalculation:" + cleanCalculation + ", cleanInstallments:" + cleanInstallments + ", rawDifference:" + rawDifference + ", cleanDifference:" + cleanDifference + ", firstPayment:" + firstPayment + "]");
                     $("#agmInstallmentAmount").val(cleanCalculation.toFixed(2));
                     $("#agmLastAmount").val(firstPayment.toFixed(2));
                 }
@@ -366,6 +291,117 @@
                     $(".fcyNoShow").hide();
                 }
             }
+
+            function insertRow(columnA, columnB, style) {
+
+                //console.log( columnA + ' ' + columnB + ' ' + style );
+
+                var table = document.getElementById("paymentSchedule");
+                var row = table.insertRow(1);
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+
+                if (style != '') {
+                    cell1.innerHTML = '<i>' + columnA + '</i>';
+                    cell2.innerHTML = columnB;
+                } else {
+                    cell1.innerHTML = columnA;
+                    cell2.innerHTML = columnB;
+                }
+            }
+            function showSchedule() {
+
+                $("#paymentSchedule:not(:first)").remove();
+
+                var selectedIndex = $("#agmFrequency").val();
+
+                var instalmentFrequency = $("#agmNumberOfInstallments").val();
+                var instalmentAmount = $("#agmInstallmentAmount").val();
+
+                var paymentStartDate = $("#agmPaymentDate").val();
+
+                var firstPaymentDate = $("#agmStartDate").val();
+                var initialAmount = $("#agmStartAmount").val();
+                var lastAmount = $("#agmLastAmount").val();
+                var monthDay = $("#agmDayOfMonth").val();
+                var weekDay = $("#agmDayOfWeek").val();
+                var today = formatDate();
+
+                // HANDLE INITIAL PAYMENTS - SHOW IN BOLD OUTSIDE OF TABLE?
+
+                //// WEEKLY
+                if (selectedIndex == 1) {
+                    console.log('WEEKLY');
+                    for (var i = 0; i < instalmentFrequency; i++) {
+                        var newScheduleDate = moment(paymentStartDate, 'dd/mm/yy').add(i, 'weeks').format('DD/MM/YYYY');
+                        if (i == (instalmentFrequency - 1)) {
+                            insertRow(newScheduleDate, lastAmount, '');
+                        } else {
+                            insertRow(newScheduleDate, instalmentAmount, 'i');
+                        }
+                    }
+                }
+
+                //// MONTHLY
+                if (selectedIndex == 2) {
+                    console.log('MONTHLY');
+                    for (var i = 0; i < instalmentFrequency; i++) {
+                        var newScheduleDate = moment(paymentStartDate, 'dd/mm/yy').add(i, 'months').format('DD/MM/YYYY');
+                        if (i == (instalmentFrequency - 1)) {
+                            insertRow(newScheduleDate, lastAmount, '');
+                        } else {
+                            insertRow(newScheduleDate, instalmentAmount, 'i');
+                        }
+                    }
+                }
+
+                if (selectedIndex == 3) {
+                    // ONE OFF PAYMENT
+                    console.log('ONEOFF');
+                }
+
+                $('#arrangementScreen').hide();
+                $('#scheduleScreen').show();
+            }
+            function showArrangement() {
+                $('#scheduleScreen').hide();
+                $('#arrangementScreen').show();
+            }
+
+            function createArrangementWrapper() {
+
+                var agm_start_date              = $("#agmStartDate").val();
+                var agm_frequency               = $("#agmFrequency").val();
+                var agm_day_of_month            = $("#agmDayOfMonth").val();
+                var agm_day_of_week             = $("#agmDayOfWeek").val();
+                var agm_start_amount            = $("#agmStartAmount").val();
+                var agm_installment_amount      = $("#agmInstallmentAmount").val();
+                var agm_number_installment      = $("#agmNumberOfInstallments").val();
+                var agm_payment_method          = $("#agmPaymentMethod").val();
+                var agm_agreed_amount           = $("#agmAgreedAmount").val();
+                var agm_totaldebt_amount        = $("#agmTotalDebtAmount").val();
+                var agm_last_amount             = $("#agmLastAmount").val();
+                var agm_agreement_date          = $("#agmAgreementDate").val();
+                var agm_payment_date            = $("#agmPaymentDate").val();
+                var agm_starting_from_date      = $("#agmPaymentStartDate").val();
+
+                console.log("agm_frequency -" + agm_frequency);
+                console.log("agm_day_of_month -"        + agm_day_of_month);
+                console.log("agm_day_of_week -"         + agm_day_of_week);
+                console.log("agm_start_amount -"        + agm_start_amount);
+                console.log("agm_installment_amount -"  + agm_installment_amount);
+                console.log("agm_number_installment -"  + agm_number_installment);
+                console.log("agm_payment_method -"      + agm_payment_method);
+                console.log("agm_agreed_amount -"       + agm_agreed_amount);
+                console.log("agm_totaldebt_amount -"    + agm_totaldebt_amount);
+                console.log("agm_last_amount -"         + agm_last_amount);
+                console.log("agm_agreement_date -"      + agm_agreement_date);
+                console.log("agm_payment_date -"        + agm_payment_date);
+                console.log("agm_starting_from_date - " + agm_starting_from_date);
+
+                //createAgreement(agm_start_date, agm_frequency, agm_day_of_month, agm_day_of_week, agm_start_amount, agm_installment_amount, agm_number_installment, agm_payment_method, agm_agreed_amount, agm_totaldebt_amount, agm_last_amount, agm_agreement_date, agm_payment_date, agm_starting_from_date);
+            }
+
     </script>
 
 </body>

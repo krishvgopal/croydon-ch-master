@@ -4,14 +4,14 @@
 <%@ Register Src="~/Common/SiteHeader.ascx" TagName="SiteHeader" TagPrefix="sh" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="headMenu" Runat="Server">
-    <sh:SiteHeader      ID="SiteHeader"          runat="server" />
-    <asp:HiddenField ID="sourceValue"       runat="server" ClientIDMode="Static" />
-    <asp:HiddenField ID="sourceRefValue"    runat="server" ClientIDMode="Static" />
-    <asp:HiddenField ID="selectedDebtId"    runat="server" ClientIDMode="Static" />
-    <asp:HiddenField ID="cnpin"             runat="server" ClientIDMode="Static" />
-    <asp:HiddenField ID="uprn"              runat="server" ClientIDMode="Static" />
-    <asp:HiddenField ID="userId"            runat="server" ClientIDMode="Static" />
-    <asp:HiddenField ID="debtRowTotalValue" runat="server" ClientIDMode="Static" />
+    <sh:SiteHeader      ID="SiteHeader"        runat="server" />
+    <asp:HiddenField    ID="sourceValue"       runat="server" ClientIDMode="Static" />
+    <asp:HiddenField    ID="sourceRefValue"    runat="server" ClientIDMode="Static" />
+    <asp:HiddenField    ID="selectedDebtId"    runat="server" ClientIDMode="Static" />
+    <asp:HiddenField    ID="cnpin"             runat="server" ClientIDMode="Static" />
+    <asp:HiddenField    ID="uprn"              runat="server" ClientIDMode="Static" />
+    <asp:HiddenField    ID="userId"            runat="server" ClientIDMode="Static" />
+    <asp:HiddenField    ID="debtRowTotalValue" runat="server" ClientIDMode="Static" />
     <script src="Scripts/ckeditor/ckeditor.js"></script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="headInfo" Runat="Server">

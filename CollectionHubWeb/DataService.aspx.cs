@@ -13,7 +13,6 @@ public partial class DataService : System.Web.UI.Page
     {
         Response.Redirect("~/Dashboard.aspx");
     }
-
     [WebMethod]
     public static List<PersonAttribute> GetCurrentAttribute(int partyPin)
     {
@@ -120,6 +119,26 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
+
+
+    [WebMethod]
+    public static bool CreateArrangement(int agm_pin,    // PIN
+                                         int agm_cd_id,  // DEBTID
+                                         DateTime? agm_start_date, int agm_frequency,
+                                      int agm_day_of_month, int agm_day_of_week, decimal agm_start_amount,
+                                      decimal agm_installment_amount, int agm_number_installment, int agm_payment_method,
+                                      decimal agm_agreed_amount, decimal agm_totaldebt_amount, decimal agm_last_amount,
+                                      int agm_Created_By, DateTime? agm_agreement_date, DateTime? agm_payment_date, DateTime? agm_starting_from_date)
+    {
+
+        var dataAccess = new CollectionHubData.DataAccess();
+        var returnData = dataAccess.CreateArrangement(agm_pin, agm_cd_id, agm_start_date, agm_frequency, agm_day_of_month, agm_day_of_week, agm_start_amount, agm_installment_amount, agm_number_installment, agm_payment_method, agm_agreed_amount, agm_totaldebt_amount, agm_last_amount, agm_Created_By, agm_agreement_date, agm_payment_date, agm_starting_from_date);
+
+        return returnData;
+    }
+
+
+
     [WebMethod]
     public static List<DebtItem> GetDebts(int pin)
     {
