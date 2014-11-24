@@ -84,12 +84,12 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
-    public static List<RecoveryCycle> GetRecoveryCycles()
+    public static List<TreatmentCycle> GetTreatmentCycles(int debtId)
     {
-        var returnData = new List<RecoveryCycle>();
+        var returnData = new List<TreatmentCycle>();
         var dataAccess = new CollectionHubData.DataAccess();
 
-        returnData = dataAccess.GetRecoveryCycles();
+        returnData = dataAccess.GetTreatmentCycles(debtId);
 
         return returnData;
     }
@@ -122,13 +122,23 @@ public partial class DataService : System.Web.UI.Page
 
 
     [WebMethod]
-    public static bool CreateArrangement(int agm_pin,    // PIN
-                                         int agm_cd_id,  // DEBTID
-                                         DateTime? agm_start_date, int agm_frequency,
-                                      int agm_day_of_month, int agm_day_of_week, decimal agm_start_amount,
-                                      decimal agm_installment_amount, int agm_number_installment, int agm_payment_method,
-                                      decimal agm_agreed_amount, decimal agm_totaldebt_amount, decimal agm_last_amount,
-                                      int agm_Created_By, DateTime? agm_agreement_date, DateTime? agm_payment_date, DateTime? agm_starting_from_date)
+    public static bool CreateArrangement(   int agm_pin,    // PIN
+                                            int agm_cd_id,  // DEBTID
+                                            DateTime? agm_start_date, 
+                                            int agm_frequency,
+                                            int agm_day_of_month, 
+                                            int agm_day_of_week, 
+                                            decimal agm_start_amount,
+                                            decimal agm_installment_amount, 
+                                            int agm_number_installment, int agm_payment_method,
+                                            decimal agm_agreed_amount, 
+                                            decimal agm_totaldebt_amount, 
+                                            decimal agm_last_amount,
+                                            int agm_Created_By, 
+                                            DateTime? agm_agreement_date, 
+                                            DateTime? agm_payment_date, 
+                                            DateTime? agm_starting_from_date
+        )
     {
 
         var dataAccess = new CollectionHubData.DataAccess();
@@ -161,12 +171,12 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
-    public static List<FullNameFullAddressSearchResults> SearchFullNameFullAddress(string firstName, string lastName, string nino, string dob, string address, string street, string postCode)
+    public static List<FullNameFullAddressSearchResults> SearchFullNameFullAddress(string firstName, string lastName, string nino, string dob, string address, string street, string postCode, bool currentAddressOnly, string sourceCode)
     {
         var returnData = new List<FullNameFullAddressSearchResults>();
         var dataAccess = new CollectionHubData.DataAccess();
 
-        returnData = dataAccess.SearchAddress(firstName, lastName, nino, dob, address, street, postCode);
+        returnData = dataAccess.SearchAddress(firstName, lastName, nino, dob, address, street, postCode, currentAddressOnly, sourceCode);
 
         return returnData;
     }
@@ -569,22 +579,33 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
-    public static List<string> GetTreatmentGroups()
+    public static List<string> GetTreatmentGroups(int debtId)
     {
         var returnData = new List<string>();
         var dataAccess = new CollectionHubData.DataAccess();
 
-        returnData = dataAccess.GetTreatmentGroups();
+        returnData = dataAccess.GetTreatmentGroups(debtId);
 
         return returnData;
     }
     [WebMethod]
-    public static List<TreatmentItems> GetTreatmentsForGroup(string viewName)
+    public static List<TreatmentActionItems> GetTreatmentsForGroup(string actionType, int debtId)
     {
-        var returnData = new List<TreatmentItems>();
+        var returnData = new List<TreatmentActionItems>();
         var dataAccess = new CollectionHubData.DataAccess();
 
-        returnData = dataAccess.GetTreatmentsForGroup(viewName);
+        returnData = dataAccess.GetTreatmentsForGroup(actionType, debtId);
+
+        return returnData;
+    }
+
+    [WebMethod]
+    public static List<DebtStream> GetDebtStreams()
+    {
+        var returnData = new List<DebtStream>();
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.GetDebtStreams();
 
         return returnData;
     }

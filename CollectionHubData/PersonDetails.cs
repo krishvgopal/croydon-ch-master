@@ -30,7 +30,7 @@ namespace CollectionHubData
             //PAR_TYPE = Convert.ToString(value["PAR_TYPE"]);
             FULLNAME = Convert.ToString(value["FULLNAME"]);
             FULLADDRESS = Convert.ToString(value["FULLADDRESS"]);
-            AccountRef = Convert.ToString(value["AccountRef"]);
+            //AccountRef = Convert.ToString(value["AccountRef"]);
             //CTAXACCLIVE = Convert.ToString(value["CTAXACCLIVE"]);
             UPRN = Convert.ToString(value["UPRN"]);
         }

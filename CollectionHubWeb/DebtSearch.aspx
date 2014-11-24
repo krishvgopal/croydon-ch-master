@@ -14,7 +14,7 @@
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="pageTitle" Runat="Server">
     <div class="row">
-        <h3 class="page-header">Search</h3>
+        <h3 class="page-header">Debt Search</h3>
     </div>
 </asp:Content>
 <asp:Content ID="Content5" ContentPlaceHolderID="pageBody" Runat="Server">
@@ -52,11 +52,6 @@
                     <div class="form-group">
                         <label>Includes Debt Streem</label>
                         <select class="form-control-compact" id="debtStreamCode">
-                            <option value="0">All</option>
-                            <option value="1">Council Tax</option>
-                            <option value="2">Housing Benifit</option>
-                            <option value="3">Benifits</option>
-                            <option value="4">Parking</option>
                         </select>
                     </div>
                 </div>
@@ -92,6 +87,7 @@
                 <div class="col-lg-3">
                     <div class="form-group">
                         <br />
+                        <button type="button" class="btn btn-default" onclick="clearMainForm();">Clear Search</button>
                         <button type="button" class="btn btn-default" onclick="doSearch();">Search</button>
                         <img id="loadingImage" src="img/gif-load.gif" alt="Loading Image" />
                     </div>

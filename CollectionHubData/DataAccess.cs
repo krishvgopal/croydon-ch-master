@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Text;
 
 namespace CollectionHubData
@@ -206,16 +207,12 @@ namespace CollectionHubData
             return returnvalue;
         }
 
-        
-
-
-        public bool CreateArrangement(int agm_pin, int agm_cd_id, DateTime? agm_start_date, int agm_frequency,
-                                      int agm_day_of_month, int agm_day_of_week, decimal agm_start_amount,
-                                      decimal agm_installment_amount, int agm_number_installment, int agm_payment_method,
-                                      decimal agm_agreed_amount, decimal agm_totaldebt_amount, decimal agm_last_amount,
-                                      int agm_Created_By, DateTime? agm_agreement_date, DateTime? agm_payment_date, DateTime? agm_starting_from_date)
+        public bool CreateArrangement(  int agm_pin, int agm_cd_id, DateTime? agm_start_date, int agm_frequency, int agm_day_of_month, 
+                                        int agm_day_of_week, decimal agm_start_amount, decimal agm_installment_amount, int agm_number_installment, 
+                                        int agm_payment_method, decimal agm_agreed_amount, decimal agm_totaldebt_amount, decimal agm_last_amount, 
+                                        int agm_Created_By, DateTime? agm_agreement_date, DateTime? agm_payment_date, DateTime? agm_starting_from_date)
         {
-
+            var returnValue = false;
             using (var sqlDataConnection = new SqlConnection(GetConnectionString()))
             {
                 sqlDataConnection.Open();
@@ -240,32 +237,12 @@ namespace CollectionHubData
                     sqlCommand.Parameters.Add(new SqlParameter("agm_payment_date",          agm_payment_date));
                     sqlCommand.Parameters.Add(new SqlParameter("agm_starting_from_date",    agm_starting_from_date)); 
                     
-                    // @ERROR_MESSAGE			
                     var count = sqlCommand.ExecuteNonQuery();
-                    //if (count > 0) { returnvalue = true; }
+                    if (count > 0) { returnValue = true; }
                 }
                 sqlDataConnection.Close();
             }
-
-            return false;
-            
-            //agm_pin, agm_cd_id, agm_start_date, agm_frequency, agm_day_of_month, agm_day_of_week, agm_start_amount, agm_installment_amount, agm_number_installment, agm_payment_method, agm_agreed_amount, agm_totaldebt_amount, agm_last_amount, agm_Created_By            
-            //ERROR_MESSAGE			
-            //@agm_pin				
-            //@agm_cd_id				
-            //@agm_start_date			
-            //@agm_frequency			
-            //@agm_day_of_month		
-            //@agm_day_of_week		
-            //@agm_start_amount		
-            //@agm_installment_amount	
-            //@agm_number_installments
-            //@agm_payment_method		
-            //@agm_agreed_amount		
-            //@agm_totaldebt_amount	
-            //@agm_last_amount		
-            //@agm_Created_By			
-            //@ERROR_MESSAGE			
+            return returnValue;   			
         }
 
         #region DASHBOARD GRAPH PROCEDURES
@@ -494,7 +471,7 @@ namespace CollectionHubData
             }
             return returnValue;
         }
-        public List<FullNameFullAddressSearchResults>   SearchAddress(string firstName, string lastName, string nino, string dob, string address, string street, string postcode)
+        public List<FullNameFullAddressSearchResults>   SearchAddress(string firstName, string lastName, string nino, string dob, string address, string street, string postcode, bool currentAddressOnly, string streamSource)
         {
             var returnValue = new List<FullNameFullAddressSearchResults>();
             var sqlDataConnection = new SqlConnection(GetConnectionString());
@@ -514,6 +491,9 @@ namespace CollectionHubData
                 sqlCommand.Parameters.Add(new SqlParameter("ADDRNAME", street));
                 sqlCommand.Parameters.Add(new SqlParameter("ADDRPOSTCODE", postcode));
 
+                sqlCommand.Parameters.Add(new SqlParameter("SOURCECODE", streamSource));
+                sqlCommand.Parameters.Add(new SqlParameter("CURRENT", currentAddressOnly));
+
                 var dataReader = sqlCommand.ExecuteReader();
 
                 if (dataReader.HasRows)
@@ -531,6 +511,8 @@ namespace CollectionHubData
             return returnValue;
         }
        
+
+
         public List<RecoveryCycleItem>  GetRecoveryCycleHistory(int debtId)
         {
             var returnValue = new List<RecoveryCycleItem>();
@@ -555,23 +537,26 @@ namespace CollectionHubData
             sqlDataConnection.Close();
             return returnValue;
         }
-        public List<RecoveryCycle>      GetRecoveryCycles()
+        
+        //[PreviousName("GetTreatmentCycles")]
+        public List<TreatmentCycle> GetTreatmentCycles(int debtId)
         {
-            var returnValue = new List<RecoveryCycle>();
+            var returnValue = new List<TreatmentCycle>();
             var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
-            using (var sqlCommand = new SqlCommand("CHP_RECOVERY_CYCLE_LIST", sqlDataConnection))
+            using (var sqlCommand = new SqlCommand("P_CYCLES_LIST", sqlDataConnection))
             {
                 sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-
+                sqlCommand.Parameters.Add(new SqlParameter("DebtID", debtId));
+                
                 var dataReader = sqlCommand.ExecuteReader();
 
                 if (dataReader.HasRows)
                 {
                     while (dataReader.Read())
                     {
-                        returnValue.Add(new RecoveryCycle(dataReader));
+                        returnValue.Add(new TreatmentCycle(dataReader));
                     }
                 }
             }
@@ -580,6 +565,14 @@ namespace CollectionHubData
 
             return returnValue;
         }
+        
+        
+        
+        
+        
+        
+        
+        
         public List<DebtItem>           GetFrequencyListGetDebts(int pin)
         {
             var returnValue = new List<DebtItem>();
@@ -589,7 +582,6 @@ namespace CollectionHubData
             using (var sqlCommand = new SqlCommand("CHP_GETPERSONDEBTS_byPIN", sqlDataConnection))
             {
                 sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-
                 sqlCommand.Parameters.Add(new SqlParameter("pin", pin));
 
                 var dataReader = sqlCommand.ExecuteReader();
@@ -994,6 +986,33 @@ namespace CollectionHubData
                 sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                 sqlCommand.Parameters.Add(new SqlParameter("LoginName", loginName));
                 sqlCommand.Parameters.Add(new SqlParameter("PasswordHash", passwordHash));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue = new UserData(dataReader);
+                    }
+                }
+            }
+
+            sqlDataConnection.Close();
+
+            return returnValue;
+        }
+
+        public UserData AuthenticateUser(string windowsId)
+        {
+            UserData returnValue = null;
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CH_AUTHENTICATE_WINDOWSID", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("windowsId", windowsId));
 
                 var dataReader = sqlCommand.ExecuteReader();
 
@@ -1699,15 +1718,16 @@ namespace CollectionHubData
             return returnValue;
         }
         #endregion
-        public List<string> GetTreatmentGroups()
+        public List<string> GetTreatmentGroups(int debtId)
         {
             var returnValue = new List<string>();
             var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
-            using (var sqlCommand = new SqlCommand("CH_TREATMENT_GROUP_LIST", sqlDataConnection))
+            using (var sqlCommand = new SqlCommand("P_ACTIONTYPE_GROUPS", sqlDataConnection))
             {
                 sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("debtId", debtId));
 
                 var dataReader = sqlCommand.ExecuteReader();
 
@@ -1722,16 +1742,17 @@ namespace CollectionHubData
             sqlDataConnection.Close();
             return returnValue;
         }
-        public List<TreatmentItems> GetTreatmentsForGroup(string groupName)
+        public List<TreatmentActionItems> GetTreatmentsForGroup(string groupName, int debtId)
         {
-            var returnValue = new List<TreatmentItems>();
+            var returnValue = new List<TreatmentActionItems>();
             var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
-            using (var sqlCommand = new SqlCommand("CH_Treatment_List", sqlDataConnection))
+            using (var sqlCommand = new SqlCommand("P_ACTIONTYPE_LIST_BY_GROUP", sqlDataConnection))
             {
                 sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                 sqlCommand.Parameters.Add(new SqlParameter("GroupName", groupName));
+                sqlCommand.Parameters.Add(new SqlParameter("DebtId", debtId));
                
                 var dataReader = sqlCommand.ExecuteReader();
 
@@ -1739,7 +1760,7 @@ namespace CollectionHubData
                 {
                     while (dataReader.Read())
                     {
-                        returnValue.Add( new TreatmentItems(dataReader));
+                        returnValue.Add(new TreatmentActionItems(dataReader));
                     }
                 }
             }
@@ -1802,5 +1823,33 @@ namespace CollectionHubData
             sqlDataConnection.Close();
             return returnValue;
         }
+
+        public List<DebtStream> GetDebtStreams()
+        {
+            var returnValue = new List<DebtStream>();
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("P_GET_DEBT_STREAMS", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add(new DebtStream(dataReader));
+                    }
+                }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
+    
+    
+    
+    
     }
 }

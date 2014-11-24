@@ -126,3 +126,6 @@ window.toggleNavigation = function () {
         });
     }
 };
+window.clearMainForm = function() {
+    $('#mainForm').trigger("reset");
+}

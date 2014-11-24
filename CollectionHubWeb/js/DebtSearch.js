@@ -1,6 +1,14 @@
 ﻿$("#loadingImage").hide();
 $("#searchResults").hide();
 
+$(":text").keypress(function (arg) {
+    if (arg.which == 13) {
+        doSearch();
+    }
+});
+
+loadStreams();
+
 function doSearch() {
     $("#loadingImage").toggle();
     $.ajax({
@@ -73,6 +81,23 @@ function doSearch() {
             });
             $("#searchResults").show();
             $("#loadingImage").toggle();
+        }
+    });
+}
+function loadStreams() {
+    $.ajax({
+        type: "POST",
+        url: "DataService.aspx/GetDebtStreams",
+        data: "{}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            $.each(result.d, function (i, item) {
+                $('#debtStreamCode').append($('<option>', {
+                    value: item.Id,
+                    text: item.StreamName
+                }));
+            });
         }
     });
 }

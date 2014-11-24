@@ -152,13 +152,9 @@
                 <button type="button" class="btn btn-primary" onclick="createArrangementWrapper();" id="formCreate">Create Arrangement</button>
             </div>
         </div>
-
-        <!-- Show Schedule Ends -->
-
         <div id="scheduleScreen" style="display:none;height:100%">
             <p>Please review the schedule below.</p>
             <br />
-
             <table class="table table-striped table-bordered table-hover" id="paymentSchedule">
                 <thead>
                     <tr>
@@ -168,21 +164,15 @@
                 </thead>
                 <tbody></tbody>
             </table>
-
             <div class="modal-footer" style="width:100%;clear:both;margin-top:440px">
-                <button type="button" class="btn btn-default" onclick="showArrangement();">Back</button>
+                <button type="button" class="btn btn-default" onclick="showArrangement();">Show Breakdown</button>
                 <button type="button" class="btn btn-primary" onclick="createArrangementWrapper();" id="formCreate">Create Arrangement</button>
             </div>
-
         </div>
-
     </div>
 
     <script>
-
             var currentDate = formatDate();
-
-            //  agm_pin, agm_cd_id, agm_start_date, agm_frequency, agm_day_of_month, agm_day_of_week, agm_start_amount, agm_installment_amount, agm_number_installment, agm_payment_method, agm_agreed_amount, agm_totaldebt_amount, agm_last_amount, agm_Created_By, agm_agreement_date, agm_payment_date, agm_starting_from_date
 
             refreshForm();
 
@@ -291,7 +281,6 @@
                     $(".fcyNoShow").hide();
                 }
             }
-
             function insertRow(columnA, columnB, style) {
 
                 //console.log( columnA + ' ' + columnB + ' ' + style );
@@ -367,7 +356,6 @@
                 $('#scheduleScreen').hide();
                 $('#arrangementScreen').show();
             }
-
             function createArrangementWrapper() {
 
                 var agm_start_date              = $("#agmStartDate").val();
@@ -383,27 +371,28 @@
                 var agm_last_amount             = $("#agmLastAmount").val();
                 var agm_agreement_date          = $("#agmAgreementDate").val();
                 var agm_payment_date            = $("#agmPaymentDate").val();
-                var agm_starting_from_date      = $("#agmPaymentStartDate").val();
+                //var agm_starting_from_date      = $("#agmPaymentStartDate").val();
 
-                console.log("agm_frequency -" + agm_frequency);
-                console.log("agm_day_of_month -"        + agm_day_of_month);
-                console.log("agm_day_of_week -"         + agm_day_of_week);
-                console.log("agm_start_amount -"        + agm_start_amount);
-                console.log("agm_installment_amount -"  + agm_installment_amount);
-                console.log("agm_number_installment -"  + agm_number_installment);
-                console.log("agm_payment_method -"      + agm_payment_method);
-                console.log("agm_agreed_amount -"       + agm_agreed_amount);
-                console.log("agm_totaldebt_amount -"    + agm_totaldebt_amount);
-                console.log("agm_last_amount -"         + agm_last_amount);
-                console.log("agm_agreement_date -"      + agm_agreement_date);
-                console.log("agm_payment_date -"        + agm_payment_date);
-                console.log("agm_starting_from_date - " + agm_starting_from_date);
+                agm_agreement_date = moment(agm_agreement_date, "dd/mm/yyyy").format("YYYY-MM-DD");
+                agm_payment_date = moment(agm_payment_date, "dd/mm/yyyy").format("YYYY-MM-DD");
+                agm_start_date = moment(agm_start_date, "dd/mm/yyyy").format("YYYY-MM-DD");
+                
+                //console.log("agm_frequency - "           + agm_frequency);
+                //console.log("agm_day_of_month - "        + agm_day_of_month);
+                //console.log("agm_day_of_week - "         + agm_day_of_week);
+                //console.log("agm_start_amount - "        + agm_start_amount);
+                //console.log("agm_installment_amount - "  + agm_installment_amount);
+                //console.log("agm_number_installment - "  + agm_number_installment);
+                //console.log("agm_payment_method - "      + agm_payment_method);
+                //console.log("agm_agreed_amount - "       + agm_agreed_amount);
+                //console.log("agm_totaldebt_amount - "    + agm_totaldebt_amount);
+                //console.log("agm_last_amount - "         + agm_last_amount);
+                //console.log("agm_agreement_date - "      + agm_agreement_date);
+                //console.log("agm_payment_date - "        + agm_payment_date);
+                //console.log("agmStartDate - "            + agm_start_date);
 
-                //createAgreement(agm_start_date, agm_frequency, agm_day_of_month, agm_day_of_week, agm_start_amount, agm_installment_amount, agm_number_installment, agm_payment_method, agm_agreed_amount, agm_totaldebt_amount, agm_last_amount, agm_agreement_date, agm_payment_date, agm_starting_from_date);
+                createAgreement(agm_start_date, agm_frequency, agm_day_of_month, agm_day_of_week, agm_start_amount, agm_installment_amount, agm_number_installment, agm_payment_method, agm_agreed_amount, agm_totaldebt_amount, agm_last_amount, agm_agreement_date, agm_payment_date, agm_start_date);
             }
-
     </script>
-
 </body>
-
 </html>

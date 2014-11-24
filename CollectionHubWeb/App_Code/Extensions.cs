@@ -1,4 +1,6 @@
 ﻿using System.Collections.Specialized;
+using System.Data;
+using System.Data.SqlClient;
 using System.Web;
 
 /* 
@@ -53,4 +55,11 @@ public static class Extensions
     {
         return HttpUtility.UrlPathEncode(url);
     }
+
+
+
+    //public static IDataReader GetDateTime(this object value)
+    //{
+    //    //return HttpUtility.UrlPathEncode(url);
+    //}
 }
