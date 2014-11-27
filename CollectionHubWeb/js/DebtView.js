@@ -1,17 +1,20 @@
 ﻿$("#showClearedLoadingImage").hide();
 
 $('#pageBody_pageIcon').click(function (e) {
-    console.log("ClickedOnImage1");
+    //console.log("ClickedOnImage1");
     refreshSingleDebtView();
 });
 
 $('#pageIcon').click(function (e) {
     e.preventDefault();
-    console.log("ClickedOnImage2");
+    //console.log("ClickedOnImage2");
     refreshSingleDebtView();
 });
 
 $(function () {
+    //console.log('1');
+    loadAttributeStatusTypes();
+    //console.log('2');
     refreshSingleDebtView();
 });
 
@@ -54,6 +57,20 @@ function loadDebtsView(result) {
         ],
         "aoColumnDefs": [
             {
+                "sTitle": "Initial Debt"
+                , "aTargets": ["debt_initial"]
+                , "sClass": "right"
+                , "mRender": function (value, type, full) {
+                    return formatCurrency(value);
+                }
+            },{
+                "sTitle": "O/S Debt"
+                , "aTargets": ["debt_outstanding"]
+                , "sClass": "right"
+                , "mRender": function (value, type, full) {
+                    return formatCurrency(value);
+                }
+            },{
                 "sTitle": "Debt ID",
                 "aTargets": ["debt_id"],
                 "mRender": function(value, type, full) {
@@ -70,7 +87,8 @@ function loadDebtsView(result) {
             }, {
                 "aTargets": ["group_order"],
                 "bVisible": false,
-            }, { "width": "10px", "targets": 0 }
+            }, { "width": "10px", "targets": 0 },
+
         ],
         "initComplete": function (settings, json) {
 
@@ -156,6 +174,31 @@ function loadAttributesList() {
         }
     });
 }
+
+function loadAttributeStatusTypes() {
+    
+    $('#attributeCurrentStatuses').val('');
+    $('#attributeCurrentStatuses').append($('<option>', {
+        value: 0,
+        text: "Unknown"
+    }));
+    $.ajax({
+        type: "POST",
+        url: "DataService.aspx/GetAttributesCurrentStatuses",
+        data: "{}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            $.each(result.d, function (i, item) {
+                $('#attributeCurrentStatuses').append($('<option>', {
+                    value: item.AttributeTypeId,
+                    text: item.TypeName
+                }));
+            });
+        }
+    });
+}
+
 function loadRecoveryCycleList(debtId) {
     $.ajax({
         type: "POST",
@@ -228,7 +271,7 @@ function refreshDebtsList() {
     });
 }
 function refreshSingleDebtView() {
-    var showCleared = 'false';
+    var showCleared = 'true';
     if ($("#showCleared").val() == 2) { showCleared = 'true'; }
     $.ajax({
         type: "POST",
@@ -354,8 +397,17 @@ function refreshPaymentHistoryByPin(pin) {
                     { mData: 'PaymentAmount' },
                     { mData: 'PaymentDate' }
                 ],
-                "aoColumnDefs": [{
-                    "sTitle": "Payment Date",
+                "aoColumnDefs": [
+                 {
+                     "sTitle": "Amount",
+                     "aTargets": ["payment_amount"]
+                     , "sClass": "right",
+                     "mRender": function (value, type, full) {
+                         return formatCurrency(value);
+                        }
+                 },{
+                     "sTitle": "Payment Date",
+                     "sClass": "right",
                     "aTargets": ["payment_date"],
                     "mRender": function (value, type, full) {
                         var dtStart = new Date(parseInt(value.substr(6)));
@@ -368,9 +420,6 @@ function refreshPaymentHistoryByPin(pin) {
     });
 }
 function refreshPaymentHistory(debtId, source, sourceAccRef) {
-
-    //console.log("{'debtId':'" + debtId + "','source':'" + source + "','sourceAccountReference':'" + sourceAccRef + "'}");
-
     $.ajax({
         type: "POST",
         url: "DataService.aspx/GetPaymentsByDebtId",
@@ -392,9 +441,16 @@ function refreshPaymentHistory(debtId, source, sourceAccRef) {
                     { mData: 'PaymentDate' }
                 ],
                 "aoColumnDefs": [{
+                    "sTitle": "Amount",
+                    "aTargets": ["payment_amount"]
+                    , "sClass": "right",
+                    "mRender": function(value, type, full) {
+                        return formatCurrency(value);
+                    }
+                }, {
                     "sTitle": "Payment Date",
                     "aTargets": ["payment_date"],
-                    "mRender": function(value, type, full) {
+                    "mRender": function (value, type, full) {
                         var dtStart = new Date(parseInt(value.substr(6)));
                         var dtStartWrapper = moment(dtStart);
                         return dtStartWrapper.format('DD/MM/YYYY');
@@ -419,7 +475,6 @@ function refreshParties(debtId) {
                 "destroy": true,
                 "aaData": result,
                 aoColumns: [
-                    //{ mData: 'PartyType' },
                     { mData: 'PartyFullName' },
                     { mData: 'PrimaryFlag' }
                 ],
@@ -540,14 +595,15 @@ function refreshPersonAttributes(partyPin) {
                 aoColumns: [
                     { mData: 'AttributeText' },
                     { mData: 'AttributeValue' },
-                    { mData: 'IsCurrent' },
                     { mData: 'Streams' },
                     { mData: 'ToDate' },
                     { mData: 'FromDate' },
-                    { mData: 'PersonAttributeId' }],
+                    { mData: 'StatusText' },
+                    { mData: 'PersonAttributeId' }
+                ],
                 "aoColumnDefs": [
                     {
-                        "sTitle": "To Date"
+                        "sTitle": "From Date"
                         , "aTargets": ["from_date"]
                         , "mRender": function (value, type, full) {
                             if (value != null) {
@@ -557,7 +613,7 @@ function refreshPersonAttributes(partyPin) {
                             } else { return ''; }
                         }
                     }, {
-                        "sTitle": "From Date"
+                        "sTitle": "To Date"
                         , "aTargets": ["to_date"]
                         , "mRender": function (value, type, full) {
                             if (value != null) {
@@ -570,25 +626,63 @@ function refreshPersonAttributes(partyPin) {
                       "sTitle": "Current Attribute"
                     , "aTargets": ["set_current"]
                     , "mRender": function (value, type, full) {
-                        if (value == true) {
-                            return 'Current';
-                        }
-                        else {
-                            return '<a href="#" onclick="setCurrent(\'' + full.PersonAttributeId + '\');">Set Current</a>';
-                        }
-                    }
+
+                        //  console.log(full[6]);
+
+                        //return '<a href="#" onclick="doSelect($(this))">' + value + '</a>';
+                        return '<a href="#" onclick="doSelect($(this),' + full.PersonAttributeId + ')">' + value + '</a>';
+
+                          //return value;
+                          //if (value == true) {
+                          //    return 'Current';
+                          //}
+                          //else {
+                          //    return '<a href="#" onclick="setCurrent(\'' + full.PersonAttributeId + '\');">Set Current</a>';
+                          //}
+                      }
                     },{
                     "aTargets": ["person_attribute_id"]
                     , "bVisible": false
                 },
                 { "width": "200px", "targets": 0 },
                 { "width": "*%", "targets": 1 },
-                { "width": "150px", "targets": 2 }]
+                { "width": "130px", "targets": 2 },
+                { "width": "110px", "targets": 3 },
+                { "width": "100px", "targets": 4 },
+                { "width": "130px", "targets": 5 }
+                ]
             });
         }
     });
 }
-
+function doSelect(e,id) {
+    var newDropdown = $("#attributeCurrentStatuses").clone();
+    var newId = getUUID();
+    newDropdown.attr("id", newId);
+    $(e).parent().html(newDropdown);
+    $('#' + newId).change(
+        function(event) {
+            var s = $('#' + newId).val();
+            var v = id;
+            setAttributeStatus(v, s);
+        }
+    );
+}
+function setAttributeStatus(personAttributeId, statusId) {
+    $.ajax({
+        type: "POST",
+        url: "DataService.aspx/SetPersonAttributeStatus",
+        data: "{'userId':'" + getUserId() + "','statusId':'" + statusId + "','personAttributeId':'" + personAttributeId + "'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            refreshPersonAttributes($("#cnpin").val());
+        },
+        failure: function (error) {
+            alert(error.message);
+        }
+    });
+}
 function refreshCurrentAttributes(partyPin) {
     $.ajax({
         type: "POST",
@@ -604,33 +698,31 @@ function refreshCurrentAttributes(partyPin) {
                 "aaData": result,
                 aoColumns: [
                     { mData: 'AttributeText' },
-                    { mData: 'AttributeValue' },
-                    { mData: 'CreatedDate' },
-                    { mData: 'IsCurrent' }],
+                    { mData: 'AttributeValue' }
+                    ],
                 "aoColumnDefs": [
-                     {    "sTitle": "Created Date"
-                        , "aTargets": ["created_date"]
-                        , "mRender": function (value, type, full) {
-                            var dtStart = new Date(parseInt(value.substr(6)));
-                            var dtStartWrapper = moment(dtStart);
-                            return dtStartWrapper.format('DD/MM/YYYY');
-                        }
-                     },
-                     {  "sTitle": "Status"
-                        , "aTargets": ["status"]
-                        , "mRender": function (value, type, full) {
-                            if (value == true) {
-                                return 'Current'
-                            }
-                            else {
-                                return 'Not Current';
-                            }
-                        }
-                    },
+                     //{    "sTitle": "Created Date"
+                     //   , "aTargets": ["created_date"]
+                     //   , "mRender": function (value, type, full) {
+                     //       var dtStart = new Date(parseInt(value.substr(6)));
+                     //       var dtStartWrapper = moment(dtStart);
+                     //       return dtStartWrapper.format('DD/MM/YYYY');
+                     //   }
+                     //},
+                     //{  "sTitle": "Status"
+                     //   , "aTargets": ["status"]
+                     //   , "mRender": function (value, type, full) {
+                     //       if (value == true) {
+                     //           return 'Current';
+                     //       }
+                     //       else {
+                     //           return 'Not Current';
+                     //       }
+                     //   }
+                     //},
                     { "width": "200px", "targets": 0},
-                    { "width": "*%", "targets": 1 },
-                    { "width": "150px", "targets": 2 },
-                    { "width": "150px", "targets": 3 }]
+                    { "width": "*%", "targets": 1 }
+                ]
             });
         }
     });
@@ -711,7 +803,7 @@ function refresMatchList(partyPin) {
                     ],
                 "aoColumnDefs": [
                     {
-                        "sTitle": "To Date"
+                        "sTitle": "DOB"
                         , "aTargets": ["dob"]
                         , "mRender": function (value, type, full) {
                             if (value != null) {
@@ -898,29 +990,6 @@ function unlinkMatchedResult(matchId)
         }
     });
 }
-
-function createNote() {
-    $.ajax({
-        type: "POST",
-        url: "DataService.aspx/CreateNote",
-        data: "{'debtId':'" + $("#selectedDebtId").val() + "','userId':'" + $('#UserSessionToken').val() + "','noteText':'" + $('#noteText').val() + "'}",
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (result) {
-            if (result.d != true) {
-                alert('error: createNote returned FALSE');
-            } else {
-                $("#noteText").val("");
-                refreshNotes($("#selectedDebtId").val());
-            }
-            $('#noteModal').modal('hide');
-        },
-        failure: function (error) {
-            alert(error);
-            $('#noteModal').modal('hide');
-        }
-    });
-}
 function createDebtAttribute() {
     $.ajax({
         type: "POST",
@@ -944,7 +1013,8 @@ function createDebtAttribute() {
     });
 }
 function createPersonAttribute() {
-    console.log('createPersonAttribute');
+    //console.log('createPersonAttribute');
+    console.log("{'sourceRef':'" + $("#cnpin").val() + "','userId':'" + $('#UserSessionToken').val() + "','attributeId':'" + $('#personAttributes').val() + "','isCurrent':'true','attributeValue':'" + $('#personAttributesValue').val() + "'}");
     $.ajax({
         type: "POST",
         url: "DataService.aspx/CreatePersonAttribute",
@@ -1048,17 +1118,12 @@ function setCurrent(id) {
     });
 }                                                                                                                                                                
 function setTagIndicator(resultLength, controlName) {
-
     controlName = '#' + controlName;
-
-    //console.log(controlName + ' ' + result.length);
-
     if (result.length > 0) {
         $(controlName).css("font-weight", "bold");
     } else {
         $(controlName).css("font-weight", "normal"); 
     }
-
 }
 
 function groupDebts() {
@@ -1132,3 +1197,5 @@ function createAdHocDocument(actionItemId) {
         }
     });
 }
+
+

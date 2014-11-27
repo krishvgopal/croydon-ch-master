@@ -10,13 +10,21 @@ body {
 }
 
 /* Wrappers */
-
 /* ------------------------------- */
 
+/*
+ *  We have this fix to column headers are always right aligned
+    and only if the row value is 'right' it gets right alined
+ */
+thead th .right {
+    text-align: left !important;
+}
+tbody tr .right {
+    text-align: right !important;
+}
 #wrapper {
     width: 100%;
 }
-
 #progress-wrapper {
     display: none;
     padding-top: 0px;

@@ -49,7 +49,7 @@
                         <br/>
                          <select id="showCleared" class="form-control-compact" style="width:80% !important;float:left;margin-top: 5px" onchange="refreshDebtsList();" >
                            <option value="1">Show Open Debts</option>
-                           <option value="2">Show All Debts</option>
+                           <option value="2" selected>Show All Debts</option>
                         </select>
                         <img id="showClearedLoadingImage" src="img/gif-load.gif" alt="Loading Image" style="float:left;padding-left: 5px;padding-top: 3px;" />
                     </div>
@@ -64,8 +64,8 @@
                             <th>Debt Source</th>
                             <th>Acc Ref</th>
                             <th>Debt Reference</th>
-                            <th>Initial Debt</th>
-                            <th>Outstanding</th>
+                            <th class="debt_initial">Initial Debt1</th>
+                            <th class="debt_outstanding">Outstanding2</th>
                             <th>Recovery Cycle</th>
                             <th>Status</th>
                             <th>Type</th>
@@ -79,13 +79,12 @@
             <div style="clear:both"><br /></div>
             <ul class="nav nav-tabs">
                 <li class="active"> 
-                    <a href="#recovery"  data-target="#recovery"    data-toggle="tab"  id="arefRecovery">Recovery History</a></li>
-                <li><a href="#payments"  data-target="#payments"   data-toggle="tab"  id="arefPayments">Payments</a></li>
-                <li><a href="#parties"      data-toggle="tab"  id="arefParties">    Parties</a></li>
+                    <a href="#recovery"     data-toggle="tab"  id="arefRecovery">Recovery History</a></li>
+                <li><a href="#payments"     data-toggle="tab"  id="arefPayments">Payments</a></li>
+                <li><a href="#parties"      data-toggle="tab"  id="arefParties">Parties</a></li>
                 <li><a href="#arrangements" data-toggle="tab"  id="arefArrangements">Arrangements</a></li>
                 <li><a href="#debt"         data-toggle="tab"  id="arefDebtAttributes">Debt Attributes</a></li>
                 <li><a href="#person"       data-toggle="tab"  id="arefPersonAttributes">Person Attributes</a></li>
-                <li><a href="#notes"        data-toggle="tab"  id="arefNotes">Notes</a></li>
                 <li><a href="#current"      data-toggle="tab"  id="arefCurrentAttributes">Current Attributes</a>
                 <li><a href="#matchTab1"    data-toggle="tab"  id="arefMatches">Matches</a>
                 </li>
@@ -125,7 +124,7 @@
                                     <th>Source</th>
                                     <th>Acc. Reference</th>
                                     <th>Payment Ref.</th>
-                                    <th>Amount</th>
+                                    <th class="payment_amount">Amount</th>
                                     <th class="payment_date">Date</th>
                                 </tr>
                             </thead>
@@ -186,32 +185,20 @@
                                 <tr>
                                     <th>Type</th>
                                     <th>Information</th>
-                                    <th class="set_current">Current</th>
                                     <th>From Streams</th>
-                                    <th class="from_date">Date From</th>
                                     <th class="to_date">Date To</th>
+                                    <th class="from_date">Date From</th>
+                                    <th class="set_current">StatusText</th>
                                     <th class="person_attribute_id"></th>
+
                                 </tr>
                             </thead>
                         </table>
+                        <select id="attributeCurrentStatuses" class="form-control-compact">
+                            
+                        </select>
                     </div>
                     <a data-toggle="modal" href="modals/CreatePersonAttributes.html" data-target="#personAttributeModal" class="btn btn-outline btn-primary">Create Person Attribute</a>
-                </div>
-                <div class="tab-pane fade" id="notes">
-                    <br />
-                    <div class="table-responsive">
-                        <table class="table table-striped table-bordered table-hover" id="tableNotes">
-                            <thead>
-                                <tr>
-                                    <th class="created_date">Created Date</th>
-                                    <th>Created By</th>
-                                    <th>Note</th>
-                                    <th class="note_id"></th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                    <a data-toggle="modal" href="modals/CreateDebtNote.html" data-target="#noteModal" class="btn btn-outline btn-primary">Create Note</a>
                 </div>
                 <div class="tab-pane fade" id="current">
                     <br />
@@ -221,8 +208,6 @@
                                 <tr>
                                     <th>Type</th>
                                     <th>Information</th>
-                                    <th class="created_date">Created Date</th>
-                                    <th class="status">Status</th>
                                 </tr>
                             </thead>
                         </table>

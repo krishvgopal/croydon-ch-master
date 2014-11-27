@@ -253,6 +253,28 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    public static bool SetPersonAttributeStatus(int userId, int statusId, int personAttributeId)
+    {
+        var returnData = false;
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.SetPersonAttributeStatus(userId, statusId, personAttributeId);
+
+        return returnData;
+    }
+
+    // 
+    [WebMethod]
+    public static List<AttributeCurrentStatusType> GetAttributesCurrentStatuses()
+    {
+        var returnData = new List<AttributeCurrentStatusType>();
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.GetAttributesCurrentStatuses();
+
+        return returnData;
+    }
+    [WebMethod]
     public static bool CreateDebtAttribute(int debtId, int userId, int attributeId, bool isCurrent, string attributeValue)
     {
         var returnData = false;
@@ -262,6 +284,8 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
+
+
     [WebMethod]
     public static bool CreatePersonAttribute(int sourceRef, int userId, int attributeId, bool isCurrent, string attributeValue)
     {

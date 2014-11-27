@@ -7,7 +7,7 @@ namespace CollectionHubData
         public int      PersonAttributeId   { get; set; }
         public int      SourcePin           { get; set; }
         public int      UserId              { get; set; }
-        public bool     IsCurrent           { get; set; }
+        public int?      IsCurrent           { get; set; }
         public int      AttributeId         { get; set; }
         public string   AttributeValue      { get; set; }
         public DateTime? CreatedDate        { get; set; }
@@ -15,17 +15,28 @@ namespace CollectionHubData
         public string   Streams                { get; set; }
         public DateTime? FromDate           { get; set; }
         public DateTime? ToDate             { get; set; }
+        public string StatusText { get; set; }
 
         public PersonAttribute(){}
         public PersonAttribute(System.Data.SqlClient.SqlDataReader value)
         {
             PersonAttributeId   = Convert.ToInt32(value["PersonAttributeId"]);
-            SourcePin       = Convert.ToInt32(value["SourcePin"]);
+            SourcePin       = Convert.ToInt32(value["CHPIN"]);
             UserId          = Convert.ToInt32(value["UserId"]);
-            IsCurrent       = Convert.ToBoolean(value["IsCurrent"]);
+            
             AttributeId     = Convert.ToInt32(value["AttributeId"]);
             AttributeValue  = Convert.ToString(value["AttributeValue"]);
             AttributeText   = Convert.ToString(value["AttributeText"]);
+
+            object isCurrentObject = value["IsCurrent"];
+            IsCurrent = (isCurrentObject == System.DBNull.Value)
+                ? (int?)null
+                : Convert.ToInt32(isCurrentObject);
+
+            object isCurrentObjectType = value["TypeName"];
+            StatusText = (isCurrentObjectType == System.DBNull.Value)
+                ? "Unknown"
+                : Convert.ToString(isCurrentObjectType);
 
             var allStreams = "";
 

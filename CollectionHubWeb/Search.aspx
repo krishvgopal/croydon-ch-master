@@ -66,16 +66,6 @@
                         <input class="form-control-compact" id="postcode" name="postcode">
                     </div>
                 </div>
-                
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label>Debt Stream</label>
-                         <select class="form-control-compact" id="debtStreamCode"></select>
-                    </div>
-                </div>
-
-                <div style="clear:both;"></div>
-                
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label>Current Addresses Only</label>
@@ -85,9 +75,7 @@
                          </select>
                     </div>
                 </div>
-                
                 <div style="clear:both;"></div>
-
                 <div class="col-lg-3">
                     <div class="form-group">
                         <br />
@@ -110,8 +98,8 @@
                                 <th class="fromDate">From Date</th>
                                 <th class="untilDate">Until Date</th> 
                                 <th>Debtor D.O.B.</th>
-                                <th>Total Debt</th>
-                                <th>OS Debt</th>
+                                <th class="debt_total">Total Debt</th>
+                                <th class="debt_outstanding">OS Debt</th>
                                 <th class="source"></th>
                                 <th class="pin_id"></th>
                                 <th class="cn_pin"></th>

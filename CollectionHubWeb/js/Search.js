@@ -7,7 +7,7 @@ $(":text").keypress(function (arg) {
     }
 });
 
-loadStreams();
+//loadStreams();
 
 function doSearch() {
 
@@ -18,13 +18,11 @@ function doSearch() {
         dobValue = $("#dobYear").val();
     }
     
-    console.log("{'firstName':'" + $("#firstName").val() + "','lastName':'" + $("#lastName").val() + "','nino':'" + $("#nino").val() + "','dob':'" + dobValue + "','address':'" + $("#address").val() + "','street':'" + $("#street").val() + "','postCode':'" + $("#postcode").val() + "','currentAddressOnly':'" + $("#addressCurrent").val() + "','sourceCode':'" + $("#debtStreamCode").val() + "'}");
-
     $("#loadingImage").toggle();
     $.ajax({
         type: "POST",
         url: "DataService.aspx/SearchFullNameFullAddress",
-        data: "{'firstName':'" + $("#firstName").val() + "','lastName':'" + $("#lastName").val() + "','nino':'" + $("#nino").val() + "','dob':'" + dobValue + "','address':'" + $("#address").val() + "','street':'" + $("#street").val() + "','postCode':'" + $("#postcode").val() + "','currentAddressOnly':'" + $("#addressCurrent").val() + "','sourceCode':'" + $("#debtStreamCode").val() + "'}",
+        data: "{'firstName':'" + $("#firstName").val() + "','lastName':'" + $("#lastName").val() + "','nino':'" + $("#nino").val() + "','dob':'" + dobValue + "','address':'" + $("#address").val() + "','street':'" + $("#street").val() + "','postCode':'" + $("#postcode").val() + "','currentAddressOnly':'" + $("#addressCurrent").val() + "','sourceCode':''}",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
@@ -70,13 +68,24 @@ function doSearch() {
                                 return '';
                             }
                         }
-                    },
-                    {
-                      "aTargets": ["record_selector"]
-                    , "mRender": function (value, type, full) {
-                        return '<a href="DebtView.aspx?cn_pin=' + full.CN_Pin + '&uprn=' + full.Urpin + '" target=\"_blank\" ">' + value + '</a>';
-                    }
-                },{
+                    }, {
+                          "sTitle": "O/S Debt"
+                        , "aTargets": ["debt_outstanding"]
+                        , "mRender": function (value, type, full) {
+                            return formatCurrency(value);
+                            }
+                    }, {
+                          "sTitle": "Debt Total"
+                          , "aTargets": ["debt_total"]
+                          , "mRender": function (value, type, full) {
+                            return formatCurrency(value);
+                            }
+                     }, {
+                            "aTargets": ["record_selector"]
+                            , "mRender": function (value, type, full) {
+                                return '<a href="DebtView.aspx?cn_pin=' + full.CN_Pin + '&uprn=' + full.Urpin + '" target=\"_blank\" ">' + value + '</a>';
+                            }
+                     }, {
                     "aTargets": ["source"]
                     , "bVisible": false
                 },{
@@ -88,11 +97,11 @@ function doSearch() {
                 }, {
                     "aTargets": ["uprn"]
                     , "bVisible": false
-                },  { "width": "50px", "targets": 2 },
-                    { "width": "50px", "targets": 3 },
+                },  { "width": "95px", "targets": 2 },
+                    { "width": "95px", "targets": 3 },
                     { "width": "120px", "targets": 4 },
-                    { "width": "75px", "targets": 5 },
-                    { "width": "75px", "targets": 5 }
+                    { "width": "125px", "targets": 5 },
+                    { "width": "125px", "targets": 6 }
                 ]
             });
             $("#searchResults").show();
@@ -100,21 +109,21 @@ function doSearch() {
         }
     });
 }
-function loadStreams() {
-    $.ajax({
-        type: "POST",
-        url: "DataService.aspx/GetDebtStreams",
-        data: "{}",
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (result) {
-            $.each(result.d, function (i, item) {
+//function loadStreams() {
+//    $.ajax({
+//        type: "POST",
+//        url: "DataService.aspx/GetDebtStreams",
+//        data: "{}",
+//        contentType: "application/json; charset=utf-8",
+//        dataType: "json",
+//        success: function (result) {
+//            $.each(result.d, function (i, item) {
 
-                $('#debtStreamCode').append($('<option>', {
-                    value: item.Code,
-                    text: item.StreamName
-                }));
-            });
-        }
-    });
-}
+//                $('#debtStreamCode').append($('<option>', {
+//                    value: item.Code,
+//                    text: item.StreamName
+//                }));
+//            });
+//        }
+//    });
+//}

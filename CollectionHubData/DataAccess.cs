@@ -1861,6 +1861,52 @@ namespace CollectionHubData
             sqlDataConnection.Close();
             return returnValue;
         }
+        public bool SetPersonAttributeStatus(int userId, int statusId, int personAttributeId)
+        {
+            var returnValue = false;
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CH_PERSON_ATTRIBUTE_UPDATE", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                sqlCommand.Parameters.Add(new SqlParameter("PersonAttributeId", personAttributeId));
+                sqlCommand.Parameters.Add(new SqlParameter("IsCurrentId", statusId));
+                sqlCommand.Parameters.Add(new SqlParameter("UserId", userId));
+
+                var count = sqlCommand.ExecuteNonQuery();
+                
+                if (count > 0) { returnValue = true; }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
+        public List<AttributeCurrentStatusType> GetAttributesCurrentStatuses()
+        {
+            var returnValue = new List<AttributeCurrentStatusType>();
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CH_ATTRIBUTES_STATUS_TYPES_LIST", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add(new AttributeCurrentStatusType(dataReader));
+                    }
+                }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
+
+
         public List<TreatmentActionItems> GetTreatmentsForGroup(string groupName, int debtId)
         {
             var returnValue = new List<TreatmentActionItems>();

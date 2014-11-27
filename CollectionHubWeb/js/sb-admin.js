@@ -142,6 +142,14 @@ window.doProgress = function (resultLength, controlName) {
         }, 2500);
     }
 }
+window.formatCurrency = function (total) {
+    var neg = false;
+    if (total < 0) {
+        neg = true;
+        total = Math.abs(total);
+    }
+    return (neg ? "-&#163;" : '&#163;') + parseFloat(total, 10).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,").toString();
+}
 
 var alertFallback = true;
 if (typeof console === "undefined" || typeof console.log === "undefined") {
