@@ -29,7 +29,7 @@ namespace CollectionHubData
                 : Convert.ToDateTime(sqlDateTime);
 
             object sqlDateTime2 = value["pay_created_date"];
-            PaymentCreatedDate = (sqlDateTime == System.DBNull.Value)
+            PaymentCreatedDate = (sqlDateTime2 == System.DBNull.Value)
                 ? (DateTime?)null
                 : Convert.ToDateTime(sqlDateTime2);
         }

@@ -33,9 +33,7 @@ public partial class Index : System.Web.UI.Page
     {
         var da = new DataAccess();
         var ud = da.AuthenticateUser(authLoginName.Text, authPassword.Text);
-
-        //authLoginName.Text = 
-
+                                                                                                                
         if (ud != null)
         {
             Session["USERDATA"] = ud;

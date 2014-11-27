@@ -1,9 +1,7 @@
-
-var navFat = '225px';
+var progressInterval = 25;
+var progressValue = 0;
 var navThin = '45px';
-
-//var navFat = '225px';
-//var navThin = '175px';
+var navFat = '225px';
 
 $(function () {
     $('#side-menu').metisMenu();
@@ -33,7 +31,7 @@ function QueryString() {
             vars[hash[0]] = hash[1];
         }
     }
-    return vars
+    return vars;
 }
 function htmlEscape(str) {
     return String(str)
@@ -46,18 +44,6 @@ function htmlEscape(str) {
 function getUserId() {
     if ($("#selectAll").is(':checked')) { return 0; }
     else { return $("#UserSessionToken").val(); }
-}
-
-var alertFallback = true;
-if (typeof console === "undefined" || typeof console.log === "undefined") {
-    console = {};
-    if (alertFallback) {
-        console.log = function (msg) {
-            //alert(msg);
-        };
-    } else {
-        console.log = function () { };
-    }
 }
 Array.prototype.contains = function (v) {
     for (var i = 0; i < this.length; i++) {
@@ -94,7 +80,6 @@ window.displayError = function (message) {
       .css("visibility", "visible")
       .attr("id", newId)
       .show("slow");
-
     setTimeout(function () {
         $("#" + newId).hide("slow");
     }, 5000);
@@ -128,4 +113,44 @@ window.toggleNavigation = function () {
 };
 window.clearMainForm = function() {
     $('#mainForm').trigger("reset");
+}
+window.updateProgressBar = function (percentage) {
+    $("#loadProgress").css("width", percentage + "%");
+}
+window.doProgress = function (resultLength, controlName) {
+
+    progressValue = progressValue + progressInterval;
+    $("#loadProgress").css("width", progressValue + "%");
+
+    if (resultLength > 0) {
+        $("#" + controlName).css('font-weight','bold');
+    } else {
+        $("#" + controlName).css('font-weight', 'normal');
+    }
+    if (progressValue > 0) {
+        $("#progress-wrapper").css('display','inline-block');
+    }
+    if (progressValue <= 0) {
+        $("#progress-wrapper").css('display', 'none');
+    }
+    if (progressValue >= 100) {
+        setTimeout(function() {
+            $("#progress-wrapper").css('display', 'none');
+            progressInterval = 10;
+            progressValue = 0;
+            console.log('TIMER');
+        }, 2500);
+    }
+}
+
+var alertFallback = true;
+if (typeof console === "undefined" || typeof console.log === "undefined") {
+    console = {};
+    if (alertFallback) {
+        console.log = function (msg) {
+            //alert(msg);
+        };
+    } else {
+        console.log = function () { };
+    }
 }

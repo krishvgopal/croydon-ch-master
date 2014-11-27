@@ -30,7 +30,7 @@
         <div class="col-lg-12">
             <div style="border-bottom: 1px solid rgb(215,229,223); height:90px" > 
                 <div class="col-lg-4" style="padding-left:0px !important; padding-bottom: 10px !important; width: 90px">
-                    <asp:Image runat="server" ID="pageIcon"/>
+                    <asp:Image runat="server" ID="pageIcon" ClientIDMode="Static" CssClass="pageIcon"/>
                 </div> 
                 <div class="col-lg-2">
                     <p class="form-control-compact-static">
@@ -79,8 +79,8 @@
             <div style="clear:both"><br /></div>
             <ul class="nav nav-tabs">
                 <li class="active"> 
-                    <a href="#recovery"     data-toggle="tab"  id="arefRecovery">Recovery History</a></li>
-                <li><a href="#payments"     data-toggle="tab"  id="arefPayments">Payments</a></li>
+                    <a href="#recovery"  data-target="#recovery"    data-toggle="tab"  id="arefRecovery">Recovery History</a></li>
+                <li><a href="#payments"  data-target="#payments"   data-toggle="tab"  id="arefPayments">Payments</a></li>
                 <li><a href="#parties"      data-toggle="tab"  id="arefParties">    Parties</a></li>
                 <li><a href="#arrangements" data-toggle="tab"  id="arefArrangements">Arrangements</a></li>
                 <li><a href="#debt"         data-toggle="tab"  id="arefDebtAttributes">Debt Attributes</a></li>
@@ -97,17 +97,22 @@
                         <table class="table table-striped table-bordered table-hover" id="tableRecovery">
                             <thead>
                                 <tr>
-                                    <th>Recovery Cycle</th>
-                                    <th>Stage</th>
-                                    <th>Stage Type</th>
-                                    <th>Status</th>
-                                    <th>Days</th>
-                                    <th>Target Date</th>
+                                    <th class="onClick"></th>
+                                    <th>Action</th>
+                                    <th>ActionStatus</th>
+                                    <th>ProcessMethod</th>
+                                    <th class="actionGroup">ActionGroup</th>
+                                    <th>Actionable</th>
+                                    <th class="columnFormat">ColumnFormat</th>
+                                    <th class="scheduled">Scheduled</th>
+                                    <th class="id"></th>
+                                    <th class="debtId"></th>
+                                    <th class="debtReference"></th>
                                 </tr>
                             </thead>
                         </table>
                     </div>
-                    <a data-toggle="modal" href="modals/CreateRecoveryCycle.html" data-target="#createRecoveryCycleModal" class="btn btn-outline btn-primary">Create Recovery Cycle</a>
+                    <a data-toggle="modal" href="modals/CreateRecoveryCycle.html" data-target="#createRecoveryCycleModal" class="btn btn-outline btn-primary">Set Recovery Cycle</a>
                     <a data-toggle="modal" href="modals/CreateDebtAction.html" data-target="#debtActionModal" class="btn btn-outline btn-primary">Add Debt Action</a>
                 </div>
                 <div class="tab-pane fade" id="payments">
@@ -121,7 +126,7 @@
                                     <th>Acc. Reference</th>
                                     <th>Payment Ref.</th>
                                     <th>Amount</th>
-                                    <th>Date</th>
+                                    <th class="payment_date">Date</th>
                                 </tr>
                             </thead>
                         </table>
@@ -133,9 +138,8 @@
                         <table class="table table-striped table-bordered table-hover" id="tableParties">
                             <thead>
                                 <tr>
-                                    <th>PartyType</th>
-                                    <th>PartyFullName</th>
-                                    <th>PrimaryFlag</th>
+                                    <th>Party Full Name</th>
+                                    <th>Primary Flag</th>
                                 </tr>
                             </thead>
                         </table>
@@ -323,7 +327,16 @@
                 <div class="modal-content">
                 </div>
             </div>
-        </div>
-        <script type="text/javascript" charset="utf8" src="js/DebtView.js"></script>
+        </div> 
+    <%
+        if (ConfigurationSettings.AppSettings["UseMinifiedJs"] == "true")
+        {
+            %><script type="text/javascript" charset="utf8" src="js/DebtView.js"></script><%
+        }
+        else
+        {
+            %><script type="text/javascript" charset="utf8" src="js/DebtView.js"></script><%
+        }
+    %>
 </asp:Content>
 

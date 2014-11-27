@@ -54,6 +54,16 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    public static List<DebtParties> GetPartiesByPin(string pin)
+    {
+        var returnData = new List<DebtParties>();
+        var dataAccess = new DataAccess();
+
+        returnData = dataAccess.GetPartiesByPin(pin);
+
+        return returnData;
+    }
+    [WebMethod]
     public static List<AttributeItem> GetAttributeList(bool listDebtAttributes, bool listPersonAttributes)
     {
         var returnData = new List<AttributeItem>();
@@ -74,15 +84,29 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
-    public static List<Payment> GetPaymentsByDebtId(int debtId)
+    public static List<Payment> GetPaymentsByDebtId(int debtId, string source, string sourceAccountReference)
     {
         var returnData = new List<Payment>();
         var dataAccess = new CollectionHubData.DataAccess();
 
-        returnData = dataAccess.GetPaymentsByDebtId(debtId);
+        returnData = dataAccess.GetPaymentsByDebtId(debtId, source, sourceAccountReference);
 
         return returnData;
     }
+
+    [WebMethod]
+    public static List<Payment> GetPaymentsByPin(string pin)
+    {
+        var returnData = new List<Payment>();
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.GetPaymentsByPin(pin);
+
+        return returnData;
+    }
+
+
+
     [WebMethod]
     public static List<TreatmentCycle> GetTreatmentCycles(int debtId)
     {
@@ -215,6 +239,16 @@ public partial class DataService : System.Web.UI.Page
         var dataAccess = new DataAccess();
 
         returnData = dataAccess.GetArrangements(debtId);
+
+        return returnData;
+    }
+    [WebMethod]
+    public static List<Arrangement> GetArrangementsByPin(string pin)
+    {
+        var returnData = new List<Arrangement>();
+        var dataAccess = new DataAccess();
+
+        returnData = dataAccess.GetArrangementsByPin(pin);
 
         return returnData;
     }
@@ -606,6 +640,16 @@ public partial class DataService : System.Web.UI.Page
         var dataAccess = new CollectionHubData.DataAccess();
 
         returnData = dataAccess.GetDebtStreams();
+
+        return returnData;
+    }
+    [WebMethod]
+    public static bool CreateAdHocItem(int userId, int actionItemId, int debtId)
+    {
+        var returnData = false;
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.CreateAdHocItem(userId, actionItemId, debtId);
 
         return returnData;
     }

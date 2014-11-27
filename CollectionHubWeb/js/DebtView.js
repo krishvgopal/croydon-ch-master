@@ -1,23 +1,31 @@
 ﻿$("#showClearedLoadingImage").hide();
-var progressInterval    = 25;
-var progressValue       = 0;
 
-$(function () {
-    var sourcePin = $("#cnpin").val();
+$('#pageBody_pageIcon').click(function (e) {
+    console.log("ClickedOnImage1");
     refreshSingleDebtView();
 });
 
-function selectRow(idValue) {
+$('#pageIcon').click(function (e) {
+    e.preventDefault();
+    console.log("ClickedOnImage2");
+    refreshSingleDebtView();
+});
+
+$(function () {
+    refreshSingleDebtView();
+});
+
+function selectRow(idValue, source, sourceAccRef) {
 
     $("#selectedDebtId").val(idValue);
 
-    progressInterval    = 17;
-    progressValue       = 0;
+    progressInterval = 25;
+    progressValue = 0;
+
     refreshRecoveryCycles(idValue);
-    refreshPaymentHistory(idValue);
+    refreshPaymentHistory(idValue, source, sourceAccRef);
     refreshParties(idValue);
     refreshDebtAttributes(idValue);
-    refreshNotes(idValue);
     refreshArrangements(idValue);
 }
 
@@ -98,7 +106,7 @@ function loadDebtsView(result) {
                 var selectedRowHtml     = $(ee.currentTarget.cells[0]);
                 var selectedRowValue    = selectedRowHtml.find('input:checkbox');
 
-                console.log('rowId:' + selectedRowValue.attr('debtGroupDebtId') + ', ' + 'rowDebtTotal:' + selectedRowValue.attr('debtRowTotal'));
+                //console.log('rowId:' + selectedRowValue.attr('debtGroupDebtId') + ', ' + 'rowDebtTotal:' + selectedRowValue.attr('debtRowTotal'));
 
                 $('#debtRowTotalValue').val(selectedRowValue.attr('debtRowTotal'));
 
@@ -106,8 +114,7 @@ function loadDebtsView(result) {
                     $('#agmTotalDebtAmount').val(selectedRowValue.attr('debtRowTotal'));
                     $('#agmAgreedAmount').val(selectedRowValue.attr('debtRowTotal'));
                 }
-
-                selectRow(selectedRowValue.attr('debtGroupDebtId'));
+                selectRow(selectedRowValue.attr('debtGroupDebtId'), ee.currentTarget.cells[1].innerHTML.trim(), ee.currentTarget.cells[2].innerHTML.trim());
 
                 vDataMainTable.$('tr.selected').removeClass('active');
 
@@ -204,7 +211,6 @@ function loadArrangementPaymentMethodList() {
         }
     });
 }
-
 function refreshDebtsList() {
 
     var showCleared = 'false';
@@ -232,19 +238,28 @@ function refreshSingleDebtView() {
         dataType: "json",
         success: function (data) {
 
-            var sourcePin   = $("#cnpin").val();
-            var uprn        = $("#uprn").val();
-            
-            loadDebtsView(data);
+            var pin   = $("#cnpin").val();
+            var uprn  = $("#uprn").val();
 
-            refreshPersonAttributes(sourcePin);
-            refreshCurrentAttributes(sourcePin);
-            refresMatchList(sourcePin);
-            refresMisMisMatchList(sourcePin);
-            refreshPersonDetails(sourcePin, uprn);
+            loadDebtsView(data);
+            refreshPersonOverview(pin, uprn);
         }
     });
 }
+
+function refreshPersonOverview(sourcePin, uprn) {
+
+    //TODO : ADD RECOVERY HISTORY BY PIN
+    refreshPersonAttributes(sourcePin);
+    refreshCurrentAttributes(sourcePin);
+    refresMatchList(sourcePin);
+    refresMisMisMatchList(sourcePin);
+    refreshPersonDetails(sourcePin, uprn);
+    refreshPaymentHistoryByPin(sourcePin);
+    refreshPartiesByPin(sourcePin);
+    refreshArrangementsByPin(sourcePin);
+}
+
 function refreshRecoveryCycles(debtId) {
     $.ajax({
         type: "POST",
@@ -259,27 +274,70 @@ function refreshRecoveryCycles(debtId) {
                 "destroy": true,
                 "aaData": result,
                 aoColumns: [
-                    { mData: 'RecoveryCycle' },
-                    { mData: 'Stage' },
-                    { mData: 'StageType' },
-                    { mData: 'Status' },
-                    { mData: 'Days' },
-                    { mData: 'TargetDateFormatted' }],
+                    { mData: 'ActionText'},
+                    { mData: 'Action' },
+                    { mData: 'ActionStatus' },
+                    { mData: 'ProcessMethod' },
+                    { mData: 'ActionGroup' },
+                    { mData: 'Actionable' },
+                    { mData: 'ColumnFormat' },
+                    { mData: 'Scheduled' },
+                    { mData: 'ID' },
+                    { mData: 'DebtID' },
+                    { mData: 'DebtReference' }
+                ],
                 "aoColumnDefs": [
-               { "width": "200px", "targets": 0 },
-               { "width": "*%", "targets": 1 },
-               { "width": "*%", "targets": 2 },
-               { "width": "75px", "targets": 4 },
-               { "width": "100px", "targets": 5 }]
+                    {
+                        "aTargets": ["id"],
+                        "bVisible": false,
+                    },{
+                        "aTargets": ["debtId"],
+                        "bVisible": false,
+                    },{
+                        "aTargets": ["debtReference"],
+                        "bVisible": false,
+                    },{
+                        "aTargets": ["actionGroup"],
+                        "bVisible": false,
+                    },{
+                        "aTargets": ["columnFormat"],
+                        "bVisible": false,
+                    },{
+                        "sTitle": "Scheduled"
+                        , "aTargets": ["scheduled"]
+                        , "mRender": function (value, type, full) {
+                            if (value != null) {
+                                var dtStart = new Date(parseInt(value.substr(6)));
+                                var dtStartWrapper = moment(dtStart);
+                                return dtStartWrapper.format('DD/MM/YYYY');
+                            } else { return ''; }
+                        }
+                    }
+               //{ "width": "200px", "targets": 0 },
+               //{ "width": "*%", "targets": 1 },
+               //{ "width": "*%", "targets": 2 },
+               //{ "width": "75px", "targets": 4 },
+               //{ "width": "100px", "targets": 5 }
+                ],
+                "initComplete": function(settings, json) {
+                    for (var i = 0; i < settings.aoData.length; i++) {
+                        //console.log("VALUE (" + i + ") IS (" + settings.aoData[i].anCells[6].outerText + ")");
+                        if (settings.aoData[i].anCells[6].outerText.toLowerCase() == "bold") {
+                            //console.log("#tableRecovery tr:eq(" + i + ")");
+                            $("#tableRecovery tr:eq(" + i + ")").css("font-weight", "bold");
+                        }
+                    }
+                }
             });
         }
     });
 }
-function refreshPaymentHistory(debtId) {
+function refreshPaymentHistoryByPin(pin) {
+
     $.ajax({
         type: "POST",
-        url: "DataService.aspx/GetPaymentsByDebtId",
-        data: "{'debtId':'" + debtId + "'}",
+        url: "DataService.aspx/GetPaymentsByPin",
+        data: "{'pin':'" + pin + "'}",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
@@ -295,11 +353,58 @@ function refreshPaymentHistory(debtId) {
                     { mData: 'PaymentDebtReference' },
                     { mData: 'PaymentAmount' },
                     { mData: 'PaymentDate' }
-                ]
+                ],
+                "aoColumnDefs": [{
+                    "sTitle": "Payment Date",
+                    "aTargets": ["payment_date"],
+                    "mRender": function (value, type, full) {
+                        var dtStart = new Date(parseInt(value.substr(6)));
+                        var dtStartWrapper = moment(dtStart);
+                        return dtStartWrapper.format('DD/MM/YYYY');
+                    }
+                }]
             });
         }
     });
 }
+function refreshPaymentHistory(debtId, source, sourceAccRef) {
+
+    //console.log("{'debtId':'" + debtId + "','source':'" + source + "','sourceAccountReference':'" + sourceAccRef + "'}");
+
+    $.ajax({
+        type: "POST",
+        url: "DataService.aspx/GetPaymentsByDebtId",
+        data: "{'debtId':'" + debtId + "','source':'" + source + "','sourceAccountReference':'" + sourceAccRef + "'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            doProgress(result.d.length, 'arefPayments');
+            if (result.hasOwnProperty("d")) { result = result.d; }
+            $("#tablePayments").dataTable({
+                "destroy": true,
+                "aaData": result,
+                aoColumns: [
+                    { mData: 'PaymentId' },
+                    { mData: 'PaymentSource' },
+                    { mData: 'PaymentSourceAccountReference' },
+                    { mData: 'PaymentDebtReference' },
+                    { mData: 'PaymentAmount' },
+                    { mData: 'PaymentDate' }
+                ],
+                "aoColumnDefs": [{
+                    "sTitle": "Payment Date",
+                    "aTargets": ["payment_date"],
+                    "mRender": function(value, type, full) {
+                        var dtStart = new Date(parseInt(value.substr(6)));
+                        var dtStartWrapper = moment(dtStart);
+                        return dtStartWrapper.format('DD/MM/YYYY');
+                    }
+                }]
+            });
+        }
+    });
+}
+
 function refreshParties(debtId) {
     $.ajax({
         type: "POST",
@@ -314,7 +419,7 @@ function refreshParties(debtId) {
                 "destroy": true,
                 "aaData": result,
                 aoColumns: [
-                    { mData: 'PartyType' },
+                    //{ mData: 'PartyType' },
                     { mData: 'PartyFullName' },
                     { mData: 'PrimaryFlag' }
                 ],
@@ -322,6 +427,28 @@ function refreshParties(debtId) {
         }
     });
 }
+function refreshPartiesByPin(pin) {
+    $.ajax({
+        type: "POST",
+        url: "DataService.aspx/GetPartiesByPin",
+        data: "{'pin':'" + pin + "'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            doProgress(result.d.length, 'arefParties');
+            if (result.hasOwnProperty("d")) { result = result.d; }
+            $("#tableParties").dataTable({
+                "destroy": true,
+                "aaData": result,
+                aoColumns: [
+                    { mData: 'PartyFullName' },
+                    { mData: 'PrimaryFlag' }
+                ],
+            });
+        }
+    });
+}
+
 function refreshArrangements(debtId) {
     $.ajax({
         type: "POST",
@@ -347,6 +474,32 @@ function refreshArrangements(debtId) {
         }
     });
 }
+function refreshArrangementsByPin(pin) {
+    $.ajax({
+        type: "POST",
+        url: "DataService.aspx/GetArrangementsByPin",
+        data: "{'pin':'" + pin + "'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            doProgress(result.d.length, 'arefArrangements');
+            if (result.hasOwnProperty("d")) { result = result.d; }
+            $("#tableArrangements").dataTable({
+                "destroy": true,
+                "aaData": result,
+                aoColumns: [
+                    { mData: 'CreatedDate' },
+                    { mData: 'AggreedAmount' },
+                    { mData: 'Frequency' },
+                    { mData: 'FrequencyDescription' },
+                    { mData: 'InstallmentAmount' },
+                    { mData: 'NumberOfInstallments' },
+                    { mData: 'AgmStatus' }]
+            });
+        }
+    });
+}
+
 function refreshDebtAttributes(debtId) {
     $.ajax({
         type: "POST",
@@ -435,48 +588,7 @@ function refreshPersonAttributes(partyPin) {
         }
     });
 }
-function refreshNotes(debtId) {
-    $.ajax({
-        type: "POST",
-        url: "DataService.aspx/GetDebtNotes",
-        data: "{'debtId':'" + debtId + "'}",
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (result) {
-            doProgress(result.d.length, 'arefNotes');
-            if (result.hasOwnProperty("d")) { result = result.d; }
-            
-            $("#tableNotes").dataTable({
-                "destroy": true,
-                "aaData": result,
-                aoColumns: [
-                    { mData: 'CreatedDate' },
-                    { mData: 'UserId' },
-                    { mData: 'NoteText' },
-                    { mData: 'NoteId' }
-                ],
-                "aoColumnDefs": [
-                    {
-                        "aTargets": ["note_id"],
-                        "bVisible": false
-                    },
-                    {
-                        "sTitle": "Created Date",
-                        "aTargets": ["created_date"],
-                        "mRender": function(value, type, full) {
-                            var dtStart = new Date(parseInt(value.substr(6)));
-                            var dtStartWrapper = moment(dtStart);
-                            return dtStartWrapper.format('DD/MM/YYYY');
-                        }
-                    },
-                    { "width": "100px", "targets": 0 },
-                    { "width": "100px", "targets": 1 },
-                    { "width": "*%", "targets": 2 }
-                ]
-            });
-        }
-    });
-}
+
 function refreshCurrentAttributes(partyPin) {
     $.ajax({
         type: "POST",
@@ -523,7 +635,6 @@ function refreshCurrentAttributes(partyPin) {
         }
     });
 }
-
 function refreshPersonDetails(partyPin, uprn) {
     $.ajax({
         type: "POST",
@@ -741,7 +852,9 @@ function refreshDebtActionItems(isActive, groupName, debtId) {
             if (result.hasOwnProperty("d")) { result = result.d; }
             $.each(result, function (index, value) {
                 //lineItem = lineItem + '<p><a href="#" onclick="createDebtAction(' + value.TemplateItemId + ',' + value.TemplateId + ');">' + value.ItemName + '</a></p>';
-                lineItem = lineItem + '<p><a href="#" onclick="createDebtAction(1,1);">' + value.Name + '</a></p>';
+                //lineItem = lineItem + '<p><a href="#" onclick="createDebtAction(1,1);">' + value.Name + '</a></p>';
+                lineItem = lineItem + '<p><a href="#" onclick="createAdHocDocument('+ value.Id +');">' + value.Name + '</a></p>';
+                // createAdHocDocument()
             });
             if (isActive) {
                 $("#debtActionTabPanels").append('<div class="tab-pane fade in active" id="debtRecoveryTab_' + groupName + '"><div style="padding-top:15px">' + lineItem + '</div></div>');
@@ -948,39 +1061,6 @@ function setTagIndicator(resultLength, controlName) {
 
 }
 
-function updateProgressBar(percentage) {
-    if (percentage == 0) {
-        $("#loadProgress").hide();
-        $("#loadProgress").css("width", percentage + "%");
-    } else {
-        $("#loadProgress").show();
-        $("#loadProgress").css("width", percentage + "%");
-    }
-}
-function doProgress(resultLength, controlName) {
-
-    var fontWeight      = 'normal';
-    progressValue = progressValue + progressInterval;
-
-    //console.log(controlName + ' - ' + progressValue + ' - ' + resultLength + ' - ' + fontWeight);
-    
-    if (resultLength > 0)                       {  fontWeight = 'bold'; }
-        
-    $("#" + controlName).css("font-weight", fontWeight);
-    $("#loadProgress").css("width", progressValue + "%");
-
-    if (progressValue <= 0) {
-        $("#loadProgress").hide("slow");
-    }
-    if (progressValue >= 100) {
-        setTimeout(function () { $("#loadProgress").hide(); progressInterval = 10; progressValue = 0; }, 1000);
-    }
-
-    if (progressValue > 0) {
-        $("#loadProgress").show("slow");
-    }
-}
-
 function groupDebts() {
     var debtIdString = '';
     $(".debtGroupItems:checked").each(function () { debtIdString = debtIdString + $(this).attr("debtGroupDebtId") + ','; });
@@ -1028,23 +1108,27 @@ function ungroupDebts() {
     $('#ungroupDebtModal').modal('hide');
 }
 
-function saveDocument(actionId) {
+function createAdHocDocument(actionItemId) {
 
-    var documentName = "test document name";
-    var documentContent = CKEDITOR.instances['editDocumentContent'].getData();
     var debtId = $("#selectedDebtId").val();
+
+    $("#debtActionModal").modal("hide");
+
+    console.log("{'debtId':'" + debtId + "','actionItemId':'" + actionItemId + "','userId':'" + getUserId() + "'}");
 
     $.ajax({
         type: "POST",
-        url: "DocumentService.aspx/SaveDocument",
-        data: "{'documentTemplateId':'" + $("#editDocumentContent").attr('templateItemId') + "','documentName':'" + documentName + "','documentContent':'" + documentContent + "','actionId':'" + actionId + "','userId':'" + getUserId() + "','pin':'" + $("#cnpin").val() + "','uprn':'" + $("#uprn").val() + "','debtId':'" + debtId + "'}",
+        url: "DataService.aspx/CreateAdHocItem",
+        data: "{'debtId':'" + debtId + "','actionItemId':'" + actionItemId + "','userId':'" + getUserId() + "'}",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
-            alert(result.d);
+            //alert(result.d);
+            refreshRecoveryCycles(debtId);
+
         },
         failure: function (error) {
-            alert(error);
+            //alert(error);
         }
     });
 }
