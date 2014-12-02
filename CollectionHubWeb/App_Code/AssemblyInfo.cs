@@ -4,12 +4,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("CollectionHub Data Layer")]
-[assembly: AssemblyDescription("CollectionHub Data Layer")]
+[assembly: AssemblyTitle("CollectionHub UI Layer")]
+[assembly: AssemblyDescription("CollectionHub UI Layer")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("HubSolutions Ltd.")]
-[assembly: AssemblyProduct("CollectionHubData")]
-[assembly: AssemblyCopyright("Copyright © HubFolutions 2014")]
+[assembly: AssemblyProduct("CollectionHubWebUI")]
+[assembly: AssemblyCopyright("Copyright © HubSolutions 2014")]
 [assembly: AssemblyTrademark("CollectionHUB")]
 [assembly: AssemblyCulture("EN-GB")]
 
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("35fadf30-72ce-4c27-a1d3-ed318df04e8e")]
+[assembly: Guid("35fadf30-72ce-4c27-a1d3-ed318df04e9f")]
 
 // Version information for an assembly consists of the following four values:
 //

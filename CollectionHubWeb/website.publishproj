@@ -19,9 +19,9 @@ Copyright (C) Microsoft Corporation. All rights reserved.
     <ProjectGuid>{5c5aafef-20c3-4f1a-97d5-6a27ed0bea5a}</ProjectGuid>
     <SourceWebPhysicalPath>$(MSBuildThisFileDirectory)</SourceWebPhysicalPath>
     <SourceWebVirtualPath>/CollectionHubWeb</SourceWebVirtualPath>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <SourceWebProject>http://localhost/CollectionHub</SourceWebProject>
-    <SourceWebMetabasePath>/LM/W3SVC/1/ROOT/CollectionHub</SourceWebMetabasePath>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SourceWebProject>http://localhost:60954</SourceWebProject>
+    <SourceWebMetabasePath>/IISExpress/7.5/LM/W3SVC/19/ROOT</SourceWebMetabasePath>
   </PropertyGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -30,12 +30,11 @@ Copyright (C) Microsoft Corporation. All rights reserved.
     <WebPublishTargetsVersion Condition=" '$(WebPublishTargetsVersion)'=='' ">$(VisualStudioVersion)</WebPublishTargetsVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(WebPublishTargetsVersion)</VSToolsPath>
     <_WebPublishTargetsPath Condition=" '$(_WebPublishTargetsPath)'=='' ">$(VSToolsPath)</_WebPublishTargetsPath>
-    <AssemblyFileVersion Condition="'$(AssemblyFileVersion)' == ''">1.0.0.0</AssemblyFileVersion>
-    <AssemblyVersion Condition="'$(AssemblyVersion)' == ''">1.0.0.0</AssemblyVersion>
+    <AssemblyFileVersion Condition="'$(AssemblyFileVersion)' == ''">1.0.2.*</AssemblyFileVersion>
+    <AssemblyVersion Condition="'$(AssemblyVersion)' == ''">1.0.2.*</AssemblyVersion>
+    <AssemblyCulture>EN-GB</AssemblyCulture>
     <ExcludeFoldersFromDeployment>node_modules</ExcludeFoldersFromDeployment>
-
     <ExcludeFilesFromDeployment>Gruntfile.js;package.json;CollectionHubWeb.proj.DotSettings;website.publishproj;TODO.txt</ExcludeFilesFromDeployment>
-    
   </PropertyGroup>
   <ItemGroup>
     <AssemblyAttributes Include="AssemblyFileVersion">
