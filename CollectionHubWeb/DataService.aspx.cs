@@ -7,6 +7,7 @@ using CollectionHubData;
 using System.Web.Services;
 using System.Text;
 
+[ScriptService]
 public partial class DataService : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
@@ -14,6 +15,7 @@ public partial class DataService : System.Web.UI.Page
         Response.Redirect("~/Dashboard.aspx");
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<PersonAttribute> GetCurrentAttribute(int partyPin)
     {
         var returnData = new List<PersonAttribute>();
@@ -24,6 +26,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<PersonAttribute> GetPersonAttribute(int sourcePin)
     {
         var returnData = new List<PersonAttribute>();
@@ -34,6 +37,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<DebtAttribute> GetDebtAttribute(int debtId)
     {
         var returnData = new List<DebtAttribute>();
@@ -44,6 +48,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<DebtParties> GetPartiesByDebt(int debtId)
     {
         var returnData = new List<DebtParties>();
@@ -54,6 +59,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<DebtParties> GetPartiesByPin(string pin)
     {
         var returnData = new List<DebtParties>();
@@ -64,6 +70,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<AttributeItem> GetAttributeList(bool listDebtAttributes, bool listPersonAttributes)
     {
         var returnData = new List<AttributeItem>();
@@ -74,6 +81,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<DebtNote> GetDebtNotes(int debtId)
     {
         var returnData = new List<DebtNote>();
@@ -84,6 +92,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<Payment> GetPaymentsByDebtId(int debtId, string source, string sourceAccountReference)
     {
         var returnData = new List<Payment>();
@@ -95,6 +104,7 @@ public partial class DataService : System.Web.UI.Page
     }
 
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<Payment> GetPaymentsByPin(string pin)
     {
         var returnData = new List<Payment>();
@@ -104,10 +114,8 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-
-
-
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<TreatmentCycle> GetTreatmentCycles(int debtId)
     {
         var returnData = new List<TreatmentCycle>();
@@ -118,6 +126,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<RecoveryCycleItem> GetRecoveryCycleHistory(int debtId)
     {
         var returnData = new List<RecoveryCycleItem>();
@@ -128,6 +137,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<ArrangementFrequencyItem> GetFrequencyList()
     {
         var dataAccess = new CollectionHubData.DataAccess();
@@ -136,6 +146,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<ArrangementPaymentMethods> GetPaymenyMethodList()
     {
         var dataAccess = new CollectionHubData.DataAccess();
@@ -143,9 +154,8 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-
-
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static bool CreateArrangement(   int agm_pin,    // PIN
                                             int agm_cd_id,  // DEBTID
                                             DateTime? agm_start_date, 
@@ -170,10 +180,8 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-
-
-
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<DebtItem> GetDebts(int pin)
     {
         var returnData = new List<DebtItem>();
@@ -184,6 +192,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<DebtItem> GetDebts(int pin, bool showCleared)
     {
         var returnData = new List<DebtItem>();
@@ -195,6 +204,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<FullNameFullAddressSearchResults> SearchFullNameFullAddress(string firstName, string lastName, string nino, string dob, string address, string street, string postCode, bool currentAddressOnly, string sourceCode)
     {
         var returnData = new List<FullNameFullAddressSearchResults>();
@@ -205,6 +215,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<SampleData> GetSampleData(string fixedValue, int count)
     {
         var returnData = new List<SampleData>();
@@ -215,6 +226,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static DebtSearchResult SearchDebts(decimal amountFrom, decimal amountTo, int debtStreamCount, int includesStreamCode, int lastPaymentCode, int debtAgeCode)
     {
         var dataAccess = new DataAccess();
@@ -223,6 +235,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<LinkedAddress> GetLinkedAddress(int sourcePin)
     {
         var returnData = new List<LinkedAddress>();
@@ -233,6 +246,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<Arrangement> GetArrangements(int debtId)
     {
         var returnData = new List<Arrangement>();
@@ -243,6 +257,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<Arrangement> GetArrangementsByPin(string pin)
     {
         var returnData = new List<Arrangement>();
@@ -253,6 +268,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static bool SetPersonAttributeStatus(int userId, int statusId, int personAttributeId)
     {
         var returnData = false;
@@ -262,9 +278,8 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-
-    // 
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<AttributeCurrentStatusType> GetAttributesCurrentStatuses()
     {
         var returnData = new List<AttributeCurrentStatusType>();
@@ -275,6 +290,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static bool CreateDebtAttribute(int debtId, int userId, int attributeId, bool isCurrent, string attributeValue)
     {
         var returnData = false;
@@ -284,9 +300,8 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-
-
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static bool CreatePersonAttribute(int sourceRef, int userId, int attributeId, bool isCurrent, string attributeValue)
     {
         var returnData = false;
@@ -297,6 +312,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static bool CreateNote(int debtId, int userId, string noteText)
     {
         var returnData = false;
@@ -307,6 +323,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static bool RemoveDebtGroup(int debtId)
     {
         var returnData = false;
@@ -317,6 +334,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static bool CreateDebtGroup(string debtIdString, int userId, int partyPin)
     {
         var returnData = false;
@@ -327,6 +345,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static bool SetRecoveryCycle(int debtId, int recoveryCycleId, int userId, DateTime recoveryDateTime)
     {
         var returnData = false;
@@ -337,6 +356,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static bool SetPersonAttributeCurrent(int personAttributeId)
     {
         var returnData = false;
@@ -347,6 +367,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<MatchList> GetMatchListByPin(int pin)
     {
         var returnData = new List<MatchList>();
@@ -357,6 +378,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<MisMatchList> GetMisMatchListByPin(int pin)
     {
         var returnData = new List<MisMatchList>();
@@ -367,6 +389,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<PersonDetails> GetPersonDetails(int pin, string uprn)
     {
         var returnData = new List<PersonDetails>();
@@ -395,6 +418,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<BatchProcessHistory> GetBatchProcessHistory()
     {
         var returnData = new List<BatchProcessHistory>();
@@ -405,6 +429,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<BatchProcess> GetBatchProcess(int bp_id)
     {
         var returnData = new List<BatchProcess>();
@@ -415,6 +440,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<BatchProcessJobs> GetBatchProcessJobs()
     {
         var returnData = new List<BatchProcessJobs>();
@@ -425,6 +451,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<BatchProcessFields> GetBatchProcessFields(int bp_id)
     {
         var returnData = new List<BatchProcessFields>();
@@ -435,6 +462,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static bool RemoveMatch(int matchId)
     {
         var returnData = false;
@@ -445,6 +473,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static bool CreateMatch(int matchId, string pin, string userId)
     {
         var returnData = false;
@@ -455,6 +484,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static bool SaveTemplateContent(int chtId, int userId, string content, string notes)
     {
         var returnData = false;
@@ -465,6 +495,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static int SaveBatchParameters(int batchId, int userId, string base64String)
     {
         int returnData = 0;
@@ -477,6 +508,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<BatchRecords> GetBatchRunRecords(int batchRunId)
     {
         List<BatchRecords> returnData = new List<BatchRecords>();
@@ -487,6 +519,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static bool SaveBatchIncludeStatus(int recordIdentifier, Boolean include)
     {
         var returnData = false;
@@ -497,6 +530,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static bool DeactivateBatch(int batchId)
     {
         var returnData = false;
@@ -507,6 +541,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static bool ActivateBatch(int batchId, string batchName)
     {
         var returnData = false;
@@ -516,17 +551,8 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-    //[WebMethod]
-    //public static bool ActivateBatch(int batchId, string batchName)
-    //{
-    //    var returnData = false;
-    //    var dataAccess = new CollectionHubData.DataAccess();
-
-    //    returnData = dataAccess.ActivateBatch(batchId, batchName);
-
-    //    return returnData;
-    //}
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static string GetBatchName(int batchId)
     {
         var returnData = String.Empty;
@@ -537,6 +563,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<BatchRunHistory> GetBatchRunHistory() 
     {
         var returnData = new List<BatchRunHistory>();
@@ -547,6 +574,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<BatchProcessResult> GetBatchProcessResults(int batchProcessId)
     {
         var returnData = new List<BatchProcessResult>();
@@ -557,6 +585,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static BatchProcessParentHeader GetBatchProcessParentHeader(int batchRunId)
     {
         var returnData = new BatchProcessParentHeader();
@@ -567,6 +596,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static BatchProcessParentFields GetBatchProcessParentFields(int batchRunId)
     {
         var returnData = new BatchProcessParentFields();
@@ -577,6 +607,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<BatchProcessFieldsFromRun> GetBatchProcessFieldsFromRun(int batchRunId)
     {
         var returnData = new List<BatchProcessFieldsFromRun>();
@@ -587,6 +618,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<DocumentTemplates> GetDocumentTemplates(int userId)
     {
         var returnData = new List<DocumentTemplates>();
@@ -597,6 +629,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static int CreateNewDocumentTemplate(int userId, string documentName, string viewName)
     {
         var returnData = -1;
@@ -607,6 +640,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static DocumentTemplate GetDocumentTemplate(int templateId)
     {
         var returnData = new DocumentTemplate();
@@ -617,6 +651,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<DataMergeSource> GetDataMergeOptions()
     {
         var returnData = new List<DataMergeSource>();
@@ -627,6 +662,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<DataMergeFields> GetDataMergeFields(string viewName)
     {
         var returnData = new List<DataMergeFields>();
@@ -637,6 +673,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<string> GetTreatmentGroups(int debtId)
     {
         var returnData = new List<string>();
@@ -647,6 +684,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<TreatmentActionItems> GetTreatmentsForGroup(string actionType, int debtId)
     {
         var returnData = new List<TreatmentActionItems>();
@@ -656,8 +694,8 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<DebtStream> GetDebtStreams()
     {
         var returnData = new List<DebtStream>();
@@ -668,6 +706,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
     [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static bool CreateAdHocItem(int userId, int actionItemId, int debtId)
     {
         var returnData = false;

@@ -19,10 +19,9 @@ Copyright (C) Microsoft Corporation. All rights reserved.
     <ProjectGuid>{5c5aafef-20c3-4f1a-97d5-6a27ed0bea5a}</ProjectGuid>
     <SourceWebPhysicalPath>$(MSBuildThisFileDirectory)</SourceWebPhysicalPath>
     <SourceWebVirtualPath>/CollectionHubWeb</SourceWebVirtualPath>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <SourceWebProject>http://localhost:60954</SourceWebProject>
-    <SourceWebMetabasePath>/IISExpress/7.5/LM/W3SVC/19/ROOT</SourceWebMetabasePath>
-   
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <SourceWebProject>http://localhost/CollectionHub</SourceWebProject>
+    <SourceWebMetabasePath>/LM/W3SVC/1/ROOT/CollectionHub</SourceWebMetabasePath>
   </PropertyGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -34,16 +33,17 @@ Copyright (C) Microsoft Corporation. All rights reserved.
     <AssemblyFileVersion Condition="'$(AssemblyFileVersion)' == ''">1.0.0.0</AssemblyFileVersion>
     <AssemblyVersion Condition="'$(AssemblyVersion)' == ''">1.0.0.0</AssemblyVersion>
     <ExcludeFoldersFromDeployment>node_modules</ExcludeFoldersFromDeployment>
+
+    <ExcludeFilesFromDeployment>Gruntfile.js;package.json;CollectionHubWeb.proj.DotSettings;website.publishproj;TODO.txt</ExcludeFilesFromDeployment>
+    
   </PropertyGroup>
   <ItemGroup>
-
     <AssemblyAttributes Include="AssemblyFileVersion">
       <Value>$(AssemblyFileVersion)</Value>
     </AssemblyAttributes>
     <AssemblyAttributes Include="AssemblyVersion">
       <Value>$(AssemblyVersion)</Value>
     </AssemblyAttributes>
-
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CollectionHubData\CollectionHubData.csproj">

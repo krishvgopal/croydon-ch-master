@@ -6,9 +6,6 @@ $(":text").keypress(function (arg) {
         doSearch();
     }
 });
-
-//loadStreams();
-
 function doSearch() {
 
     var dobValue = "";
