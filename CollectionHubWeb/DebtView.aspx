@@ -93,6 +93,7 @@
                 <div class="tab-pane fade in active" id="recovery">
                     <br />
                     <div class="table-responsive">
+                       
                         <table class="table table-striped table-bordered table-hover" id="tableRecovery">
                             <thead>
                                 <tr>
@@ -111,8 +112,10 @@
                             </thead>
                         </table>
                     </div>
-                    <a data-toggle="modal" href="modals/CreateRecoveryCycle.html" data-target="#createRecoveryCycleModal" class="btn btn-outline btn-primary">Set Recovery Cycle</a>
-                    <a data-toggle="modal" href="modals/CreateDebtAction.html" data-target="#debtActionModal" class="btn btn-outline btn-primary">Add Debt Action</a>
+
+                    <a data-toggle="modal" href="modals/CreateRecoveryCycle.html" data-target="#createRecoveryCycleModal" class="btn btn-primary disabled">Set Recovery Cycle</a>
+                    <a data-toggle="modal" href="modals/CreateDebtAction.html" data-target="#debtActionModal" class="btn btn-primary disabled">Add Debt Action</a>
+                 
                 </div>
                 <div class="tab-pane fade" id="payments">
                     <br />
@@ -161,7 +164,7 @@
                             </thead>
                         </table>
                     </div>
-                    <a data-toggle="modal" href="modals/CreateArrangement.html" data-target="#tableArrangementsModal" class="btn btn-outline btn-primary">Create Arrangement</a>
+                    <a data-toggle="modal" href="modals/CreateArrangement.html" data-target="#tableArrangementsModal" class="btn btn-primary">Create Arrangement</a>
                 </div>
                 <div class="tab-pane fade" id="debt">
                     <br/>
@@ -175,7 +178,7 @@
                             </thead>
                         </table>
                     </div>
-                    <a data-toggle="modal" href="modals/CreateDebtAttributes.html" data-target="#debtAttributeModal" class="btn btn-outline btn-primary">Create Debt Attribute</a>
+                    <a data-toggle="modal" href="modals/CreateDebtAttributes.html" data-target="#debtAttributeModal" class="btn btn-primary">Create Debt Attribute</a>
                 </div>
                 <div class="tab-pane fade" id="person">
                     <br />
@@ -194,11 +197,9 @@
                                 </tr>
                             </thead>
                         </table>
-                        <select id="attributeCurrentStatuses" class="form-control-compact">
-                            
-                        </select>
+                        <select id="attributeCurrentStatuses" class="form-control-compact"style="visibility: hidden;"></select>
                     </div>
-                    <a data-toggle="modal" href="modals/CreatePersonAttributes.html" data-target="#personAttributeModal" class="btn btn-outline btn-primary">Create Person Attribute</a>
+                    <a data-toggle="modal" href="modals/CreatePersonAttributes.html" data-target="#personAttributeModal" class="btn btn-primary">Create Person Attribute</a>
                 </div>
                 <div class="tab-pane fade" id="current">
                     <br />

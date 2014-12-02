@@ -33,15 +33,17 @@ Copyright (C) Microsoft Corporation. All rights reserved.
     <_WebPublishTargetsPath Condition=" '$(_WebPublishTargetsPath)'=='' ">$(VSToolsPath)</_WebPublishTargetsPath>
     <AssemblyFileVersion Condition="'$(AssemblyFileVersion)' == ''">1.0.0.0</AssemblyFileVersion>
     <AssemblyVersion Condition="'$(AssemblyVersion)' == ''">1.0.0.0</AssemblyVersion>
-    
+    <ExcludeFoldersFromDeployment>node_modules</ExcludeFoldersFromDeployment>
   </PropertyGroup>
   <ItemGroup>
+
     <AssemblyAttributes Include="AssemblyFileVersion">
       <Value>$(AssemblyFileVersion)</Value>
     </AssemblyAttributes>
     <AssemblyAttributes Include="AssemblyVersion">
       <Value>$(AssemblyVersion)</Value>
     </AssemblyAttributes>
+
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CollectionHubData\CollectionHubData.csproj">

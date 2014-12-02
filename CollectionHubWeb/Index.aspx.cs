@@ -24,6 +24,7 @@ public partial class Index : System.Web.UI.Page
                 }
                 else
                 {
+                    authLoginName.Text = loginHeader;
                     badAuth.Visible = true;
                 }
             }

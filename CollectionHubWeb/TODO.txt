@@ -46,26 +46,26 @@ AJH|KT - Set party as primary party
 
 
 
-AJH - Code to add new arrangement
+✔ AJH - Code to add new arrangement
 AJH - Code to edit an arrangemwent
 
-AJH - Group Debts - Ensure working
-AJH - Debt Goups Selection Boxes, apply the logic
-AJH - Debt Groups Formatting correctly
+✔ AJH - Group Debts - Ensure working
+✔ AJH - Debt Goups Selection Boxes, apply the logic
+✔ AJH - Debt Groups Formatting correctly
 
-AKH - Tidy Grids, paging etc.
+✔ AKH - Tidy Grids, paging etc.
 
-AJH - Pass through authentication
-AJH - IE 7/8 Review
-AJH - RTF/Word Findings
-AJH - Show debt search results in two stages
+✔ AJH - Pass through authentication
+✔ AJH - IE 7/8 Review
+✔ AJH - RTF/Word Findings
+✔ AJH - Show debt search results in two stages
 
-AJH - Export to csv the debt search results
-AJH - Create Interfaces for all Poco's
-AJH - New Recovery Cycle Date Validation
-AJH - Validation across all input values
+✔ AJH - Export to csv the debt search results
+✔ AJH - Create Interfaces for all Poco's
+✔ AJH - New Recovery Cycle Date Validation
+✔ AJH - Validation across all input values
 
-AJH - User table data
+✔ AJH - User table data
 
 
 

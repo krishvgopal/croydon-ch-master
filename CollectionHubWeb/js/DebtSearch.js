@@ -36,7 +36,7 @@ function doSearch() {
                 "aoColumnDefs": [{
                       "aTargets": ["full_name"]
                     , "mRender": function (value, type, full) {
-                        return '<a href="DebtView.aspx?cn_pin=' + full.CnPin + '" target=\"_blank\" ">' + full.FullName + '</a>';
+                        return '<a href="DebtView.aspx?cn_pin=' + full.CnPin + '&uprn=' + full.UrPin + '" target=\"_blank\" ">' + full.FullName + '</a>';
                     }
                 },{
                     "aTargets": ["source"]

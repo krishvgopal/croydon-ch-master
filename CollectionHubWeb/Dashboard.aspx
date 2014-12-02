@@ -7,6 +7,9 @@
     <sh:SiteHeader ID="SiteHeader" runat="server" />
     <script src="js/plugins/morris/raphael-2.1.0.min.js"></script>
     <script src="js/plugins/morris/morris.js"></script>
+     <script src="js/plugins/introjs/intro.js"></script>
+     <link rel="stylesheet" type="text/css" href="css/plugins/introjs/introjs.css">
+     <link rel="stylesheet" type="text/css" href="css/plugins/introjs/introjs-rtl.css">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="headInfo" Runat="Server">
     <am:ActionMenu ID="pageActionMenu" runat="server" />
@@ -44,10 +47,7 @@
                 <div id="morris-area-chart"></div>
             </div>      
             <script>
-                       
                 displayPercentageReport();
-                //displayAmountReport();
-
                 function createChart(yMin, yMax) {
                     $('#morris-area-chart').empty();
                     var chart = Morris.Bar({
@@ -61,7 +61,6 @@
                     });
                     return chart;
                 }
-
                 function displayPercentageReport() {
                     console.log('displayPercentageReport');
                     var thisChart = createChart(0, 100);
@@ -122,7 +121,31 @@
                         }
                     });
                 }
+            </script>
+            
+             <script type="text/javascript">
+                 function startIntro() {
+                     var intro = introJs();
+                     intro.setOptions({
+                         steps: [
+                           {
+                               intro: "This will give you a short tour of the features on this page."
+                           },
+                           {
+                               element: document.querySelector('#side-menu'),
+                               intro: "This is the site navigation",
+                               position: 'right'
 
+                           },
+                           {
+                               element: document.querySelector('#morris-area-chart'),
+                               intro: "This is the dashboard graph",
+                               position: 'right'
+                           }
+                         ]
+                     });
+                     intro.start();
+                 }
             </script>
 
 

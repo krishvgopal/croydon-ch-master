@@ -50,7 +50,7 @@
                 <div style="clear: both;"></div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <label>Includes Debt Streem</label>
+                        <label>Includes Debt Stream</label>
                         <select class="form-control-compact" id="debtStreamCode">
                         </select>
                     </div>
@@ -103,7 +103,7 @@
                             <tr>
                                 <th class="full_name">Full Name</th>
                                 <th>Full Address</th>
-                                <th>Debt Stream</th>
+                                <th>Debt Streams</th>
                                 <th>No. Debts</th>
                                 <th>Total Amount</th>
                                 <th class="last_paid">Last Paid</th>
