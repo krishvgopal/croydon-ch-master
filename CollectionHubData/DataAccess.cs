@@ -52,7 +52,6 @@ namespace CollectionHubData
             }
             return returnvalue;
         }
-        
         public bool SetRecoveryCycle(int debtId, int recoveryCycleId, int userId, DateTime recoveryDateTime)
         {
             var returnvalue = false;
@@ -74,30 +73,6 @@ namespace CollectionHubData
             }
             return returnvalue;
         }
-
-        //public bool SetRecoveryCycle(int debtId, int recoveryCycleId, int userId, DateTime recoveryDateTime)
-        //{
-        //    var returnvalue = false;
-        //    using (var sqlDataConnection = new SqlConnection(GetConnectionString()))
-        //    {
-        //        sqlDataConnection.Open();
-        //        using (var sqlCommand = new SqlCommand("CHP_RECOVERY_HISTORY_CREATE", sqlDataConnection))
-        //        {
-        //            sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-        //            sqlCommand.Parameters.Add(new SqlParameter("DebtId", debtId));
-        //            sqlCommand.Parameters.Add(new SqlParameter("CycleId", recoveryCycleId));
-        //            sqlCommand.Parameters.Add(new SqlParameter("UserId", userId));
-        //            sqlCommand.Parameters.Add(new SqlParameter("StartDate", recoveryDateTime.ToString("yyyy/MM/dd")));
-
-        //            var count = sqlCommand.ExecuteNonQuery();
-
-        //            if (count > 0) returnvalue = true;
-        //        }
-        //        sqlDataConnection.Close();
-        //    }
-        //    return returnvalue;
-        //}
-        
         public bool CreateDebtGroup(string debtIdString, int userId, int partyPin)
         {
             var returnvalue = false;
@@ -140,7 +115,6 @@ namespace CollectionHubData
             }
             return returnvalue;
         }
-        
         public bool CreateNote(int debtId, int userId, string noteText)
         {
             var returnvalue = false;
@@ -161,8 +135,7 @@ namespace CollectionHubData
                 sqlDataConnection.Close();
             }
             return returnvalue;
-        }
-        
+        } 
         public bool CreateDebtAttribute(int debtId, int userId, int attributeId, bool isCurrent, string attributeValue)
         {
             var returnvalue = false;
@@ -228,7 +201,6 @@ namespace CollectionHubData
             }
             return returnvalue;
         }
-
         public bool CreateArrangement(  int agm_pin, int agm_cd_id, DateTime? agm_start_date, int agm_frequency, int agm_day_of_month, 
                                         int agm_day_of_week, decimal agm_start_amount, decimal agm_installment_amount, int agm_number_installment, 
                                         int agm_payment_method, decimal agm_agreed_amount, decimal agm_totaldebt_amount, decimal agm_last_amount, 
@@ -582,13 +554,6 @@ namespace CollectionHubData
 
             return returnValue;
         }
-        
-        
-        
-        
-        
-        
-        
         
         public List<DebtItem>           GetFrequencyListGetDebts(int pin)
         {
@@ -1906,7 +1871,6 @@ namespace CollectionHubData
             return returnValue;
         }
 
-
         public List<TreatmentActionItems> GetTreatmentsForGroup(string groupName, int debtId)
         {
             var returnValue = new List<TreatmentActionItems>();
@@ -2011,9 +1975,5 @@ namespace CollectionHubData
             sqlDataConnection.Close();
             return returnValue;
         }
-    
-    
-    
-    
     }
 }

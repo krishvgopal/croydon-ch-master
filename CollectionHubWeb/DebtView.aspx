@@ -315,7 +315,7 @@
             </div>
         </div> 
     <%
-        if (ConfigurationSettings.AppSettings["UseMinifiedJs"] == "true")
+        if (System.Configuration.ConfigurationManager.AppSettings["UseMinifiedJs"] == "true")
         {
             %><script type="text/javascript" charset="utf8" src="js/DebtView.js"></script><%
         }

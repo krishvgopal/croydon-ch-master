@@ -48,12 +48,12 @@ namespace CollectionHubData
 
             if (allStreams.Length > 0) { Streams = allStreams.Substring(0, allStreams.Length - 1); }
             
-            object sqlDateTimeFromDate = value["CreatedDate"];
+            object sqlDateTimeFromDate = value["fromdate"];
             FromDate = (sqlDateTimeFromDate == System.DBNull.Value)
                 ? (DateTime?)null
                 : Convert.ToDateTime(sqlDateTimeFromDate);
 
-            object sqlDateTimeToDate = value["CreatedDate"];
+            object sqlDateTimeToDate = value["todate"];
             ToDate = (sqlDateTimeToDate == System.DBNull.Value)
                 ? (DateTime?)null
                 : Convert.ToDateTime(sqlDateTimeToDate);

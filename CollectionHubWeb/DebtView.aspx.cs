@@ -13,7 +13,7 @@ public partial class Search : System.Web.UI.Page
         var pageIconUrl = "img/person_misc.png";
         
         var mapsUrl     = "https://www.google.co.uk/maps/place/" + debtAddress.FullAddress.UrlEncode();
-        var searchUrl   = "https://www.google.co.uk/?gws_rd=ssl#q=";
+        //var searchUrl   = "https://www.google.co.uk/?gws_rd=ssl#q=";
 
         var addressUrl  = @"<a target='_blank' href=" + mapsUrl + ">" + debtAddress.FullAddress + "</a>";
         
