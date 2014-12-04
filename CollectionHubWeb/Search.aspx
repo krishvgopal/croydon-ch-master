@@ -14,7 +14,7 @@
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="pageTitle" Runat="Server">
     <div class="row">
-        <h3 class="page-header">Name &amp; Address Search</h3>
+       <div style="height:25px"></div>
     </div>
 </asp:Content>
 <asp:Content ID="Content5" ContentPlaceHolderID="pageBody" Runat="Server">

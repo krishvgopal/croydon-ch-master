@@ -82,7 +82,7 @@ function loadDebtsView(result) {
             }, {
                 "aTargets": ["group_order"],
                 "bVisible": false,
-            }, { "width": "10px", "targets": 0 },
+            }, { "width": "10px", "targets": 0 }
 
         ],
         "initComplete": function (settings, json) {

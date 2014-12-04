@@ -93,7 +93,6 @@
                 <div class="tab-pane fade in active" id="recovery">
                     <br />
                     <div class="table-responsive">
-                       
                         <table class="table table-striped table-bordered table-hover" id="tableRecovery">
                             <thead>
                                 <tr>
@@ -112,10 +111,8 @@
                             </thead>
                         </table>
                     </div>
-
                     <a data-toggle="modal" href="modals/CreateRecoveryCycle.html" data-target="#createRecoveryCycleModal" class="btn btn-primary disabled">Set Recovery Cycle</a>
                     <a data-toggle="modal" href="modals/CreateDebtAction.html" data-target="#debtActionModal" class="btn btn-primary disabled">Add Debt Action</a>
-                 
                 </div>
                 <div class="tab-pane fade" id="payments">
                     <br />
@@ -193,7 +190,6 @@
                                     <th class="from_date">Date From</th>
                                     <th class="set_current">StatusText</th>
                                     <th class="person_attribute_id"></th>
-
                                 </tr>
                             </thead>
                         </table>

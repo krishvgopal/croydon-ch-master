@@ -16,5 +16,8 @@ public partial class Common_SiteHeader : System.Web.UI.UserControl
             }
         }
         userName.Text = id;
+
+
+        //versionInfo.Text = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
     }
 }

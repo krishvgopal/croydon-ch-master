@@ -39,6 +39,6 @@
                 <p>Sed in mi sodales, ultrices odio at, vulputate nisl. Mauris laoreet tempor augue, semper malesuada ipsum elementum bibendum. Quisque accumsan ornare arcu faucibus rhoncus. Suspendisse molestie tortor tellus, vitae interdum ipsum iaculis et. Donec ac ex vitae mi elementum commodo. Pellentesque ut ex sem. Sed dignissim vel est at vehicula. In molestie, metus et interdum faucibus, metus eros efficitur nulla, in lacinia erat felis convallis risus. Sed maximus diam maximus neque accumsan, id tristique velit porttitor. Nullam fermentum id sapien mollis commodo. Quisque pretium nisl nec pharetra vestibulum.</p>
             </div> --%>
     </div>
-    <script type="text/javascript" charset="utf8" src="js/NewProcess.js"></script>
+    <script type="text/javascript" charset="utf8" src="js/NewProcess.js <% = Application["VERSION"] %>"></script>
 </asp:Content>
 

@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Collection Hub</title>
-
     <script type="text/javascript" charset="utf8" src="js/jquery-1.11.1.min.js"></script>
         <script type="text/javascript" charset="utf8" src="js/jquery-ui.min.js"></script>
         <script type="text/javascript" charset="utf8" src="js/jquery.dataTables.min.js"></script>
@@ -43,7 +42,7 @@
                     <div class="panel-body">
                         <fieldset>
                             <div class="form-group">
-                                <asp:TextBox CssClass="form-control" runat="server" ID="authLoginName" placeholder="E-mail" name="email" type="email" autofocus></asp:TextBox>
+                                <asp:TextBox CssClass="form-control" runat="server" ID="authLoginName" placeholder="E-mail" name="email" autofocus></asp:TextBox>
                             </div>
                             <div class="form-group">
                                 <asp:TextBox CssClass="form-control" runat="server" ID="authPassword" placeholder="Password" name="password" type="password" value=""></asp:TextBox>

@@ -47,7 +47,7 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-    [WebMethod]
+    [WebMethod(CacheDuration = 60)]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<DebtParties> GetPartiesByDebt(int debtId)
     {
@@ -58,7 +58,7 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-    [WebMethod]
+    [WebMethod(CacheDuration = 60)]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<DebtParties> GetPartiesByPin(string pin)
     {
@@ -91,7 +91,7 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-    [WebMethod]
+    [WebMethod(CacheDuration = 60)]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<Payment> GetPaymentsByDebtId(int debtId, string source, string sourceAccountReference)
     {
@@ -103,7 +103,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
 
-    [WebMethod]
+    [WebMethod(CacheDuration = 60)]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<Payment> GetPaymentsByPin(string pin)
     {
@@ -136,7 +136,7 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-    [WebMethod]
+    [WebMethod(CacheDuration = 120)]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<ArrangementFrequencyItem> GetFrequencyList()
     {
@@ -145,7 +145,7 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-    [WebMethod]
+    [WebMethod(CacheDuration = 120)]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<ArrangementPaymentMethods> GetPaymenyMethodList()
     {
@@ -203,7 +203,7 @@ public partial class DataService : System.Web.UI.Page
        
         return returnData;
     }
-    [WebMethod]
+    [WebMethod(CacheDuration = 60)]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<FullNameFullAddressSearchResults> SearchFullNameFullAddress(string firstName, string lastName, string nino, string dob, string address, string street, string postCode, bool currentAddressOnly, string sourceCode)
     {
@@ -225,7 +225,7 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-    [WebMethod]
+    [WebMethod(CacheDuration = 60)]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static DebtSearchResult SearchDebts(decimal amountFrom, decimal amountTo, int debtStreamCount, int includesStreamCode, int lastPaymentCode, int debtAgeCode)
     {
@@ -234,7 +234,7 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-    [WebMethod]
+    [WebMethod(CacheDuration = 60)]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<LinkedAddress> GetLinkedAddress(int sourcePin)
     {
@@ -278,7 +278,7 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-    [WebMethod]
+    [WebMethod(CacheDuration = 60)]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<AttributeCurrentStatusType> GetAttributesCurrentStatuses()
     {
@@ -388,7 +388,7 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-    [WebMethod]
+    [WebMethod(CacheDuration = 60)]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<PersonDetails> GetPersonDetails(int pin, string uprn)
     {
@@ -399,7 +399,7 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-    [WebMethod]
+    [WebMethod(CacheDuration = 60)]
     [ScriptMethod(UseHttpGet = false, ResponseFormat = ResponseFormat.Json)]
     public static String GetDashboardDataPercentByYear(int sourceId, int historic)
     {
@@ -408,7 +408,7 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-    [WebMethod]
+    [WebMethod(CacheDuration = 60)]
     [ScriptMethod(UseHttpGet = false, ResponseFormat = ResponseFormat.Json)]
     public static String GetDashboardDataAmountByYear(int sourceId, int historic)
     {
@@ -650,7 +650,7 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-    [WebMethod]
+    [WebMethod(CacheDuration = 60)]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<DataMergeSource> GetDataMergeOptions()
     {
@@ -661,7 +661,7 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-    [WebMethod]
+    [WebMethod(CacheDuration = 60)]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<DataMergeFields> GetDataMergeFields(string viewName)
     {
@@ -694,7 +694,7 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-    [WebMethod]
+    [WebMethod(CacheDuration = 60)]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<DebtStream> GetDebtStreams()
     {

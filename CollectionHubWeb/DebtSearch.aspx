@@ -14,7 +14,7 @@
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="pageTitle" Runat="Server">
     <div class="row">
-        <h3 class="page-header">Debt Search</h3>
+        <div style="height:25px"></div>
     </div>
 </asp:Content>
 <asp:Content ID="Content5" ContentPlaceHolderID="pageBody" Runat="Server">
@@ -33,7 +33,6 @@
                         <input class="form-control-compact" id="amountTo" name="lastName">
                     </div>
                 </div>
-                
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label>Stream Count</label>
@@ -45,8 +44,6 @@
                         </select>
                     </div>
                 </div>
-                
-
                 <div style="clear: both;"></div>
                 <div class="col-lg-3">
                     <div class="form-group">
@@ -110,7 +107,6 @@
                                 <th class="latest_debt">Latest Debt</th>
                                 <th class="source">Souce</th>
                                 <th class="cnpin">CnPin</th>
-                                <%--<th class="urpin">UrPin</th>--%>
                             </tr>
                         </thead>
                     </table>

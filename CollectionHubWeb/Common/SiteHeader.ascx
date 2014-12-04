@@ -8,7 +8,8 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="index.html">Collection Hub v1.2</a>
+        <a class="navbar-brand" href="index.aspx">Collection Hub v1.3</a> 
+        <asp:Literal runat="server" ID="versionInfo" ClientIDMode="Static"></asp:Literal>
     </div>
     <div class="nav navbar-top-links navbar-right" id="right_Link">
         <P style="padding-top:15px;padding-right:15px">
