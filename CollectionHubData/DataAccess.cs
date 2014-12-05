@@ -797,7 +797,7 @@ namespace CollectionHubData
             using (var sqlDataConnection = new SqlConnection(GetConnectionString()))
             {
                 sqlDataConnection.Open();
-                using (var sqlCommand = new SqlCommand("[CH_ADDRESS_LIST]", sqlDataConnection))
+                using (var sqlCommand = new SqlCommand("CH_ADDRESS_LIST", sqlDataConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add(new SqlParameter("Pin", partyPin));
@@ -1657,10 +1657,10 @@ namespace CollectionHubData
             var sqlDataConnection = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
-            using (var sqlCommand = new SqlCommand("CH_TEMPLATES_SELECT", sqlDataConnection))
+            using (var sqlCommand = new SqlCommand("P_ACTIONTYPE2_ADD", sqlDataConnection))
             {
                 sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                sqlCommand.Parameters.Add(new SqlParameter("CHT_iD", templateId));
+                sqlCommand.Parameters.Add(new SqlParameter("ActionID", templateId));
 
                 var dataReader = sqlCommand.ExecuteReader();
 
@@ -1975,5 +1975,40 @@ namespace CollectionHubData
             sqlDataConnection.Close();
             return returnValue;
         }
+
+        ///
+        public bool SaveDebtAction(int userId, int actionId, string content, byte[] documentBody, string pin, string uprn, int debtId)
+        {
+            var returnValue = false;
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("P_ACTION_2_INSERT_UPDATE", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("CONTENT", documentBody));
+                sqlCommand.Parameters.Add(new SqlParameter("ACTIONID", actionId));
+                sqlCommand.Parameters.Add(new SqlParameter("PIN", pin));
+                sqlCommand.Parameters.Add(new SqlParameter("UPRN", uprn));
+                //sqlCommand.Parameters.Add(new SqlParameter("CH_DOCUMENT_DEBTID", debtId));
+                sqlCommand.Parameters.Add(new SqlParameter("USERID", userId));
+
+                //SqlParameter returnParameter = sqlCommand.Parameters.Add("RetVal", SqlDbType.Int);
+                //returnParameter.Direction = ParameterDirection.ReturnValue;
+
+                var returnParameter = sqlCommand.ExecuteScalar();
+
+                if (returnParameter != null)
+                {
+                   if ((int)returnParameter > 0) { returnValue = true; } 
+                }
+                
+            }
+
+            sqlDataConnection.Close();
+
+            return returnValue;
+        }
+
     }
 }

@@ -107,12 +107,13 @@
                                     <th class="id"></th>
                                     <th class="debtId"></th>
                                     <th class="debtReference"></th>
+                                    <th class="actionStatus"></th>
                                 </tr>
                             </thead>
                         </table>
                     </div>
-                    <a data-toggle="modal" href="modals/CreateRecoveryCycle.html" data-target="#createRecoveryCycleModal" class="btn btn-primary disabled">Set Recovery Cycle</a>
-                    <a data-toggle="modal" href="modals/CreateDebtAction.html" data-target="#debtActionModal" class="btn btn-primary disabled">Add Debt Action</a>
+                    <a data-toggle="modal" href="modals/CreateRecoveryCycle.html" data-target="#createRecoveryCycleModal" class="btn btn-primary">Set Recovery Cycle</a>
+                    <a data-toggle="modal" href="modals/CreateDebtAction.html" data-target="#debtActionModal" class="btn btn-primary">Add Debt Action</a>
                 </div>
                 <div class="tab-pane fade" id="payments">
                     <br />

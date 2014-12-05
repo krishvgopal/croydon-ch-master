@@ -4,20 +4,22 @@ namespace CollectionHubData
 {
     public class DebtItem
     {
-        public int      DebtId { get; set; }
-        public string   DebtSource { get; set; }
-        public string   DebtAccRef { get; set; }
-        public string   DebtReference { get; set; }
-        public decimal  DebtTotal { get; set; }
-        public decimal  DebtOutstanding { get; set; }
-        public string   PartyPin { get; set; }
-        public string   PropertyReference { get; set; }
-        public string   Status { get; set; }
-        public string   Type { get; set; }
-        public string   RecoveryCycle { get; set; }
-        public DateTime? DebtDate { get; set; }
-        public DateTime? LastActionDate { get; set; }
-        public string GroupOrder { get; set; }
+        public int          DebtId              { get; set; }
+        public string       DebtSource          { get; set; }
+        public string       DebtAccRef          { get; set; }
+        public string       DebtReference       { get; set; }
+        public decimal      DebtTotal           { get; set; }
+        public decimal      DebtOutstanding     { get; set; }
+        public string       PartyPin            { get; set; }
+        public string       PropertyReference   { get; set; }
+        public string       Status              { get; set; }
+        public string       Type                { get; set; }
+        public string       RecoveryCycle       { get; set; }
+        public DateTime?    DebtDate            { get; set; }
+        public DateTime?    LastActionDate      { get; set; }
+        public string       GroupOrder          { get; set; }
+        public bool         IsGroupRecord       { get; set; }
+        public int?         GroupDebtId         { get; set; }
 
         public DebtItem() { }
         public DebtItem(System.Data.SqlClient.SqlDataReader value)
@@ -32,6 +34,12 @@ namespace CollectionHubData
             Status              = value["cd_Status"].ToString();
             Type                = value["cd_Type"].ToString();
             GroupOrder          = value["OrderId"].ToString();
+            IsGroupRecord       = Convert.ToBoolean(value["UnGroupFlag"]);
+
+            object intCheck = value["cd_group_debt_id"];
+            GroupDebtId = (intCheck == System.DBNull.Value)
+                ? (int)-1
+                : Convert.ToInt32(value["cd_group_debt_id"]);
 
             object sqlDebtOutstanding = value["cd_os_bal"];
             DebtOutstanding = (sqlDebtOutstanding == System.DBNull.Value)

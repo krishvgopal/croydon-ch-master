@@ -14,17 +14,17 @@ namespace CollectionHubData
         //public string TargetDateFormatted { get { if (TargetDate.HasValue) { return TargetDate.Value.ToShortDateString(); } else { return string.Empty; } } }
 
 
-        public int    ID                { get; set; } 
-        public string DebtID            { get; set; }
-        public string DebtReference     { get; set; }      
-        public string Action            { get; set; }                                                                                    
-        public string ActionStatus      { get; set; }
-        public DateTime? Scheduled      { get; set; }      
-        public string ProcessMethod     { get; set; }
-        public int    ActionGroup       { get; set; }
-        public string Actionable        { get; set; }
-        public string ColumnFormat      { get; set; }
-        public string ActionText        { get; set; }
+        public int          ID                { get; set; } 
+        public string       DebtID            { get; set; }
+        public string       DebtReference     { get; set; }      
+        public string       Action            { get; set; }                                                                                    
+        public string       ActionStatus      { get; set; }
+        public DateTime?    Scheduled         { get; set; }      
+        public string       ProcessMethod     { get; set; }
+        public int          ActionGroup       { get; set; }
+        public string       Actionable        { get; set; }
+        public string       ColumnFormat      { get; set; }
+        public string       ActionText        { get; set; }
 
         public RecoveryCycleItem() { }
         public RecoveryCycleItem(System.Data.SqlClient.SqlDataReader value)

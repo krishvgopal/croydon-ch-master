@@ -71,19 +71,24 @@ function loadDebtsView(result) {
                 "mRender": function(value, type, full) {
                     return '<a href="#" onclick="selectRow(' + value + ')">' + value + '</a>';
                 }
-            }, {
+            },{
                 "sTitle": "<input id=\"debtGroupAll\" type=\"checkbox\" class=\"debtGroupAll\">",
                 "bSortable": false,
                 "bSearchable": false,
                 "aTargets": ["select_id"],
-                "mRender": function(value, type, full) {
-                    return '<input type="checkbox" class="debtGroupItems" debtGroupDebtId="' + value + '" debtRowTotal="' + full.DebtTotal + '">';
+                "mRender": function (value, type, full) {
+                    var returnString = '';
+                    if (full.GroupDebtId < 0) {
+                        returnString = '<input type="checkbox" class="debtGroupItems" debtGroupDebtId="' + value + '" debtRowTotal="' + full.DebtTotal + '">';
+                    } else {
+                        returnString = '<input type="checkbox" style="visibility:hidden" class="debtGroupItems" debtGroupDebtId="' + value + '" debtRowTotal="' + full.DebtTotal + '">';
+                    }
+                    return returnString;
                 },
-            }, {
+            },{
                 "aTargets": ["group_order"],
                 "bVisible": false,
-            }, { "width": "10px", "targets": 0 }
-
+            },{ "width": "10px", "targets": 0 }
         ],
         "initComplete": function (settings, json) {
 
@@ -107,7 +112,6 @@ function loadDebtsView(result) {
                 }
                 min = min++;
                 max = max++;
-                console.log("min:'" + min + "', max:'" + max + "'");
                 $('#dataTableMain tr:nth-child(' + min + ')').addClass('groupTop');
                 $('#dataTableMain tr:nth-child(' + max + ')').addClass('groupBottom');
             }
@@ -115,6 +119,7 @@ function loadDebtsView(result) {
             $("#debtGroupAll").click(function () {
                 $(".debtGroupItems").prop('checked', $(this).prop('checked'));
             });
+
             $('#dataTableMain tbody').on('click', 'tr', function (ee) {
                 var selectedRowHtml     = $(ee.currentTarget.cells[0]);
                 var selectedRowValue    = selectedRowHtml.find('input:checkbox');
@@ -125,6 +130,7 @@ function loadDebtsView(result) {
                     $('#agmTotalDebtAmount').val(selectedRowValue.attr('debtRowTotal'));
                     $('#agmAgreedAmount').val(selectedRowValue.attr('debtRowTotal'));
                 }
+
                 selectRow(selectedRowValue.attr('debtGroupDebtId'), ee.currentTarget.cells[1].innerHTML.trim(), ee.currentTarget.cells[2].innerHTML.trim());
 
                 vDataMainTable.$('tr.selected').removeClass('active');
@@ -322,14 +328,26 @@ function refreshRecoveryCycles(debtId) {
                     { mData: 'Scheduled' },
                     { mData: 'ID' },
                     { mData: 'DebtID' },
-                    { mData: 'DebtReference' }
+                    { mData: 'DebtReference' },
+                    { mData: 'ActionStatus' } // 
                 ],
                 "aoColumnDefs": [
                     {
                         "aTargets": ["id"],
                         "bVisible": false,
                     },{
+                        "aTargets": ["onClick"],
+                        "bVisible": true,
+                        "mRender": function (value, type, full) {
+                            if (value != null) {
+                                return '<a href="#" onclick="processAction(' + full.ID + ',' + full.ActionGroup + ',\'' + full.ActionStatus + '\')">' + value + '</a>';
+                            } else { return ''; }
+                        }
+                    },{
                         "aTargets": ["debtId"],
+                        "bVisible": false,
+                    },{
+                        "aTargets": ["actionStatus"],
                         "bVisible": false,
                     },{
                         "aTargets": ["debtReference"],
@@ -996,7 +1014,7 @@ function createRecoveryCycle() {
         dataType: "json",
         success: function (result) {
             if (result.d != true) {
-                console.log('error: createRecoveryCycle returned FALSE');
+                //console.log('error: createRecoveryCycle returned FALSE');
             } else {
                 $("#recoveryStartDate").val("");
                 $("#recoveryCycles").val("");
@@ -1006,11 +1024,12 @@ function createRecoveryCycle() {
             $('#personAttributeModal').modal('hide');
         },
         failure: function (error) {
-            console.log(error.message);
+            //console.log(error.message);
             $('#debtAttributeModal').modal('hide');
         }
     });
 }
+
 function createDebtAction(templateItemId, templateId) {
     $("#documentSelection").hide();
     $("#loading").show();
@@ -1032,6 +1051,7 @@ function createDebtAction(templateItemId, templateId) {
     });
     $("#documentEdit").show();
 }
+
 function createAgreement(agm_start_date, agm_frequency, agm_day_of_month, agm_day_of_week, agm_start_amount, agm_installment_amount, agm_number_installment, agm_payment_method, agm_agreed_amount, agm_totaldebt_amount, agm_last_amount, agm_agreement_date, agm_payment_date, agm_starting_from_date) {
     $.ajax({
         type: "POST",
@@ -1154,13 +1174,10 @@ function doSelect(e, id) {
     );
 }
 
-function createAdHocDocument(actionItemId) {
+function createAdHocDocument(actionItemId)  {
 
     var debtId = $("#selectedDebtId").val();
-
     $("#debtActionModal").modal("hide");
-
-    console.log("{'debtId':'" + debtId + "','actionItemId':'" + actionItemId + "','userId':'" + getUserId() + "'}");
 
     $.ajax({
         type: "POST",
@@ -1178,5 +1195,91 @@ function createAdHocDocument(actionItemId) {
         }
     });
 }
+function processAction(itemId, groupId, status) {
 
+    if (status.toLowerCase() == 'pending') {
+        doActionPending(itemId, groupId);
+    }
+    if (status.tolower() == 'zzz') {
+        doActionSaved(itemId, groupId);
+    }
+    if (status.tolower() == 'xxx') {
+        doActionView(itemId, groupId);
+    }
+}
+function doActionPending(itemId, groupId) {
 
+     $('#debtActionModal').modal({ remote: 'modals/CreateDebtActionDocument.html', width: 925 });
+
+     $.ajax({
+         type: "POST",
+         url: "DocumentService.aspx/ProcessAdd",
+         data: "{'itemId':'" + itemId + "','groupId':'" + groupId + "','userId':'" + getUserId() + "','pin':'" + $("#cnpin").val() + "','uprn':'" + $("#uprn").val() + "'}",
+         contentType: "application/json; charset=utf-8",
+         dataType: "json",
+         success: function (result) {
+             CKEDITOR.instances['templateContent'].setData(result.d);
+         },
+         failure: function (error) {
+             alert(error);
+         }
+     });
+    //$("#debtActionModal").modal("hide");
+}
+function doActionSaved(itemId, groupId) {
+
+}
+function doActionView(itemId, groupId) {
+
+}
+
+function doSave() {
+
+    var documentContent = CKEDITOR.instances['templateContent'].getData();
+    var actionId = 3; // TODO: FiX THIS //
+
+    $.ajax({
+        type: "POST",
+        url: "DocumentService.aspx/ProcessSave",
+        data: "{'documentContent':'" + documentContent + "','actionId':'" + actionId + "','userId':'" + getUserId() + "','pin':'" + $("#cnpin").val() + "','uprn':'" + $("#uprn").val() + "'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            $('#debtActionModal').modal("hide");
+        },
+        failure: function (error) {
+            alert(error);
+        }
+    });
+
+}
+
+//var editor = CKEDITOR.inline('templateName', {
+//    removePlugins: 'toolbar'
+//});
+
+//function refreshTemplateDocument(templateId) {
+//    $.ajax({
+//        type: "POST",
+//        url: "DataService.aspx/GetDocumentTemplate",
+//        data: "{'templateId':'" + templateId + "'}",
+//        contentType: "application/json; charset=utf-8",
+//        dataType: "json",
+//        success: function (result) {
+//            if (result.hasOwnProperty("d")) { result = result.d; }
+//            $("#templateName").attr('templateId', result.CHT_ID);
+//            $("#templateName").attr('ViewTable', result.CHT_ViewTable);
+//            $("#templateName").html('<h2>' + result.CHT_Name + '</h2>');
+
+//            if (result.CHT_Notes.length > 0) {
+//                $("#templateDescription").html('<p><i>' + result.CHT_Notes + '</i></p>');
+//            } else {
+//                $("#templateDescription").html('<p><i>Click to edit</i></p>');
+//            }
+
+//            CKEDITOR.instances['templateContent'].setData(result.CHT_Content);
+//            // TODO: BETTER FIX THIS ISSUE
+//            $("#cke_22_text").css("width", "175px");
+//        }
+//    });
+//}

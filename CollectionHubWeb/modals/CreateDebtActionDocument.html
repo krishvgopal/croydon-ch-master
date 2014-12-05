@@ -12,22 +12,23 @@
         
         <div class="modal-body">
                 
-            <textarea class="ckeditor" name="templateDocumentContent" id="templateContent"></textarea>
+            <textarea class="ckeditor" name="templateContent" id="templateContent"></textarea>
          
         </div>
 
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-            <button type="button" class="btn btn-primary" onclick="activateBatch();">Yes</button>
+            <button type="button" class="btn btn-primary" onclick="doSave();">Yes</button>
         </div>
 
         <script>
             //refreshDebtActionTabs();
-            CKEDITOR.replace('templateDocumentContent',
+            CKEDITOR.replace('templateContent',
             {
                 height: 550,
-                width: 900
+                width: 775
             });
+
         </script>
 
     </body>
