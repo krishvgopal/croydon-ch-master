@@ -12,12 +12,11 @@ public partial class Common_SiteHeader : System.Web.UI.UserControl
         {
             if (ud.WindowsId.Length > 0)
             {
-                id += "<br/><i>" + ud.WindowsId + "</i>";
+                id += "&nbsp;|&nbsp;" + ud.WindowsId;
             }
         }
-        userName.Text = id;
-
-
+        userName.InnerHtml = id;
+        userName.Attributes.Add("title", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString() );
         //versionInfo.Text = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
     }
 }

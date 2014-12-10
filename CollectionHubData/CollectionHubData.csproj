@@ -71,6 +71,7 @@
     <Compile Include="BatchProcessParentHeader.cs" />
     <Compile Include="BatchRecords.cs" />
     <Compile Include="BatchProcessFieldsFromRun.cs" />
+    <Compile Include="CorrespondenceItem.cs" />
     <Compile Include="CurrentAttributes.cs" />
     <Compile Include="DataAccess.cs" />
     <Compile Include="DataMergeSource.cs" />

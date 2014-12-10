@@ -1051,7 +1051,6 @@ function createDebtAction(templateItemId, templateId) {
     });
     $("#documentEdit").show();
 }
-
 function createAgreement(agm_start_date, agm_frequency, agm_day_of_month, agm_day_of_week, agm_start_amount, agm_installment_amount, agm_number_installment, agm_payment_method, agm_agreed_amount, agm_totaldebt_amount, agm_last_amount, agm_agreement_date, agm_payment_date, agm_starting_from_date) {
     $.ajax({
         type: "POST",
@@ -1200,10 +1199,10 @@ function processAction(itemId, groupId, status) {
     if (status.toLowerCase() == 'pending') {
         doActionPending(itemId, groupId);
     }
-    if (status.tolower() == 'zzz') {
+    if (status.toLowerCase() == 'saved') {
         doActionSaved(itemId, groupId);
     }
-    if (status.tolower() == 'xxx') {
+    if (status.toLowerCase() == 'xxx') {
         doActionView(itemId, groupId);
     }
 }
@@ -1219,6 +1218,7 @@ function doActionPending(itemId, groupId) {
          dataType: "json",
          success: function (result) {
              CKEDITOR.instances['templateContent'].setData(result.d);
+             $("#templateContent").attr('itemId', itemId);
          },
          failure: function (error) {
              alert(error);
@@ -1227,8 +1227,27 @@ function doActionPending(itemId, groupId) {
     //$("#debtActionModal").modal("hide");
 }
 function doActionSaved(itemId, groupId) {
-
+    $('#debtActionModal').attr('itemId', itemId);
+    $('#debtActionModal').modal( { remote: 'modals/AmendDebtActionDocument.html', width: 925 });
 }
+
+function openSavedItem(itemId) {
+    $.ajax({
+        type: "POST",
+        url: "DocumentService.aspx/OpenItemById",
+        data: "{'itemId':'" + itemId + "'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            CKEDITOR.instances['templateContent'].setData(result.d);
+            //$("#templateContent").attr('itemId', itemId);
+        },
+        failure: function (error) {
+            alert(error);
+        }
+    });
+}
+
 function doActionView(itemId, groupId) {
 
 }
@@ -1236,7 +1255,9 @@ function doActionView(itemId, groupId) {
 function doSave() {
 
     var documentContent = CKEDITOR.instances['templateContent'].getData();
-    var actionId = 3; // TODO: FiX THIS //
+    var actionId = $("#templateContent").attr('itemId');
+
+    console.log(actionId);
 
     $.ajax({
         type: "POST",

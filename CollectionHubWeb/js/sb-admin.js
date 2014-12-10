@@ -128,7 +128,7 @@ window.doProgress = function (resultLength, controlName) {
         $("#" + controlName).css('font-weight', 'normal');
     }
     if (progressValue > 0) {
-        $("#progress-wrapper").css('display','inline-block');
+        $("#progress-wrapper").css('display', 'inline-block');
     }
     if (progressValue <= 0) {
         $("#progress-wrapper").css('display', 'none');
@@ -138,7 +138,6 @@ window.doProgress = function (resultLength, controlName) {
             $("#progress-wrapper").css('display', 'none');
             progressInterval = 10;
             progressValue = 0;
-            console.log('TIMER');
         }, 2500);
     }
 }

@@ -43,11 +43,6 @@
     <body>
         <form id="mainForm" runat="server">
             <asp:HiddenField runat="server" ID="UserSessionToken" />
-            <div id="progress-wrapper">
-                <div class="progress" style="margin: 5px 0px 0px 0px; height:15px;width:100%; height:5px;">
-                    <div class="progress-bar" id="loadProgress" role="progressbar" style="width:0%;"></div>
-                </div>
-            </div>
             <div id="wrapper">
                 <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0px;">
                     <div class="navbar-header">
@@ -60,6 +55,9 @@
                         </div>
                     </div>
                 </nav>
+                <div id="progress-wrapper" style="width:100%;height:2px;z-index: 1;position: absolute;">
+                    <div class="progress-bar" id="loadProgress" role="progressbar" style="width:0;"></div>
+                </div>
                 <div id="page-wrapper">
                     <div class="row">
                         <div class="alert alert-danger alert-dismissable" id="alertBox" style="visibility: hidden">

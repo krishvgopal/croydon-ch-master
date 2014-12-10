@@ -1986,29 +1986,56 @@ namespace CollectionHubData
             using (var sqlCommand = new SqlCommand("P_ACTION_2_INSERT_UPDATE", sqlDataConnection))
             {
                 sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("CONTENT_TEXT", content));
                 sqlCommand.Parameters.Add(new SqlParameter("CONTENT", documentBody));
                 sqlCommand.Parameters.Add(new SqlParameter("ACTIONID", actionId));
                 sqlCommand.Parameters.Add(new SqlParameter("PIN", pin));
                 sqlCommand.Parameters.Add(new SqlParameter("UPRN", uprn));
-                //sqlCommand.Parameters.Add(new SqlParameter("CH_DOCUMENT_DEBTID", debtId));
                 sqlCommand.Parameters.Add(new SqlParameter("USERID", userId));
 
                 //SqlParameter returnParameter = sqlCommand.Parameters.Add("RetVal", SqlDbType.Int);
                 //returnParameter.Direction = ParameterDirection.ReturnValue;
 
                 var returnParameter = sqlCommand.ExecuteScalar();
+                returnValue = true;  
 
-                if (returnParameter != null)
-                {
-                   if ((int)returnParameter > 0) { returnValue = true; } 
-                }
+                //if (returnParameter != null)
+                //{
+                //   if ((int)returnParameter > 0) { returnValue = true; } 
+                //}
                 
+            }
+            sqlDataConnection.Close();
+
+            return returnValue;
+        }
+        /// CHT_ACTION_CORRES
+
+        public CorrespondenceItem GetActionCorrespondenceItem(int actionId)
+        {
+            CorrespondenceItem returnValue = null;
+            var sqlDataConnection   = new SqlConnection(GetConnectionString());
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("P_ACTIONTYPE2_VIEW_EDIT", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("ACTIONID", actionId));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue = new CorrespondenceItem(dataReader);
+                    }
+                }
             }
 
             sqlDataConnection.Close();
 
             return returnValue;
         }
-
     }
 }
