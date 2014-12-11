@@ -1675,6 +1675,33 @@ namespace CollectionHubData
             sqlDataConnection.Close();
             return returnValue;
         }
+
+        public DocumentTemplate GetDocumentTemplateByTemplateId(int templateId)
+        {
+            var returnValue = new DocumentTemplate();
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CH_TEMPLATES_SELECT", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("CHT_iD", templateId));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue = new DocumentTemplate(dataReader);
+                    }
+                }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
+
+
         public bool SaveTemplateContent(int chtId, int userId, string content, string notes)
         {
             var returnvalue = false;
@@ -1975,8 +2002,6 @@ namespace CollectionHubData
             sqlDataConnection.Close();
             return returnValue;
         }
-
-        ///
         public bool SaveDebtAction(int userId, int actionId, string content, byte[] documentBody, string pin, string uprn, int debtId)
         {
             var returnValue = false;
@@ -2003,14 +2028,31 @@ namespace CollectionHubData
                 //{
                 //   if ((int)returnParameter > 0) { returnValue = true; } 
                 //}
-                
             }
             sqlDataConnection.Close();
 
             return returnValue;
         }
-        /// CHT_ACTION_CORRES
+        public bool CompleteDebtAction(int actionId, int outputType)
+        {
+            var returnValue = false;
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("P_ACTIONTYPE2_OUTPUT", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("ACTIONID", actionId));
+                sqlCommand.Parameters.Add(new SqlParameter("OUTPUT", outputType));
+
+                var returnParameter = sqlCommand.ExecuteScalar();
+                returnValue = true;
+
+            }
+            sqlDataConnection.Close();
+
+            return returnValue;
+        }
         public CorrespondenceItem GetActionCorrespondenceItem(int actionId)
         {
             CorrespondenceItem returnValue = null;
@@ -2022,8 +2064,8 @@ namespace CollectionHubData
                 sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                 sqlCommand.Parameters.Add(new SqlParameter("ACTIONID", actionId));
 
-                var dataReader = sqlCommand.ExecuteReader();
-
+                var dataReader = sqlCommand.ExecuteReader(CommandBehavior.SequentialAccess);
+                
                 if (dataReader.HasRows)
                 {
                     while (dataReader.Read())
@@ -2032,7 +2074,6 @@ namespace CollectionHubData
                     }
                 }
             }
-
             sqlDataConnection.Close();
 
             return returnValue;

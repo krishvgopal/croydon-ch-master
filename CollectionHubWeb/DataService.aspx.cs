@@ -639,6 +639,7 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
+    //TODO: RENAME A NESSISSARY _ THIS NEEDS TO BE DONE
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static DocumentTemplate GetDocumentTemplate(int templateId)
@@ -650,6 +651,18 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public static DocumentTemplate GetDocumentTemplateByTemplateId(int templateId)
+    {
+        var returnData = new DocumentTemplate();
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.GetDocumentTemplateByTemplateId(templateId);
+
+        return returnData;
+    }
+    // 
     [WebMethod(CacheDuration = 60)]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<DataMergeSource> GetDataMergeOptions()

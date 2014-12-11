@@ -1202,7 +1202,7 @@ function processAction(itemId, groupId, status) {
     if (status.toLowerCase() == 'saved') {
         doActionSaved(itemId, groupId);
     }
-    if (status.toLowerCase() == 'xxx') {
+    if (status.toLowerCase() == 'printed') {
         doActionView(itemId, groupId);
     }
 }
@@ -1224,11 +1224,14 @@ function doActionPending(itemId, groupId) {
              alert(error);
          }
      });
-    //$("#debtActionModal").modal("hide");
 }
 function doActionSaved(itemId, groupId) {
     $('#debtActionModal').attr('itemId', itemId);
     $('#debtActionModal').modal( { remote: 'modals/AmendDebtActionDocument.html', width: 925 });
+}
+function doActionView(itemId, groupId) {
+    e.preventDefault();  //stop the browser from following
+    window.location.href = 'DocumentService.aspx?documentId=' + itemId;
 }
 
 function openSavedItem(itemId) {
@@ -1240,7 +1243,7 @@ function openSavedItem(itemId) {
         dataType: "json",
         success: function (result) {
             CKEDITOR.instances['templateContent'].setData(result.d);
-            //$("#templateContent").attr('itemId', itemId);
+            $("#templateContent").attr('itemId', itemId);
         },
         failure: function (error) {
             alert(error);
@@ -1248,16 +1251,12 @@ function openSavedItem(itemId) {
     });
 }
 
-function doActionView(itemId, groupId) {
 
-}
 
 function doSave() {
 
     var documentContent = CKEDITOR.instances['templateContent'].getData();
     var actionId = $("#templateContent").attr('itemId');
-
-    console.log(actionId);
 
     $.ajax({
         type: "POST",
@@ -1272,8 +1271,41 @@ function doSave() {
             alert(error);
         }
     });
-
 }
+
+function doPrint() {
+
+    var documentContent = CKEDITOR.instances['templateContent'].getData();
+    var actionId = $("#templateContent").attr('itemId');
+
+    console.log("PRINT");
+
+    $.ajax({
+        type: "POST",
+        url: "DocumentService.aspx/ProcessPrint",
+        data: "{'actionId':'" + actionId + "'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            $('#debtActionModal').modal("hide");
+        },
+        failure: function (error) {
+            alert(error);
+        }
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 //var editor = CKEDITOR.inline('templateName', {
 //    removePlugins: 'toolbar'

@@ -57,7 +57,7 @@ function refreshBatchProcessJobs() {
 function refreshTemplateDocument(templateId) {
     $.ajax({
         type: "POST",
-        url: "DataService.aspx/GetDocumentTemplate",
+        url: "DataService.aspx/GetDocumentTemplateByTemplateId",
         data: "{'templateId':'" + templateId + "'}",
         contentType: "application/json; charset=utf-8",
         dataType: "json",

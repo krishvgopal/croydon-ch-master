@@ -11,7 +11,17 @@ public partial class DocumentService : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        Response.Redirect(@"~/Default.aspx");
+        if (Request.QueryString["documentId"] != null)
+        {
+            var documentId = Convert.ToInt32(Request.QueryString["documentId"]);
+            var returnByte = DownloadItemById(documentId);
+
+            Response.BinaryWrite(returnByte);
+        }
+        else
+        {
+            Response.Redirect(@"~/Default.aspx");
+        }
     }
 
     [WebMethod]
@@ -96,7 +106,7 @@ public partial class DocumentService : System.Web.UI.Page
 
         b.InsertHtml(documentContent);
         d.Save(stream, SaveFormat.Doc);
-        //d.Save("new_doc_" + Guid.NewGuid().ToString() + ".doc" );
+        
         stream.Position = 0;
 
         var documentBody = stream.ToArray();
@@ -112,44 +122,50 @@ public partial class DocumentService : System.Web.UI.Page
 
         return returnValue;
     }
-
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
-    public static bool ProcessPrint(string documentContent, int actionId, int userId, string pin, string uprn)
+    public static bool ProcessPrint(int actionId)
     {
         var returnValue = false;
 
-        var stream = new MemoryStream();
-        var d = new Document();
-        var b = new DocumentBuilder(d);
+        //var stream  = new MemoryStream();
+        //var d       = new Document();
+        //var b       = new DocumentBuilder(d);
 
-        b.InsertHtml(documentContent);
-        d.Save(stream, SaveFormat.Doc);
-        //d.Save("new_doc_" + Guid.NewGuid().ToString() + ".doc" );
-        stream.Position = 0;
+        //b.InsertHtml(documentContent);
+        //d.Save(stream, SaveFormat.Doc);
+        
+        //stream.Position = 0;
 
-        var documentBody = stream.ToArray();
+        //var documentBody = stream.ToArray();
 
-        stream.Close();
+        //stream.Close();
 
         var da = new DataAccess();
 
-        returnValue = da.SaveDebtAction(userId, actionId, documentContent, documentBody, pin, uprn, 0);
+        // public bool CompleteDebtAction(int actionId, int outputType)
 
-        stream.Dispose();
-        d = null;
+        returnValue = da.CompleteDebtAction(actionId, 1);
+
+        //stream.Dispose();
+        //d = null;
 
         return returnValue;
     }
-
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static string OpenItemById(int itemId)
     {
         var da = new DataAccess();
-
         CorrespondenceItem returnValue = da.GetActionCorrespondenceItem(itemId);
-
         return returnValue.ContentText;
+    }
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public static byte[] DownloadItemById(int itemId)
+    {
+        var da = new DataAccess();
+        CorrespondenceItem returnValue = da.GetActionCorrespondenceItem(itemId);
+        return returnValue.ContentArray;
     }
 }

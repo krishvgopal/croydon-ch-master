@@ -9,7 +9,6 @@
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title">Confirm Action</h4>
         </div>
-        AMEND
         <div class="modal-body">
             <textarea class="ckeditor" name="templateContent" id="templateContent"></textarea>
         </div>
@@ -19,11 +18,11 @@
             <button type="button" class="btn btn-primary" onclick="doPrint();">Print</button>
         </div>
         <script>
-            //var button = $(event.relatedTarget); // Button that triggered the modal
-            //console.log($('#debtActionModal').attr('itemId'));
-            openSavedItem($('#debtActionModal').attr('itemId'));
-            //var recipient = button.data('whatever') // Extract info from data-* attributes
+            var itemId = $('#debtActionModal').attr('itemId');
+            openSavedItem(itemId);
+            $('#debtActionModal').attr('itemId', itemId);
             CKEDITOR.replace('templateContent', { height: 550, width: 775 });
         </script>
     </body>
 </html>
+
