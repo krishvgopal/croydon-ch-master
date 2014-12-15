@@ -369,11 +369,6 @@ function refreshRecoveryCycles(debtId) {
                             } else { return ''; }
                         }
                     }
-               //{ "width": "200px", "targets": 0 },
-               //{ "width": "*%", "targets": 1 },
-               //{ "width": "*%", "targets": 2 },
-               //{ "width": "75px", "targets": 4 },
-               //{ "width": "100px", "targets": 5 }
                 ],
                 "initComplete": function(settings, json) {
                     for (var i = 0; i < settings.aoData.length; i++) {
@@ -1194,56 +1189,34 @@ function createAdHocDocument(actionItemId)  {
         }
     });
 }
+
 function processAction(itemId, groupId, status) {
 
-    if (status.toLowerCase() == 'pending') {
+    var statusValue = status.toLowerCase();
+
+    if (statusValue == 'pending') {
         doActionPending(itemId, groupId);
     }
-    if (status.toLowerCase() == 'saved') {
+    if (statusValue == 'saved') {
         doActionSaved(itemId, groupId);
     }
-    if (status.toLowerCase() == 'printed') {
+    if (statusValue == 'printed') {
         doActionView(itemId, groupId);
     }
 }
 function doActionPending(itemId, groupId) {
 
-     $('#debtActionModal').modal({ remote: 'modals/CreateDebtActionDocument.html', width: 925 });
+    $('#debtActionCreateModal').modal({ remote: 'modals/CreateDebtActionDocument.html', width: 925 });
+    $("#debtActionCreateModal").attr('itemId', itemId);
 
-     $.ajax({
-         type: "POST",
-         url: "DocumentService.aspx/ProcessAdd",
-         data: "{'itemId':'" + itemId + "','groupId':'" + groupId + "','userId':'" + getUserId() + "','pin':'" + $("#cnpin").val() + "','uprn':'" + $("#uprn").val() + "'}",
-         contentType: "application/json; charset=utf-8",
-         dataType: "json",
-         success: function (result) {
-             CKEDITOR.instances['templateContent'].setData(result.d);
-             $("#templateContent").attr('itemId', itemId);
-         },
-         failure: function (error) {
-             alert(error);
-         }
-     });
-}
-function doActionSaved(itemId, groupId) {
-    $('#debtActionModal').attr('itemId', itemId);
-    $('#debtActionModal').modal( { remote: 'modals/AmendDebtActionDocument.html', width: 925 });
-}
-function doActionView(itemId, groupId) {
-    e.preventDefault();  //stop the browser from following
-    window.location.href = 'DocumentService.aspx?documentId=' + itemId;
-}
-
-function openSavedItem(itemId) {
     $.ajax({
         type: "POST",
-        url: "DocumentService.aspx/OpenItemById",
-        data: "{'itemId':'" + itemId + "'}",
+        url: "DocumentService.aspx/ProcessAdd",
+        data: "{'itemId':'" + itemId + "','groupId':'" + groupId + "','userId':'" + getUserId() + "','pin':'" + $("#cnpin").val() + "','uprn':'" + $("#uprn").val() + "'}",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
-            CKEDITOR.instances['templateContent'].setData(result.d);
-            $("#templateContent").attr('itemId', itemId);
+            CKEDITOR.instances['templateContentCreate'].setData(result.d);            
         },
         failure: function (error) {
             alert(error);
@@ -1251,12 +1224,39 @@ function openSavedItem(itemId) {
     });
 }
 
+function doActionSaved(itemId, groupId) {
+    $('#debtActionEditModal').attr('itemId', itemId);
+    $('#debtActionEditModal').modal({ remote: 'modals/AmendDebtActionDocument.html', width: 925 });
+}
 
+function doActionView(itemId, groupId) {
+    window.location.href = 'DocumentService.aspx?documentId=' + itemId;
+}
 
-function doSave() {
+function openSavedItem(itemId, destinationControl) {
 
-    var documentContent = CKEDITOR.instances['templateContent'].getData();
-    var actionId = $("#templateContent").attr('itemId');
+    console.log("itemid:" + itemId + ", destinationControl:" + destinationControl);
+
+    $.ajax({
+        type: "POST",
+        url: "DocumentService.aspx/OpenItemById",
+        data: "{'itemId':'" + itemId + "'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            console.log("openSavedItem: " + result.d);
+            CKEDITOR.instances[destinationControl].setData(result.d);
+            $("#" + destinationControl).attr('itemId', itemId);
+        },
+        failure: function (error) {
+            alert(error);
+        }
+    });
+}
+
+function doSave(actionId, documentContent, parentModal) {
+
+    console.log("actionId, parentModal - " + actionId + "--" + parentModal);
 
     $.ajax({
         type: "POST",
@@ -1265,7 +1265,11 @@ function doSave() {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
-            $('#debtActionModal').modal("hide");
+
+            $('#' + parentModal).modal("hide");
+            console.log("CALLING - " + $("#selectedDebtId").val());
+            refreshRecoveryCycles($("#selectedDebtId").val());
+            //console.log('refreshed:' + $("#selectedDebtId").val());
         },
         failure: function (error) {
             alert(error);
@@ -1273,12 +1277,11 @@ function doSave() {
     });
 }
 
-function doPrint() {
+function doPrint(actionId) {
 
-    var documentContent = CKEDITOR.instances['templateContent'].getData();
-    var actionId = $("#templateContent").attr('itemId');
-
-    console.log("PRINT");
+    //var documentContent = CKEDITOR.instances['templateContent'].getData();
+    //var actionId = $("#templateContent").attr('itemId');
+    //console.log("PRINT");
 
     $.ajax({
         type: "POST",
@@ -1287,13 +1290,16 @@ function doPrint() {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
-            $('#debtActionModal').modal("hide");
+            $('#debtActionEditModal').modal("hide");
+            refreshRecoveryCycles($("#selectedDebtId").val());
         },
         failure: function (error) {
             alert(error);
         }
     });
 }
+
+
 
 
 
@@ -1310,7 +1316,6 @@ function doPrint() {
 //var editor = CKEDITOR.inline('templateName', {
 //    removePlugins: 'toolbar'
 //});
-
 //function refreshTemplateDocument(templateId) {
 //    $.ajax({
 //        type: "POST",
@@ -1323,13 +1328,11 @@ function doPrint() {
 //            $("#templateName").attr('templateId', result.CHT_ID);
 //            $("#templateName").attr('ViewTable', result.CHT_ViewTable);
 //            $("#templateName").html('<h2>' + result.CHT_Name + '</h2>');
-
 //            if (result.CHT_Notes.length > 0) {
 //                $("#templateDescription").html('<p><i>' + result.CHT_Notes + '</i></p>');
 //            } else {
 //                $("#templateDescription").html('<p><i>Click to edit</i></p>');
 //            }
-
 //            CKEDITOR.instances['templateContent'].setData(result.CHT_Content);
 //            // TODO: BETTER FIX THIS ISSUE
 //            $("#cke_22_text").css("width", "175px");

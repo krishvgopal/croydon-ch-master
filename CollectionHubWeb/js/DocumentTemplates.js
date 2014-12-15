@@ -10,7 +10,6 @@ var editor = CKEDITOR.inline('templateName', {
     removePlugins: 'toolbar'
 });
 
-
 refreshBatchProcessJobs();
 
 function refreshBatchProcessJobs() {

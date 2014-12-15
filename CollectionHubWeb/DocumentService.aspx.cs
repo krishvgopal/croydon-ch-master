@@ -1,6 +1,7 @@
 ﻿using System;
 
 using System.IO;
+using System.Web;
 using System.Web.Script.Services;
 using System.Web.Services;
 
@@ -16,7 +17,12 @@ public partial class DocumentService : System.Web.UI.Page
             var documentId = Convert.ToInt32(Request.QueryString["documentId"]);
             var returnByte = DownloadItemById(documentId);
 
-            Response.BinaryWrite(returnByte);
+            Response.Clear();
+            Response.ContentType = "application/msword";
+            Response.AddHeader("Content-Disposition", "attachment; filename=test.doc");
+            Response.OutputStream.Write(returnByte, 0, returnByte.Length);
+            Response.Flush();
+            Response.End();
         }
         else
         {
@@ -76,7 +82,7 @@ public partial class DocumentService : System.Web.UI.Page
 
         b.InsertHtml(documentContent);
         d.Save(stream, SaveFormat.Doc);
-        //d.Save("new_doc_" + Guid.NewGuid().ToString() + ".doc" );
+        //d.Save("C:\\Temp\\new_doc_" + Guid.NewGuid().ToString() + ".doc" );
         
         stream.Position = 0;
 
@@ -106,6 +112,7 @@ public partial class DocumentService : System.Web.UI.Page
 
         b.InsertHtml(documentContent);
         d.Save(stream, SaveFormat.Doc);
+        //d.Save("C:\\Temp\\new_doc_" + Guid.NewGuid().ToString() + ".doc");
         
         stream.Position = 0;
 

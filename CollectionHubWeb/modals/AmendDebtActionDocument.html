@@ -7,21 +7,31 @@
     <body>
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title">Confirm Action</h4>
+            <h4 class="modal-title">Confirm Action!</h4>
         </div>
         <div class="modal-body">
-            <textarea class="ckeditor" name="templateContent" id="templateContent"></textarea>
+            <textarea class="ckeditor" name="templateContentAmend" id="templateContentAmend"></textarea>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-            <button type="button" class="btn btn-primary" onclick="doSave();" >Save</button>
-            <button type="button" class="btn btn-primary" onclick="doPrint();">Print</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" onclick="doSaveWrapper();" >Save</button>
+            <button type="button" class="btn btn-primary" onclick="doPrintWrapper();">Print</button>
         </div>
         <script>
-            var itemId = $('#debtActionModal').attr('itemId');
-            openSavedItem(itemId);
-            $('#debtActionModal').attr('itemId', itemId);
-            CKEDITOR.replace('templateContent', { height: 550, width: 775 });
+            CKEDITOR.replace('templateContentAmend', { height: 550, width: 775 });
+            var itemId = $('#debtActionEditModal').attr('itemId');
+            openSavedItem(itemId, 'templateContentAmend');
+            function doSaveWrapper() {
+                var doc = CKEDITOR.instances['templateContentAmend'].getData();
+                var itemId = $('#debtActionEditModal').attr('itemId');
+                doSave(itemId, doc, 'debtActionEditModal');
+            }
+            function doPrintWrapper() {
+                var doc = CKEDITOR.instances['templateContentAmend'].getData();
+                var itemId = $('#debtActionEditModal').attr('itemId');
+                doSave(itemId, doc, 'debtActionEditModal');
+                doPrint(itemId, doc, 'debtActionEditModal');
+            }
         </script>
     </body>
 </html>

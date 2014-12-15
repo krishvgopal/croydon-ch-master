@@ -1936,7 +1936,8 @@ namespace CollectionHubData
                 sqlCommand.Parameters.Add(new SqlParameter("ViewName", viewName));
                 sqlCommand.Parameters.Add(new SqlParameter("PIN", pin));
                 sqlCommand.Parameters.Add(new SqlParameter("uprn", uprn));
-
+                sqlCommand.Parameters.Add(new SqlParameter("debtid", 0));
+                
                 var dataReader = sqlCommand.ExecuteReader();
 
                 if (dataReader.HasRows)
@@ -2064,7 +2065,7 @@ namespace CollectionHubData
                 sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                 sqlCommand.Parameters.Add(new SqlParameter("ACTIONID", actionId));
 
-                var dataReader = sqlCommand.ExecuteReader(CommandBehavior.SequentialAccess);
+                var dataReader = sqlCommand.ExecuteReader(); //CommandBehavior.SequentialAccess
                 
                 if (dataReader.HasRows)
                 {

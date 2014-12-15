@@ -310,16 +310,39 @@
                 <div class="modal-content">
                 </div>
             </div>
-        </div> 
-    <%
-        if (System.Configuration.ConfigurationManager.AppSettings["UseMinifiedJs"] == "true")
-        {
-            %><script type="text/javascript" charset="utf8" src="js/DebtView.js"></script><%
-        }
-        else
-        {
-            %><script type="text/javascript" charset="utf8" src="js/DebtView.js"></script><%
-        }
-    %>
+        </div>
+    
+        <div class="modal fade" id="debtActionCreateModal" tabindex="-1" role="dialog" aria-labelledby="debtActionCreateModal" aria-hidden="true" >
+            <div class="modal-dialog" style="width:825px">
+                <div class="modal-content">
+                </div>
+            </div>
+        </div>
+    
+
+        <div class="modal fade" id="debtActionEditModal" tabindex="-1" role="dialog" aria-labelledby="debtActionEditModal" aria-hidden="true" >
+            <div class="modal-dialog" style="width:825px">
+                <div class="modal-content">
+                </div>
+            </div>
+        </div>
+    
+<%--        <div class="modal fade" id="debtActionSavedModal" tabindex="-1" role="dialog" aria-labelledby="debtActionSavedModal" aria-hidden="true" >
+            <div class="modal-dialog" style="width:825px">
+                <div class="modal-content">
+                </div>
+            </div>
+        </div>
+    
+        <div class="modal fade" id="debtActionViewModal" tabindex="-1" role="dialog" aria-labelledby="debtActionViewModal" aria-hidden="true" >
+            <div class="modal-dialog" style="width:825px">
+                <div class="modal-content">
+                </div>
+            </div>
+        </div>--%>
+
+    <% if (System.Configuration.ConfigurationManager.AppSettings["UseMinifiedJs"] == "true") { %>
+    <script type="text/javascript" charset="utf8" src="js/DebtView.js"></script><% } else { %>
+    <script type="text/javascript" charset="utf8" src="js/DebtView.js"></script><% } %>
 </asp:Content>
 
