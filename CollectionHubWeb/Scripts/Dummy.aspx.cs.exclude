@@ -1,0 +1,210 @@
+﻿using Microsoft.VisualBasic;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
+using System.Data.SqlClient;
+
+public partial class Scripts_Dummy : System.Web.UI.Page
+{
+	protected void Page_Load(object sender, System.EventArgs e)
+	{
+
+		//Instanciation des variables
+		//Creation of variables
+		string str = "";
+		//Chaîne JSON en sortie - Will be the output JSON string
+		string strClassement = "";
+		//Colonne sur laquelle le tableau est trié - Will be the sorted column
+		string strSens = "";
+		//ASC or DESC
+		string strSensInverse = "";
+		//DESC or ASC
+
+		//Détection de la colonne de tri
+		//Detection of sorted column
+		switch (Request("iSortCol_0")) {
+			case 0:
+				strClassement = "engine";
+				break;
+			case 1:
+				strClassement = "browser";
+				break;
+			case 2:
+				strClassement = "platform";
+				break;
+			case 3:
+				strClassement = "version";
+				break;
+			case 4:
+				strClassement = "grade";
+				break;
+			default:
+				strClassement = "engine";
+				break;
+		}
+
+		//Détection du sens du tri
+		//detection of direction of the sort
+		switch (Request("sSortDir_0")) {
+			case "asc":
+				strSens = " ASC";
+				strSensInverse = " DESC";
+				break;
+			case "desc":
+				strSens = " DESC";
+				strSensInverse = " ASC";
+				break;
+		}
+
+		//Connexion SQL
+		//SQL connection
+		SqlConnection maConnexion = default(SqlConnection);
+		string strConnect = "server={SQL_SERVER}" + "; uid={USERNAME}" + ";pwd={PASSWORD}" + "; database={DATABASE}";
+		maConnexion = new SqlConnection(strConnect);
+		maConnexion.Open();
+
+		DataSet dataset = new DataSet();
+
+		//Création de la requête SQL
+		//SQL request creation
+		string strRequeteA = new string("");
+		string strRequeteC = new string("");
+		string strRequeteB_1 = new string("");
+		string strRequeteB_2 = new string("");
+		string strRequeteB_3 = new string("");
+
+		//Le requête est bâtie selon une méthode permettant la pagination avec SQL Server
+		//The request is built with a method which allow pagination with SQL Server
+		// http://troels.arvin.dk/db/rdbms/
+		strRequeteA += "SELECT * FROM (";
+		strRequeteA += "SELECT TOP ";
+		strRequeteA += Request("iDisplayLength").ToString;
+		strRequeteA += " * FROM (";
+		strRequeteB_1 = "SELECT ";
+		strRequeteB_2 = "TOP " + (Convert.ToInt32(Request("iDisplayStart")) + Convert.ToInt32(Request("iDisplayLength"))).ToString;
+		strRequeteB_3 += " id, engine, browser, platform, version, grade ";
+		strRequeteB_3 += "FROM ajax ";
+
+		if (!string.IsNullOrEmpty(Request("sSearch"))) {
+			if (Request("sSearch") != " ") {
+				strRequeteB_3 += "WHERE ";
+				string chaine = null;
+				for (int i = 0; i <= (Strings.Split(Request("sSearch").ToString, " ").Length - 1); i++) {
+					chaine = Strings.Split(Request("sSearch").ToString, " ")(i);
+					if (!string.IsNullOrEmpty(chaine)) {
+						if (i != 0) {
+							strRequeteB_3 += "AND (";
+						} else {
+							strRequeteB_3 += "(";
+						}
+						strRequeteB_3 += "engine LIKE '%" + chaine + "%'";
+						strRequeteB_3 += " OR ";
+						strRequeteB_3 += "browser LIKE '%" + chaine + "%'";
+						strRequeteB_3 += " OR ";
+						strRequeteB_3 += "platform LIKE '%" + chaine + "%'";
+						strRequeteB_3 += " OR ";
+						strRequeteB_3 += "version LIKE '%" + chaine + "%'";
+						strRequeteB_3 += " OR ";
+						strRequeteB_3 += "grade LIKE '%" + chaine + "%'";
+						strRequeteB_3 += ") ";
+					}
+				}
+			}
+		}
+
+		strRequeteC += " ORDER BY ";
+		strRequeteC += strClassement;
+		strRequeteC += strSens;
+
+		strRequeteC += ") AS foo ORDER BY ";
+		strRequeteC += strClassement;
+		strRequeteC += strSensInverse;
+
+		strRequeteC += ") AS bar ORDER BY ";
+		strRequeteC += strClassement;
+		strRequeteC += strSens;
+
+		//Exécution de la requête
+		//Request execution
+		SqlCommand MaCommande = new SqlCommand(strRequeteA + strRequeteB_1 + strRequeteB_2 + strRequeteB_3 + strRequeteC, maConnexion);
+		SqlDataAdapter MonAdapteur = new SqlDataAdapter(MaCommande);
+		MonAdapteur.Fill(dataset);
+		MaCommande.Dispose();
+
+		if (dataset.Tables.Count > 0) {
+			DataTable table = new DataTable();
+			table = dataset.Tables(0);
+
+			//Ecriture des données JSON
+			//JSON data writing
+			str = "{";
+			str += "\"sEcho\": " + Request("sEcho") + ",";
+
+			//Requête permettant l'écriture du nombre total d'enregistrements
+			//Request finding the total records number
+			strRequeteA = "SELECT COUNT(id) FROM ajax";
+			dataset = new DataSet();
+			MaCommande = new SqlCommand(strRequeteA, maConnexion);
+			MonAdapteur = new SqlDataAdapter(MaCommande);
+			MonAdapteur.Fill(dataset);
+			MaCommande.Dispose();
+			str += "\"iTotalRecords\": " + dataset.Tables(0).Rows(0)(0).ToString + ",";
+
+			//Requête permettant l'écriture du nombre d'enregistrement filtrés
+			//Request finding the displayed records number
+			strRequeteA = "SELECT COUNT(id) FROM (" + strRequeteB_1 + strRequeteB_2 + strRequeteB_3 + ") AS P1";
+			dataset = new DataSet();
+			MaCommande = new SqlCommand("SELECT COUNT(id) FROM (" + strRequeteB_1 + strRequeteB_3 + ") AS P1", maConnexion);
+			MonAdapteur = new SqlDataAdapter(MaCommande);
+			MonAdapteur.Fill(dataset);
+			MaCommande.Dispose();
+			str += "\"iTotalDisplayRecords\": " + dataset.Tables(0).Rows(0)(0).ToString + ",";
+
+			str += "\"aaData\": [";
+
+			//Procédure évitant les doublons dans la dernière page
+			//Procedure avoiding double records in last page
+			int nbRowANePasAfficher = 0;
+			if ((Convert.ToInt32(Request("iDisplayStart")) + Convert.ToInt32(Request("iDisplayLength"))) > dataset.Tables(0).Rows(0)(0)) {
+				nbRowANePasAfficher = (Convert.ToInt32(Request("iDisplayStart")) + Convert.ToInt32(Request("iDisplayLength"))) - dataset.Tables(0).Rows(0)(0);
+			}
+			if (Convert.ToInt32(Request("iDisplayStart")) == 0) {
+				nbRowANePasAfficher = 0;
+			}
+
+			//Ecriture des données JSON
+			//JSON data writing
+			bool autre = false;
+			foreach (DataRow row in table.Rows) {
+				if (nbRowANePasAfficher > 0) {
+					nbRowANePasAfficher -= 1;
+					continue;
+				}
+				if (autre == true) {
+					str += ",";
+				}
+				str += "[";
+				str += "\"" + row("engine").ToString + "\",";
+				str += "\"" + row("browser").ToString + "\",";
+				str += "\"" + row("platform").ToString + "\",";
+				str += "\"" + row("version").ToString + "\",";
+				str += "\"" + row("grade").ToString + "\"";
+				str += "]";
+				autre = true;
+			}
+		}
+		str += "]";
+		str += "}";
+
+		Response.Write(str);
+
+		maConnexion.Close();
+
+	}
+	public DTServeur()
+	{
+		Load += Page_Load;
+	}
+}
