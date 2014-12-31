@@ -54,9 +54,33 @@
                
         $(document).ready(function () {
             $('#searchTable').dataTable({
-                "processing": true,
+                "processing": false,
                 "serverSide": true,
-                "ajax": "scripts/pro.aspx"
+                "ajax": "scripts/pro.aspx",
+                "aoColumnDefs": [
+                   {
+                       "aTargets": [0],
+                       "bVisible": true,
+                   }
+                ],
+                "initComplete": function (settings, json) {
+                    $('#searchTable tfoot th').each(function () {
+                        var title = $('#searchTable thead th').eq($(this).index()).text();
+                        $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+                    });
+                    var table = $('#searchTable').DataTable();
+                    table.columns().eq(0).each(function (colIdx) {
+                        $('input', table.column(colIdx).footer()).on('keypress', function (e) {
+                            var code = (e.keyCode ? e.keyCode : e.which);
+                            if (code == 13) {
+                                table
+                                .column(colIdx)
+                                .search(this.value)
+                                .draw();
+                            }
+                        });
+                    });
+                }
             });
         });
 

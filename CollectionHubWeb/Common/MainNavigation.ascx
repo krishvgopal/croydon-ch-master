@@ -7,6 +7,7 @@
     <li><a title="New Process"          name="menuList" href="NewProcess.aspx"          thisLabel="&nbsp;New Process"       thisFA="fa-cogs">       <i class="fa fa-cogs fa-fw"></i>        </a></li>
     <li><a title="Processes"            name="menuList" href="Processes.aspx"           thisLabel="&nbsp;Processes"         thisFA="fa-cogs">       <i class="fa fa-cogs fa-fw"></i>        </a></li>
     <li><a title="Document Templates"   name="menuList" href="DocumentTemplates.aspx"   thisLabel="&nbsp;Documents"         thisFA="fa-file">       <i class="fa fa-file fa-fw"></i>        </a></li>
+    <li><a title="Application Settings" name="menuList" href="ApplicationSettings.aspx"   thisLabel="&nbsp;Application Settings"         thisFA="fa-wrench">      <i class="fa fa-wrench fa-fw"></i>        </a></li>
     <ul class="nav" id="side-menu">
         <li><a href="#" onclick="toggleNavigation();"> <i id="resizeContainer" class="fa fa-expand"></i> </a></li>
     </ul>

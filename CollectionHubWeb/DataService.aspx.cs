@@ -549,6 +549,7 @@ public partial class DataService : System.Web.UI.Page
 
         returnData = dataAccess.ActivateBatch(batchId, batchName);
 
+
         return returnData;
     }
     [WebMethod]

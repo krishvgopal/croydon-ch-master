@@ -11,7 +11,7 @@ namespace CollectionHubData
         public DateTime CreatedDate     { get; set; }
         public string   Procedure       { get; set; }
         public string   Description     { get; set; }
-        public string   BatchProcedure  { get; set; }
+        //public string   BatchProcedure  { get; set; }
 
 
         public BatchProcess() { }
@@ -22,7 +22,7 @@ namespace CollectionHubData
             DebtSource          = Convert.ToString(value["bp_debt_source"]);
             CreatedDate         = Convert.ToDateTime(value["bp_created_date"]);
             Procedure           = Convert.ToString(value["bp_selection_procedure"]);
-            BatchProcedure      = Convert.ToString(value["bp_batch_procedure"]);
+            //BatchProcedure      = Convert.ToString(value["bp_batch_procedure"]);
             Description         = Convert.ToString(value["bp_description"]);
 
            // IsMandatory         = Convert.ToBoolean(value["bf_field_mandatory"]);

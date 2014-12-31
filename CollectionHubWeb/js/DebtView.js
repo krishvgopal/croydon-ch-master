@@ -2,10 +2,12 @@
 
 $('#pageBody_pageIcon').click(function (e) {
     e.preventDefault();
+    $("#selectedDebtId").val('');
     refreshSingleDebtView();
 });
 $('#pageIcon').click(function (e) {
     e.preventDefault();
+    $("#selectedDebtId").val('');
     refreshSingleDebtView();
 });
 $(function () {
@@ -162,7 +164,6 @@ function loadAttributesList() {
                         text: item.AttributeText
                     }));
                 }
-
                 if (item.IsPersonAttribute) {
                     $('#personAttributes').append($('<option>', {
                         value: item.AttributeId,
@@ -242,7 +243,6 @@ function loadArrangementPaymentMethodList() {
         dataType: "json",
         success: function (result) {
             $.each(result.d, function (i, item) {
-                //console.log(item.ArrangementName);
                 $('#agmPaymentMethod').append($('<option>', {
                     value: item.PaymentMethodCode,
                     text: item.PaymentMethodName
@@ -372,9 +372,7 @@ function refreshRecoveryCycles(debtId) {
                 ],
                 "initComplete": function(settings, json) {
                     for (var i = 0; i < settings.aoData.length; i++) {
-                        //console.log("VALUE (" + i + ") IS (" + settings.aoData[i].anCells[6].outerText + ")");
                         if (settings.aoData[i].anCells[6].outerText.toLowerCase() == "bold") {
-                            //console.log("#tableRecovery tr:eq(" + i + ")");
                             $("#tableRecovery tr:eq(" + i + ")").css("font-weight", "bold");
                         }
                     }

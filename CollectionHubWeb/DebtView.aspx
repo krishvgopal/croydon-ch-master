@@ -47,9 +47,9 @@
                         <label>Total Debt Outstanding &pound;</label>
                         <asp:Literal ID="pageDebtOutstanding" runat="server"></asp:Literal>
                         <br/>
-                         <select id="showCleared" class="form-control-compact" style="width:80% !important;float:left;margin-top: 5px" onchange="refreshDebtsList();" >
-                           <option value="1">Show Open Debts</option>
-                           <option value="2" selected>Show All Debts</option>
+                        <select id="showCleared" class="form-control-compact" style="width:80% !important;float:left;margin-top: 5px" onchange="refreshDebtsList();" >
+                            <option value="1">Show Open Debts</option>
+                            <option value="2" selected>Show All Debts</option>
                         </select>
                         <img id="showClearedLoadingImage" src="img/gif-load.gif" alt="Loading Image" style="float:left;padding-left: 5px;padding-top: 3px;" />
                     </div>

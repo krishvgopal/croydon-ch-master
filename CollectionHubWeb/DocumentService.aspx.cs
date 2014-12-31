@@ -30,6 +30,50 @@ public partial class DocumentService : System.Web.UI.Page
         }
     }
 
+    //public string ExecuteBatchDocuments(int templateId, int userId, string pin, string uprn)
+    //{
+    //    var da = new DataAccess();
+    //    var dt = da.GetDocumentTemplate(templateId);
+    //    var mv = da.GetMergeValues(userId, dt.CHT_ViewTable, pin, uprn);
+
+    //    var html = dt.CHT_Content;
+
+    //    foreach (MergeValue m in mv)
+    //    {
+    //        // TODO: THIS SHOULD BE LOOKING FOR ALL [] MATCHES TO REMOVE UNUSED MARKERS
+    //        html = html.Replace(m.FieldName, m.FieldValue);
+    //    }
+
+    //    //return html;
+
+    //    var returnValue = false;
+
+    //    var stream = new MemoryStream();
+
+    //    var d = new Document();
+    //    var b = new DocumentBuilder(d);
+
+    //    b.InsertHtml(documentContent);
+    //    d.Save(stream, SaveFormat.Doc);
+    //    //d.Save("C:\\Temp\\new_doc_" + Guid.NewGuid().ToString() + ".doc" );
+
+    //    stream.Position = 0;
+
+    //    var documentBody = stream.ToArray();
+
+    //    stream.Close();
+
+    //    //var da = new DataAccess();
+
+    //    returnValue = da.SaveDocument(userId, documentTemplateId, documentName, documentContent, documentBody, actionId, pin, uprn, debtId);
+
+    //    stream.Dispose();
+    //    d = null;
+
+    //    //  return returnValue;
+
+    //}
+
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static string ProcessAdd(int itemId, int groupId, int userId, string pin, string uprn)

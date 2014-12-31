@@ -25,14 +25,8 @@ public class ServerSideProcessor : System.Web.Services.WebService {
 
 
     }
-
-    
-
     [WebMethod]
     public string HelloWorld() {
         return "Hello World";
     }
-    
-
-
 }

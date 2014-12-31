@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Newtonsoft.Json;
 using NLog;
 
 public partial class Scripts_Pro : System.Web.UI.Page
@@ -13,12 +16,15 @@ public partial class Scripts_Pro : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        //System.Diagnostics.Debug.WriteLine("QueryString Values");
-        //foreach (String key in Request.QueryString.AllKeys)
-        //{
-        //    System.Diagnostics.Debug.WriteLine("Key:[{0}],Value:[{1}]", key, Request.QueryString[key]);
-        //}
+        StringBuilder sb = new StringBuilder();
 
+        foreach (String key in Request.QueryString.AllKeys)
+        {
+            System.Diagnostics.Debug.WriteLine("{0}:{1}", key, Request.QueryString[key]);
+            sb.AppendLine(key + ":" + Request.QueryString[key]);
+        }
+
+        //System.Diagnostics.Debug.WriteLine("______________________________");
         //System.Diagnostics.Debug.WriteLine("Form Values");
         //foreach (var key in Request.Form.AllKeys)
         //{
@@ -27,6 +33,11 @@ public partial class Scripts_Pro : System.Web.UI.Page
         //}
 
         //string json = "";
+
+        Debug.Write(sb.ToString());
+
+       // DataTableParameters x = new DataTableParameters(sb.ToString());
+
         var counter = 1;
 
         if (Application["count"] == null)
@@ -38,6 +49,7 @@ public partial class Scripts_Pro : System.Web.UI.Page
             Application["count"] = Convert.ToInt32(Application["count"]) + 1;
             counter = Convert.ToInt32(Application["count"]);
         }
+
         Response.Clear();
 
         var sr = new StreamReader(@"C:\_Repositories\HubSolutionsCollectionHub\CollectionHubWeb\Scripts\test.json");
