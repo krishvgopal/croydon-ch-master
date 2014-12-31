@@ -513,7 +513,58 @@ namespace CollectionHubData
             using (var sqlCommand = new SqlCommand("P_ACTIONS_LIST", sqlDataConnection))
             {
                 sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                sqlCommand.Parameters.Add(new SqlParameter("DebtId", debtId)); 
+                sqlCommand.Parameters.Add(new SqlParameter("DebtId", debtId));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add(new RecoveryCycleItem(dataReader));
+                    }
+                }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
+        public List<RecoveryCycleItem> GetRecoveryCycleHistory(int debtId, int statusId)
+        {
+            var returnValue = new List<RecoveryCycleItem>();
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("P_ACTIONS_LIST", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("DebtId", debtId));
+                sqlCommand.Parameters.Add(new SqlParameter("Status", statusId));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add(new RecoveryCycleItem(dataReader));
+                    }
+                }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
+        public List<RecoveryCycleItem> GetRecoveryCycleHistory(int debtId, int statusId, int nextStep)
+        {
+            var returnValue = new List<RecoveryCycleItem>();
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("P_ACTIONS_LIST", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("DebtId", debtId));
+                sqlCommand.Parameters.Add(new SqlParameter("Status", statusId));
+                sqlCommand.Parameters.Add(new SqlParameter("NextAction", nextStep));
 
                 var dataReader = sqlCommand.ExecuteReader();
 
@@ -1951,6 +2002,31 @@ namespace CollectionHubData
             sqlDataConnection.Close();
             return returnValue;
         }
+
+
+        public List<ActionStatus> GetActionStatuses()
+        {
+            var returnValue = new List<ActionStatus>();
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("P_ACTION_STATUS_LIST", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add(new ActionStatus(dataReader));
+                    }
+                }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
+
         public bool                     SaveDocument(int userId, int templateId, string documentName, string documentContent, byte[] documentBody, int actionId, string pin, string uprn, int debtId)
         {
             var returnValue = false;

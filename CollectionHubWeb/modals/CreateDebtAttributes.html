@@ -9,6 +9,7 @@
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title">Confirm Action</h4>
         </div>
+        <div id="headerTag"></div>
         <div class="modal-body">
             <p>Enter in the fields below to create a new debt attribute. Attributes can be used to refine search results.</p>
             <br />
@@ -28,6 +29,7 @@
             <button type="button" class="btn btn-primary" onclick="createDebtAttribute();">Create Attribute</button>
         </div>
         <script>
+            $("#headerTag").html(getHeader());
             loadAttributesList();
         </script>
     </body>

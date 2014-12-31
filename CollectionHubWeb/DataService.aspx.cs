@@ -289,6 +289,31 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
+
+    [WebMethod(CacheDuration = 60)]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public static List<ActionStatus> GetActionStatuses()
+    {
+        var returnData = new List<ActionStatus>();
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.GetActionStatuses();
+
+        return returnData;
+    }
+
+    [WebMethod(CacheDuration = 60)]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public static List<RecoveryCycleItem> GetRecoveryCycleHistory(int debtId, int statusId, int nextStep)
+    {
+        var returnData = new List<RecoveryCycleItem>();
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.GetRecoveryCycleHistory(debtId, statusId, nextStep);
+
+        return returnData;
+    }
+
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static bool CreateDebtAttribute(int debtId, int userId, int attributeId, bool isCurrent, string attributeValue)

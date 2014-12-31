@@ -9,6 +9,7 @@
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title">Confirm Action</h4>
         </div>
+        <div id="headerTag"></div>
         <div class="modal-body">
             <p>Enter in the fields below to create a new recovery Cycle</p>
             <br />
@@ -28,8 +29,15 @@
             <button type="button" class="btn btn-primary" onclick="createRecoveryCycle();">Set Recovery Cycle</button>
         </div>
         <script>
+            
+            var todayFull = new Date();
+            var todayPretty = (todayFull.getDate() + 1) + '/' + todayFull.getMonth() + '/' + todayFull.getFullYear();
+
+            $("#headerTag").html(getHeader());
             $("#recoveryStartDate").datepicker();
+            $("#recoveryStartDate").val(todayPretty);
             loadRecoveryCycleList($("#selectedDebtId").val());
+
         </script>
     </body>
 </html>

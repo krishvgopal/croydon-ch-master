@@ -9,6 +9,7 @@
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title">Confirm Action</h4>
         </div>
+        <div id="headerTag"></div>
         <div class="modal-body">
             <textarea class="ckeditor" name="templateContentCreate" id="templateContentCreate"></textarea>
         </div>
@@ -18,6 +19,8 @@
             <button type="button" class="btn btn-primary" onclick="doPrintWrapper();">Print</button>
         </div>
         <script>
+            $("#headerTag").html(getHeader());
+
             CKEDITOR.replace('templateContentCreate', { height: 550, width: 775 });
             function doSaveWrapper() {
                 var doc = CKEDITOR.instances['templateContentCreate'].getData();

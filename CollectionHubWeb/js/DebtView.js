@@ -1,18 +1,26 @@
-﻿$("#showClearedLoadingImage").hide();
+﻿
+"Use Strict";
+
+$("#showClearedLoadingImage").hide();
+
+var selectedDebtRecord = null;
 
 $('#pageBody_pageIcon').click(function (e) {
     e.preventDefault();
     $("#selectedDebtId").val('');
     refreshSingleDebtView();
+    loadDebtActionButtons();
 });
 $('#pageIcon').click(function (e) {
     e.preventDefault();
     $("#selectedDebtId").val('');
     refreshSingleDebtView();
+    loadDebtActionButtons();
 });
 $(function () {
     loadAttributeStatusTypes();
     refreshSingleDebtView();
+    loadDebtActionButtons();
 });
 
 function selectRow(idValue, source, sourceAccRef) {
@@ -27,6 +35,8 @@ function selectRow(idValue, source, sourceAccRef) {
     refreshParties(idValue);
     refreshDebtAttributes(idValue);
     refreshArrangements(idValue);
+
+    loadDebtActionButtons();
 }
 
 function loadDebtsView(result) {
@@ -124,7 +134,9 @@ function loadDebtsView(result) {
 
             $('#dataTableMain tbody').on('click', 'tr', function (ee) {
                 var selectedRowHtml     = $(ee.currentTarget.cells[0]);
-                var selectedRowValue    = selectedRowHtml.find('input:checkbox');
+                var selectedRowValue = selectedRowHtml.find('input:checkbox');
+
+                selectedDebtRecord = ee.currentTarget.cells;
 
                 $('#debtRowTotalValue').val(selectedRowValue.attr('debtRowTotal'));
 
@@ -251,12 +263,110 @@ function loadArrangementPaymentMethodList() {
         }
     });
 }
+function loadActionStatuses() {
+    $('#recoveryActiveStatus').val('');
+    $.ajax({
+        type: "POST",
+        url: "DataService.aspx/GetActionStatuses",
+        data: "{}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            $.each(result.d, function (i, item) {
+                $('#recoveryActiveStatus').append($('<option>', {
+                    value: item.ActionStatusId,
+                    text: item.ActionStatusText
+                }));
+            });
+        }
+    });
+}
+
+function updateRecoveryHistory() {
+   
+    console.log($("#recoveryActiveStatus").val());
+    // " + $("#recoveryActiveStatus").val() + "
+
+    $.ajax({
+        type: "POST",
+        url: "DataService.aspx/GetRecoveryCycleHistory",
+        data: "{'debtId':'" + $("#selectedDebtId").val() + "','statusId':'" + $("#recoveryActiveStatus").val() + "','nextStep':'" + $("#recoveryNextStep").val() + "'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            doProgress(result.d.length, 'arefRecovery');
+            if (result.hasOwnProperty("d")) { result = result.d; }
+            $("#tableRecovery").dataTable({
+                "destroy": true,
+                "aaData": result,
+                aoColumns: [
+                    { mData: 'ActionText' },
+                    { mData: 'Action' },
+                    { mData: 'ActionStatus' },
+                    { mData: 'ProcessMethod' },
+                    { mData: 'ActionGroup' },
+                    { mData: 'Actionable' },
+                    { mData: 'ColumnFormat' },
+                    { mData: 'Scheduled' },
+                    { mData: 'ID' },
+                    { mData: 'DebtID' },
+                    { mData: 'DebtReference' },
+                    { mData: 'ActionStatus' } // 
+                ],
+                "aoColumnDefs": [
+                    {
+                        "aTargets": ["id"],
+                        "bVisible": false,
+                    }, {
+                        "aTargets": ["onClick"],
+                        "bVisible": true,
+                        "mRender": function (value, type, full) {
+                            if (value != null) {
+                                return '<a href="#" onclick="processAction(' + full.ID + ',' + full.ActionGroup + ',\'' + full.ActionStatus + '\')">' + value + '</a>';
+                            } else { return ''; }
+                        }
+                    }, {
+                        "aTargets": ["debtId"],
+                        "bVisible": false,
+                    }, {
+                        "aTargets": ["actionStatus"],
+                        "bVisible": false,
+                    }, {
+                        "aTargets": ["debtReference"],
+                        "bVisible": false,
+                    }, {
+                        "aTargets": ["actionGroup"],
+                        "bVisible": false,
+                    }, {
+                        "aTargets": ["columnFormat"],
+                        "bVisible": false,
+                    }, {
+                        "sTitle": "Scheduled"
+                        , "aTargets": ["scheduled"]
+                        , "mRender": function (value, type, full) {
+                            if (value != null) {
+                                var dtStart = new Date(parseInt(value.substr(6)));
+                                var dtStartWrapper = moment(dtStart);
+                                return dtStartWrapper.format('DD/MM/YYYY');
+                            } else { return ''; }
+                        }
+                    }
+                ],
+                "initComplete": function (settings, json) {
+                    for (var i = 0; i < settings.aoData.length; i++) {
+                        if (settings.aoData[i].anCells[6].outerText.toLowerCase() == "bold") {
+                            $("#tableRecovery tr:eq(" + i + ")").css("font-weight", "bold");
+                        }
+                    }
+                }
+            });
+        }
+    });
+}
 
 function refreshDebtsList() {
-
     var showCleared = 'false';
     if ($("#showCleared").val() == 2) { showCleared = 'true'; }
-
     $.ajax({
         type: "POST",
         url: "DataService.aspx/GetDebts",
@@ -278,23 +388,17 @@ function refreshSingleDebtView() {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (data) {
-
             var pin   = $("#cnpin").val();
             var uprn  = $("#uprn").val();
-
             loadDebtsView(data);
             refreshPersonOverview(pin, uprn);
         }
     });
 }
 function refreshPersonOverview(sourcePin, uprn) {
-
-    //TODO : ADD RECOVERY HISTORY BY PIN
-
     //100% / BY NUMBER OF UNITS
     progressInterval = 100/7;
     progressValue = 0;
-
     refreshPersonAttributes(sourcePin);
     refreshCurrentAttributes(sourcePin);
     refresMatchList(sourcePin);
@@ -305,10 +409,12 @@ function refreshPersonOverview(sourcePin, uprn) {
     refreshArrangementsByPin(sourcePin);
 }
 function refreshRecoveryCycles(debtId) {
+    loadActionStatuses();
     $.ajax({
         type: "POST",
         url: "DataService.aspx/GetRecoveryCycleHistory",
-        data: "{'debtId':'" + debtId + "'}",
+        //data: "{'debtId':'" + debtId + "'}",
+        data: "{'debtId':'" + debtId + "','statusId':'0','nextStep':'0'}",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
@@ -588,6 +694,7 @@ function refreshPersonAttributes(partyPin) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
+
             doProgress(result.d.length, 'arefPersonAttributes');
             if (result.hasOwnProperty("d")) { result = result.d; }
             
@@ -770,7 +877,6 @@ function refresMatchList(partyPin) {
                         , "mRender": function (value, type, full) {
                             if (value != null) {
                                 var dtStart = new Date(parseInt(value.substr(6)));
-                                //consle.log('TE' + dtStart);
                                 var dtStartWrapper = moment(dtStart);
                                 return dtStartWrapper.format('DD/MM/YYYY');
                             } else {
@@ -906,7 +1012,6 @@ function refreshDebtActionItems(isActive, groupName, debtId) {
             if (result.hasOwnProperty("d")) { result = result.d; }
             $.each(result, function (index, value) {
                 lineItem = lineItem + '<p><a href="#" onclick="createAdHocDocument('+ value.Id +');">' + value.Name + '</a></p>';
-                // createAdHocDocument()
             });
             if (isActive) {
                 $("#debtActionTabPanels").append('<div class="tab-pane fade in active" id="debtRecoveryTab_' + groupName + '"><div style="padding-top:15px">' + lineItem + '</div></div>');
@@ -1007,7 +1112,7 @@ function createRecoveryCycle() {
         dataType: "json",
         success: function (result) {
             if (result.d != true) {
-                //console.log('error: createRecoveryCycle returned FALSE');
+                // TODO : LOG ERROR 
             } else {
                 $("#recoveryStartDate").val("");
                 $("#recoveryCycles").val("");
@@ -1017,7 +1122,7 @@ function createRecoveryCycle() {
             $('#personAttributeModal').modal('hide');
         },
         failure: function (error) {
-            //console.log(error.message);
+            // TODO : LOG ERROR
             $('#debtAttributeModal').modal('hide');
         }
     });
@@ -1044,7 +1149,11 @@ function createDebtAction(templateItemId, templateId) {
     });
     $("#documentEdit").show();
 }
-function createAgreement(agm_start_date, agm_frequency, agm_day_of_month, agm_day_of_week, agm_start_amount, agm_installment_amount, agm_number_installment, agm_payment_method, agm_agreed_amount, agm_totaldebt_amount, agm_last_amount, agm_agreement_date, agm_payment_date, agm_starting_from_date) {
+function createAgreement(agm_start_date, agm_frequency, agm_day_of_month, agm_day_of_week,
+                         agm_start_amount, agm_installment_amount, agm_number_installment,
+                         agm_payment_method, agm_agreed_amount, agm_totaldebt_amount,
+                         agm_last_amount, agm_agreement_date, agm_payment_date,
+                         agm_starting_from_date) {
     $.ajax({
         type: "POST",
         url: "DataService.aspx/CreateArrangement",
@@ -1178,12 +1287,12 @@ function createAdHocDocument(actionItemId)  {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
-            //alert(result.d);
+            //  TODO : LOG ERROR
             refreshRecoveryCycles(debtId);
 
         },
         failure: function (error) {
-            //alert(error);
+            //  TODO : LOG ERROR
         }
     });
 }
@@ -1221,20 +1330,16 @@ function doActionPending(itemId, groupId) {
         }
     });
 }
-
 function doActionSaved(itemId, groupId) {
     $('#debtActionEditModal').attr('itemId', itemId);
     $('#debtActionEditModal').modal({ remote: 'modals/AmendDebtActionDocument.html', width: 925 });
 }
-
 function doActionView(itemId, groupId) {
+    //  TODO : USE UNIQUE ONE TIME HASH FOR FILE REFERENCE
     window.location.href = 'DocumentService.aspx?documentId=' + itemId;
 }
 
 function openSavedItem(itemId, destinationControl) {
-
-    console.log("itemid:" + itemId + ", destinationControl:" + destinationControl);
-
     $.ajax({
         type: "POST",
         url: "DocumentService.aspx/OpenItemById",
@@ -1251,11 +1356,7 @@ function openSavedItem(itemId, destinationControl) {
         }
     });
 }
-
 function doSave(actionId, documentContent, parentModal) {
-
-    console.log("actionId, parentModal - " + actionId + "--" + parentModal);
-
     $.ajax({
         type: "POST",
         url: "DocumentService.aspx/ProcessSave",
@@ -1263,24 +1364,16 @@ function doSave(actionId, documentContent, parentModal) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
-
             $('#' + parentModal).modal("hide");
             console.log("CALLING - " + $("#selectedDebtId").val());
             refreshRecoveryCycles($("#selectedDebtId").val());
-            //console.log('refreshed:' + $("#selectedDebtId").val());
         },
         failure: function (error) {
             alert(error);
         }
     });
 }
-
 function doPrint(actionId) {
-
-    //var documentContent = CKEDITOR.instances['templateContent'].getData();
-    //var actionId = $("#templateContent").attr('itemId');
-    //console.log("PRINT");
-
     $.ajax({
         type: "POST",
         url: "DocumentService.aspx/ProcessPrint",
@@ -1297,43 +1390,47 @@ function doPrint(actionId) {
     });
 }
 
+function loadDebtActionButtons() {
+    if ($("#selectedDebtId").val().length > 0) {
+        enableDebtActions();
+    } else {
+        selectedDebtRecord = null;
+        disableDebtActions();
+    }
+    return 0;
+}
+function disableDebtActions() {
+    $("#debtCreateArrangement").addClass('disabled');
+    $("#recoveryActionCreate").addClass('disabled');
+    $("#debtAttributeCreate").addClass('disabled');
+    $("#recoveryCycleSet").addClass('disabled');
+    $("#debtGroupRemove").css('visibility', 'hidden');
+    $("#debtGroupCreate").css('visibility', 'hidden');
+    $("#recoveryActiveStatus").addClass('disabled');
+    $("#recoveryNextStep").addClass('disabled');
+}
+function enableDebtActions() {
+    $("#debtCreateArrangement").removeClass('disabled');
+    $("#recoveryActionCreate").removeClass('disabled');
+    $("#debtAttributeCreate").removeClass('disabled');
+    $("#recoveryCycleSet").removeClass('disabled');
+    $("#debtGroupRemove").css('visibility', '');
+    $("#debtGroupCreate").css('visibility', '');
+    $("#recoveryActiveStatus").removeClass('disabled');
+    $("#recoveryNextStep").removeClass('disabled');
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-//var editor = CKEDITOR.inline('templateName', {
-//    removePlugins: 'toolbar'
-//});
-//function refreshTemplateDocument(templateId) {
-//    $.ajax({
-//        type: "POST",
-//        url: "DataService.aspx/GetDocumentTemplate",
-//        data: "{'templateId':'" + templateId + "'}",
-//        contentType: "application/json; charset=utf-8",
-//        dataType: "json",
-//        success: function (result) {
-//            if (result.hasOwnProperty("d")) { result = result.d; }
-//            $("#templateName").attr('templateId', result.CHT_ID);
-//            $("#templateName").attr('ViewTable', result.CHT_ViewTable);
-//            $("#templateName").html('<h2>' + result.CHT_Name + '</h2>');
-//            if (result.CHT_Notes.length > 0) {
-//                $("#templateDescription").html('<p><i>' + result.CHT_Notes + '</i></p>');
-//            } else {
-//                $("#templateDescription").html('<p><i>Click to edit</i></p>');
-//            }
-//            CKEDITOR.instances['templateContent'].setData(result.CHT_Content);
-//            // TODO: BETTER FIX THIS ISSUE
-//            $("#cke_22_text").css("width", "175px");
-//        }
-//    });
-//}
+function getHeader() {
+    var returnValue = '<table style="width:90%;margin-left:35px;margin-left:35px;margin-top:20px;border:1px solid #ddd">\
+                            <tr><td style="padding:5px;padding-bottom:7px;border-bottom: 1px solid #dddddd" colspan="6">' + $("#pageFullNameField").html() + '</td></tr>\
+                            <tr>\
+                                <td style="padding-top:7px;padding:5px"><strong>Debt Source</strong></td>\
+                                <td style="padding-top:7px;padding:5px">' + selectedDebtRecord[1].innerHTML + '</td>\
+                                <td style="padding-top:7px;padding:5px"><strong>Debt Account No.</strong></td>\
+                                <td style="padding-top:7px;padding:5px">' + selectedDebtRecord[2].innerHTML + '</td>\
+                                <td style="padding-top:7px;padding:5px"><strong>Debt Reference</strong></td>\
+                                <td style="padding-top:7px;padding:5px">' + selectedDebtRecord[3].innerHTML + '</td>\
+                            </tr>\
+                        </table>';
+    return returnValue;
+}

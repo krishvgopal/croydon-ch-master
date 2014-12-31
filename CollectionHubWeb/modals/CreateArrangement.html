@@ -9,10 +9,9 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title">Create Arrangement</h4>
     </div>
+    <div id="headerTag"></div>
     <div class="modal-body" style="height:580px;">
-
         <div id="arrangementScreen" style="display:block;height:100%">
-
             <p>Fill in the below to create a new arrangement</p>
             <br />
             <div style="width:45%;margin-left:10px;float:left;height:auto">
@@ -174,6 +173,8 @@
     </div>
     <script>
             var currentDate = formatDate();
+
+            $("#headerTag").html(getHeader());
 
             refreshForm();
 

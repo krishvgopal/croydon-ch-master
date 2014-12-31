@@ -34,7 +34,7 @@
                 </div> 
                 <div class="col-lg-2">
                     <p class="form-control-compact-static">
-                        <asp:Literal ID="pageFullName" runat="server"></asp:Literal>
+                        <span id="pageFullNameField"><asp:Literal ID="pageFullName" runat="server"></asp:Literal></span>
                         <br/><br/>
                         <asp:Literal ID="pageFullAddress" runat="server"></asp:Literal>
                     </p>
@@ -73,25 +73,35 @@
                         </tr>
                     </thead>
                 </table>
-                <a data-toggle="modal" href="modals/CreateDebtGroup.html" data-target="#myModal">Create Group</a>
-                <a data-toggle="modal" href="modals/RemoveDebtGroup.html" data-target="#ungroupDebtModal">Remove Group</a>
+                <a data-toggle="modal" href="modals/CreateDebtGroup.html" data-target="#myModal"  id="debtGroupCreate">Create Group</a>
+                <a data-toggle="modal" href="modals/RemoveDebtGroup.html" data-target="#ungroupDebtModal" id="debtGroupRemove">Remove Group</a>
             </div>
             <div style="clear:both"><br /></div>
             <ul class="nav nav-tabs">
                 <li class="active"> 
-                    <a href="#recovery"     data-toggle="tab"  id="arefRecovery">Recovery History</a></li>
-                <li><a href="#payments"     data-toggle="tab"  id="arefPayments">Payments</a></li>
-                <li><a href="#parties"      data-toggle="tab"  id="arefParties">Parties</a></li>
-                <li><a href="#arrangements" data-toggle="tab"  id="arefArrangements">Arrangements</a></li>
-                <li><a href="#debt"         data-toggle="tab"  id="arefDebtAttributes">Debt Attributes</a></li>
-                <li><a href="#person"       data-toggle="tab"  id="arefPersonAttributes">Person Attributes</a></li>
-                <li><a href="#current"      data-toggle="tab"  id="arefCurrentAttributes">Current Attributes</a>
-                <li><a href="#matchTab1"    data-toggle="tab"  id="arefMatches">Matches</a>
-                </li>
+                    <a href="#recovery"     data-toggle="tab"  id="arefRecovery">           Recovery History    </a></li>
+                <li><a href="#payments"     data-toggle="tab"  id="arefPayments">           Payments            </a></li>
+                <li><a href="#parties"      data-toggle="tab"  id="arefParties">            Parties             </a></li>
+                <li><a href="#arrangements" data-toggle="tab"  id="arefArrangements">       Arrangements        </a></li>
+                <li><a href="#debt"         data-toggle="tab"  id="arefDebtAttributes">     Debt Attributes     </a></li>
+                <li><a href="#person"       data-toggle="tab"  id="arefPersonAttributes">   Person Attributes   </a></li>
+                <li><a href="#current"      data-toggle="tab"  id="arefCurrentAttributes">  Current Attributes  </a></li>
+                <li><a href="#matchTab1"    data-toggle="tab"  id="arefMatches">            Matches             </a></li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane fade in active" id="recovery">
                     <br />
+                    <div style="width:150px;float:left;"><strong>Status Filter</strong></div>
+                    <div style="width:225px;float:left;padding-bottom:15px;">
+                        <select class="form-control-compact" id="recoveryActiveStatus" onchange="updateRecoveryHistory();"></select>
+                    </div>
+                    <div style="width:150px;float:left;margin-left:20px;"><strong>Next Step</strong></div>
+                    <div style="width:100px;float:left;padding-bottom:15px;">
+                        <select class="form-control-compact" id="recoveryNextStep" onchange="updateRecoveryHistory();">
+                            <option value="1" selected>Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered table-hover" id="tableRecovery">
                             <thead>
@@ -112,8 +122,8 @@
                             </thead>
                         </table>
                     </div>
-                    <a data-toggle="modal" href="modals/CreateRecoveryCycle.html" data-target="#createRecoveryCycleModal" class="btn btn-primary">Set Recovery Cycle</a>
-                    <a data-toggle="modal" href="modals/CreateDebtAction.html" data-target="#debtActionModal" class="btn btn-primary">Add Debt Action</a>
+                    <a data-toggle="modal" href="modals/CreateRecoveryCycle.html" data-target="#createRecoveryCycleModal" class="btn btn-primary" id="recoveryCycleSet">Set Recovery Cycle</a>
+                    <a data-toggle="modal" href="modals/CreateDebtAction.html"    data-target="#debtActionModal"          class="btn btn-primary" id="recoveryActionCreate">Add Debt Action</a>
                 </div>
                 <div class="tab-pane fade" id="payments">
                     <br />
@@ -162,7 +172,7 @@
                             </thead>
                         </table>
                     </div>
-                    <a data-toggle="modal" href="modals/CreateArrangement.html" data-target="#tableArrangementsModal" class="btn btn-primary">Create Arrangement</a>
+                    <a data-toggle="modal" href="modals/CreateArrangement.html" data-target="#tableArrangementsModal" class="btn btn-primary" id="debtCreateArrangement">Create Arrangement</a>
                 </div>
                 <div class="tab-pane fade" id="debt">
                     <br/>
@@ -176,7 +186,7 @@
                             </thead>
                         </table>
                     </div>
-                    <a data-toggle="modal" href="modals/CreateDebtAttributes.html" data-target="#debtAttributeModal" class="btn btn-primary">Create Debt Attribute</a>
+                    <a data-toggle="modal" href="modals/CreateDebtAttributes.html" data-target="#debtAttributeModal" class="btn btn-primary" id="debtAttributeCreate">Create Debt Attribute</a>
                 </div>
                 <div class="tab-pane fade" id="person">
                     <br />

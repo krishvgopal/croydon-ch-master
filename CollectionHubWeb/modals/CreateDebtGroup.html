@@ -2,25 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
       <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <title>Create Drbt Group</title>  
+  <title>Create Debt Group</title>  
 </head>
-<body>
-
     <body>
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                 <h4 class="modal-title">Confirm Action</h4>
-            </div>
-            <div class="modal-body">
-                <p>
-                    Are you sure you want to great this debt group?
-                </p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" onclick="groupDebts();">Create Group</button>
-            </div>
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Confirm Action</h4>
+        </div>
+        <div id="headerTag"></div>
+        <div class="modal-body">
+            <p>Are you sure you want to great this debt group?</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" onclick="groupDebts();">Create Group</button>
+        </div>
+        <script>
+            $("#headerTag").html(getHeader());
+        </script>
     </body>
-
-</body>
 </html>
