@@ -413,7 +413,6 @@ function refreshRecoveryCycles(debtId) {
     $.ajax({
         type: "POST",
         url: "DataService.aspx/GetRecoveryCycleHistory",
-        //data: "{'debtId':'" + debtId + "'}",
         data: "{'debtId':'" + debtId + "','statusId':'0','nextStep':'0'}",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -435,7 +434,7 @@ function refreshRecoveryCycles(debtId) {
                     { mData: 'ID' },
                     { mData: 'DebtID' },
                     { mData: 'DebtReference' },
-                    { mData: 'ActionStatus' } // 
+                    { mData: 'ActionStatus' }
                 ],
                 "aoColumnDefs": [
                     {
@@ -1134,7 +1133,7 @@ function createDebtAction(templateItemId, templateId) {
     $.ajax({
         type: "POST",
         url: "DocumentService.aspx/MergeDocument",
-        data: "{'documentTemplateId':'" + templateItemId + "','templateId':'" + templateId + "','userId':'" + getUserId() + "','pin':'" + $("#cnpin").val() + "','uprn':'" + $("#uprn").val() + "'}",
+        data: "{'documentTemplateId':'" + templateItemId + "','templateId':'" + templateId + "','userId':'" + getUserId() + "','pin':'" + $("#cnpin").val() + "','uprn':'" + $("#uprn").val() + "','debtId':'" + $("#selectedDebtId").val() + "'}",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
@@ -1287,12 +1286,14 @@ function createAdHocDocument(actionItemId)  {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
-            //  TODO : LOG ERROR
-            refreshRecoveryCycles(debtId);
 
+            console.log('A-OK');
+            refreshRecoveryCycles(debtId);
+            
         },
         failure: function (error) {
             //  TODO : LOG ERROR
+            console.log('!A-OK');
         }
     });
 }
@@ -1300,6 +1301,8 @@ function createAdHocDocument(actionItemId)  {
 function processAction(itemId, groupId, status) {
 
     var statusValue = status.toLowerCase();
+
+    console.log("itemid:" + itemId + ", groupId:" + groupId + "status:"+status);
 
     if (statusValue == 'pending') {
         doActionPending(itemId, groupId);
@@ -1315,30 +1318,40 @@ function doActionPending(itemId, groupId) {
 
     $('#debtActionCreateModal').modal({ remote: 'modals/CreateDebtActionDocument.html', width: 925 });
     $("#debtActionCreateModal").attr('itemId', itemId);
+    $('#debtActionCreateModal').on('hidden.bs.modal', function () { $(this).data('modal', null); });
+
+    $('#debtActionCreateModal').on('hidden', function () {
+        $('#debtActionCreateModal').removeData('bs.modal');
+        console.log('CREATE MODAL DESTROYED');
+    });
 
     $.ajax({
         type: "POST",
         url: "DocumentService.aspx/ProcessAdd",
-        data: "{'itemId':'" + itemId + "','groupId':'" + groupId + "','userId':'" + getUserId() + "','pin':'" + $("#cnpin").val() + "','uprn':'" + $("#uprn").val() + "'}",
+        data: "{'itemId':'" + itemId + "','groupId':'" + groupId + "','userId':'" + getUserId() + "','pin':'" + $("#cnpin").val() + "','uprn':'" + $("#uprn").val() + "','debtId':'" + $("#selectedDebtId").val() + "'}",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
-            CKEDITOR.instances['templateContentCreate'].setData(result.d);            
+            CKEDITOR.instances['templateContentCreate'].setData(result.d);
         },
         failure: function (error) {
-            alert(error);
+            // TODO: HANDLE ERROR
         }
     });
 }
 function doActionSaved(itemId, groupId) {
     $('#debtActionEditModal').attr('itemId', itemId);
+    $('#debtActionEditModal').on('hidden.bs.modal', function () {
+        $('#debtActionEditModal').removeData('bs.modal');
+        console.log('EDIT MODAL DESTROYED');
+    });
     $('#debtActionEditModal').modal({ remote: 'modals/AmendDebtActionDocument.html', width: 925 });
+    
 }
 function doActionView(itemId, groupId) {
     //  TODO : USE UNIQUE ONE TIME HASH FOR FILE REFERENCE
     window.location.href = 'DocumentService.aspx?documentId=' + itemId;
 }
-
 function openSavedItem(itemId, destinationControl) {
     $.ajax({
         type: "POST",
@@ -1347,9 +1360,7 @@ function openSavedItem(itemId, destinationControl) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
-            console.log("openSavedItem: " + result.d);
-            CKEDITOR.instances[destinationControl].setData(result.d);
-            $("#" + destinationControl).attr('itemId', itemId);
+            CKEDITOR.instances['templateContentAmend'].setData(result.d);
         },
         failure: function (error) {
             alert(error);
@@ -1364,12 +1375,11 @@ function doSave(actionId, documentContent, parentModal) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
-            $('#' + parentModal).modal("hide");
-            console.log("CALLING - " + $("#selectedDebtId").val());
+            console.log("CALLING - " + $("#selectedDebtId").val() );
             refreshRecoveryCycles($("#selectedDebtId").val());
         },
         failure: function (error) {
-            alert(error);
+            // TODO: HANDLE ERROR HERE
         }
     });
 }
@@ -1381,15 +1391,13 @@ function doPrint(actionId) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
-            $('#debtActionEditModal').modal("hide");
             refreshRecoveryCycles($("#selectedDebtId").val());
         },
         failure: function (error) {
-            alert(error);
+            // TODO : HANDLE ERROR HERE
         }
     });
 }
-
 function loadDebtActionButtons() {
     if ($("#selectedDebtId").val().length > 0) {
         enableDebtActions();

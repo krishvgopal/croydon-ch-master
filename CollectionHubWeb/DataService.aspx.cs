@@ -290,7 +290,7 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
 
-    [WebMethod(CacheDuration = 60)]
+    [WebMethod(CacheDuration = 3600)] // 1 HOUR
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<ActionStatus> GetActionStatuses()
     {
@@ -301,8 +301,6 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-
-    [WebMethod(CacheDuration = 60)]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<RecoveryCycleItem> GetRecoveryCycleHistory(int debtId, int statusId, int nextStep)
     {

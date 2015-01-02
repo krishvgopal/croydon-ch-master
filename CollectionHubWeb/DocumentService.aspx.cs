@@ -76,12 +76,12 @@ public partial class DocumentService : System.Web.UI.Page
 
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
-    public static string ProcessAdd(int itemId, int groupId, int userId, string pin, string uprn)
+    public static string ProcessAdd(int itemId, int groupId, int userId, string pin, string uprn, int debtId)
     {
         var da = new DataAccess();
 
         var dt = da.GetDocumentTemplate(itemId);
-        var mv = da.GetMergeValues(userId, dt.CHT_ViewTable, pin, uprn);
+        var mv = da.GetMergeValues(userId, dt.CHT_ViewTable, pin, uprn, debtId);
 
         var html = dt.CHT_Content;
 
@@ -96,11 +96,11 @@ public partial class DocumentService : System.Web.UI.Page
 
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
-    public static string MergeDocument(int documentTemplateId, int templateId, int userId, string pin, string uprn)
+    public static string MergeDocument(int documentTemplateId, int templateId, int userId, string pin, string uprn, int debtId)
     {
         var da = new DataAccess();
         var dt = da.GetDocumentTemplate(templateId);
-        var mv = da.GetMergeValues(userId, dt.CHT_ViewTable, pin, uprn);
+        var mv = da.GetMergeValues(userId, dt.CHT_ViewTable, pin, uprn, debtId);
 
         var html = dt.CHT_Content;
 
@@ -166,7 +166,7 @@ public partial class DocumentService : System.Web.UI.Page
 
         var da      = new DataAccess();
 
-        returnValue = da.SaveDebtAction(userId, actionId, documentContent, documentBody, pin, uprn, 0);
+        returnValue = da.SaveDebtAction(userId, actionId, documentContent, documentBody, pin, uprn);
 
         stream.Dispose();
         d = null;

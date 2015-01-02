@@ -1974,7 +1974,7 @@ namespace CollectionHubData
             sqlDataConnection.Close();
             return returnValue;
         }
-        public List<MergeValue>         GetMergeValues(int userId, string viewName, string pin, string uprn)
+        public List<MergeValue>         GetMergeValues(int userId, string viewName, string pin, string uprn, int debtId)
         {
             var returnValue = new List<MergeValue>();
             var sqlDataConnection = new SqlConnection(GetConnectionString());
@@ -1987,7 +1987,7 @@ namespace CollectionHubData
                 sqlCommand.Parameters.Add(new SqlParameter("ViewName", viewName));
                 sqlCommand.Parameters.Add(new SqlParameter("PIN", pin));
                 sqlCommand.Parameters.Add(new SqlParameter("uprn", uprn));
-                sqlCommand.Parameters.Add(new SqlParameter("debtid", 0));
+                sqlCommand.Parameters.Add(new SqlParameter("debtid", debtId));
                 
                 var dataReader = sqlCommand.ExecuteReader();
 
@@ -2079,7 +2079,7 @@ namespace CollectionHubData
             sqlDataConnection.Close();
             return returnValue;
         }
-        public bool SaveDebtAction(int userId, int actionId, string content, byte[] documentBody, string pin, string uprn, int debtId)
+        public bool SaveDebtAction(int userId, int actionId, string content, byte[] documentBody, string pin, string uprn)
         {
             var returnValue = false;
             var sqlDataConnection = new SqlConnection(GetConnectionString());
