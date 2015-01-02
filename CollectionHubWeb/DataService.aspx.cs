@@ -80,17 +80,17 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-    [WebMethod]
-    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
-    public static List<DebtNote> GetDebtNotes(int debtId)
-    {
-        var returnData = new List<DebtNote>();
-        var dataAccess = new CollectionHubData.DataAccess();
+    //[WebMethod]
+    //[ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    //public static List<DebtNote> GetDebtNotes(int debtId)
+    //{
+    //    var returnData = new List<DebtNote>();
+    //    var dataAccess = new CollectionHubData.DataAccess();
 
-        returnData = dataAccess.GetDebtNotes(debtId);
+    //    returnData = dataAccess.GetDebtNotes(debtId);
 
-        return returnData;
-    }
+    //    return returnData;
+    //}
     [WebMethod(CacheDuration = 60)]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<Payment> GetPaymentsByDebtId(int debtId, string source, string sourceAccountReference)
@@ -125,6 +125,33 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
+
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public static List<DebtorNoteCategory> GetDebtNoteCategories()
+    {
+        var returnData = new List<DebtorNoteCategory>();
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.GetDebtNoteCategories();
+
+        return returnData;
+    }
+
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public static List<DebtItem> GetNoteDebts(int noteId)
+    {
+        var returnData = new List<DebtItem>();
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.GetNoteDebts(noteId);
+
+        return returnData;
+    }
+
+    //  public List<DebtItem> GetNoteDebts(int noteId)
+
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<RecoveryCycleItem> GetRecoveryCycleHistory(int debtId)
@@ -201,6 +228,17 @@ public partial class DataService : System.Web.UI.Page
         returnData = dataAccess.GetDebts(pin);
         if (!showCleared) { returnData.RemoveAll(o => o.DebtOutstanding.Equals(0)); }
        
+        return returnData;
+    }
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public static DebtorNote GetDebtorNote(int noteId)
+    {
+        var returnData = new DebtorNote();
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.GetDebtorNote(noteId);
+
         return returnData;
     }
     [WebMethod(CacheDuration = 60)]

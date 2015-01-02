@@ -25,9 +25,9 @@ namespace CollectionHubData
         public DebtItem(System.Data.SqlClient.SqlDataReader value)
         {
             DebtId              = Convert.ToInt32( value["cd_id"].ToString());
-            DebtSource          = value["cd_source"].ToString();
-            DebtAccRef          = value["cd_source_accref"].ToString();
-            DebtReference       = value["cd_debt_ref"].ToString();
+            DebtSource          = value["cd_source"].ToString().Trim();
+            DebtAccRef          = value["cd_source_accref"].ToString().Trim();
+            DebtReference       = value["cd_debt_ref"].ToString().Trim();
             PartyPin            = value["cd_party_pin"].ToString();
             PropertyReference   = value["cd_prop_ref"].ToString();
             RecoveryCycle       = value["Recovery_Cycle"].ToString();

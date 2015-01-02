@@ -39,7 +39,7 @@
                         <asp:Literal ID="pageFullAddress" runat="server"></asp:Literal>
                     </p>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-2">
                     <div class="form-group">
                         <label>Total Debt &pound;</label>
                         <asp:Literal ID="pageTotalDebt" runat="server"></asp:Literal>
@@ -47,13 +47,19 @@
                         <label>Total Debt Outstanding &pound;</label>
                         <asp:Literal ID="pageDebtOutstanding" runat="server"></asp:Literal>
                         <br/>
-                        <select id="showCleared" class="form-control-compact" style="width:80% !important;float:left;margin-top: 5px" onchange="refreshDebtsList();" >
+                        <select id="showCleared" class="form-control-compact" style="width:100% !important;float:left;margin-top: 5px" onchange="refreshDebtsList();" >
                             <option value="1">Show Open Debts</option>
                             <option value="2" selected>Show All Debts</option>
                         </select>
                         <img id="showClearedLoadingImage" src="img/gif-load.gif" alt="Loading Image" style="float:left;padding-left: 5px;padding-top: 3px;" />
                     </div>
                 </div>
+                 <div class="col-lg-3" style="float:left">
+                     
+                        <i class="fa fa-phone" style="font-size: 24px; line-height: 1.5em;"></i>
+                        Record Contact Note
+
+                 </div>
             </div>
             <div class="table-responsive">
                <br/>

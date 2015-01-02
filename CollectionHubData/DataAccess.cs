@@ -415,31 +415,64 @@ namespace CollectionHubData
 
             return returnValue;
         }
-        public List<DebtNote>           GetDebtNotes(int debtId)
+
+        public List<DebtItem> GetNoteDebts(int noteId)
         {
-            var returnValue = new List<DebtNote>();
-            using (var sqlDataConnection = new SqlConnection(GetConnectionString()))
+            var returnValue = new List<DebtItem>();
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CHP_NOTE_DEBT_LIST", sqlDataConnection))
             {
-                sqlDataConnection.Open();
-                using (var sqlCommand = new SqlCommand("CH_DEBT_NOTES_LIST", sqlDataConnection))
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("noteId", noteId));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
                 {
-                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                    sqlCommand.Parameters.Add(new SqlParameter("DebtId", debtId));
-
-                    var dataReader = sqlCommand.ExecuteReader();
-
-                    if (dataReader.HasRows)
+                    while (dataReader.Read())
                     {
-                        while (dataReader.Read())
-                        {
-                            returnValue.Add(new DebtNote(dataReader));
-                        }
+                        var newResult = new DebtItem(dataReader);
+                        returnValue.Add(newResult);
                     }
                 }
-                sqlDataConnection.Close();
             }
+
+            sqlDataConnection.Close();
+
             return returnValue;
         }
+
+        //  CHP_NOTE_DEBT_LIST
+
+
+
+        //public List<DebtNote>           GetDebtNotes(int debtId)
+        //{
+        //    var returnValue = new List<DebtNote>();
+        //    using (var sqlDataConnection = new SqlConnection(GetConnectionString()))
+        //    {
+        //        sqlDataConnection.Open();
+        //        using (var sqlCommand = new SqlCommand("CH_DEBT_NOTES_LIST", sqlDataConnection))
+        //        {
+        //            sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+        //            sqlCommand.Parameters.Add(new SqlParameter("DebtId", debtId));
+
+        //            var dataReader = sqlCommand.ExecuteReader();
+
+        //            if (dataReader.HasRows)
+        //            {
+        //                while (dataReader.Read())
+        //                {
+        //                    returnValue.Add(new DebtNote(dataReader));
+        //                }
+        //            }
+        //        }
+        //        sqlDataConnection.Close();
+        //    }
+        //    return returnValue;
+        //}
         
         public List<ArrangementPaymentMethods>          GetPaymenyMethodList()
         {
@@ -2155,5 +2188,64 @@ namespace CollectionHubData
 
             return returnValue;
         }
+
+
+
+        public DebtorNote GetDebtorNote(int noteId)
+        {
+            var returnValue = new DebtorNote();
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CHP_ACTION_NOTES_DATA", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                sqlCommand.Parameters.Add(new SqlParameter("NoteID", noteId));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        var newResult = new DebtorNote(dataReader);
+                        returnValue = newResult;
+                    }
+                }
+            }
+
+            sqlDataConnection.Close();
+
+            return returnValue;
+        }
+
+        public List<DebtorNoteCategory> GetDebtNoteCategories()
+        {
+            var returnValue = new List<DebtorNoteCategory>();
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("LOOKUP_NOTE_CATEGORY", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        var newResult = new DebtorNoteCategory(dataReader);
+                        returnValue.Add(newResult);
+                    }
+                }
+            }
+
+            sqlDataConnection.Close();
+
+            return returnValue;
+        }
+
     }
 }

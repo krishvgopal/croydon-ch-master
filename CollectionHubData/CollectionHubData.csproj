@@ -80,7 +80,7 @@
     <Compile Include="DebtAddress.cs" />
     <Compile Include="DebtAttribute.cs" />
     <Compile Include="DebtItem.cs" />
-    <Compile Include="DebtNote.cs" />
+    <Compile Include="DebtorNote.cs" />
     <Compile Include="DebtParties.cs" />
     <Compile Include="DebtSearchResult.cs" />
     <Compile Include="DebtSearchResultItem.cs" />
