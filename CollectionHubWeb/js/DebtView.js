@@ -38,7 +38,6 @@ function selectRow(idValue, source, sourceAccRef) {
 
     loadDebtActionButtons();
 }
-
 function loadDebtsView(result) {
     if (result.hasOwnProperty("d")) { result = result.d; }
     var vDataMainTable = $("#dataTableMain").dataTable({
@@ -83,17 +82,17 @@ function loadDebtsView(result) {
                 "mRender": function(value, type, full) {
                     return '<a href="#" onclick="selectRow(' + value + ')">' + value + '</a>';
                 }
-            },{
-                "sTitle": "<input id=\"debtGroupAll\" type=\"checkbox\" class=\"debtGroupAll\">",
+            }, {
+                "sTitle": "<input data-toggle=\"tooltip\" data-placement=\"right\" title=\"Select record for grouping\" id=\"debtGroupAll\" type=\"checkbox\" class=\"debtGroupAll\">",
                 "bSortable": false,
                 "bSearchable": false,
                 "aTargets": ["select_id"],
                 "mRender": function (value, type, full) {
                     var returnString = '';
                     if (full.GroupDebtId < 0) {
-                        returnString = '<input type="checkbox" class="debtGroupItems" debtGroupDebtId="' + value + '" debtRowTotal="' + full.DebtTotal + '">';
+                        returnString = '<input data-toggle="tooltip" data-placement="right" title="Select record for grouping actions" type="checkbox" class="debtGroupItems" debtGroupDebtId="' + value + '" debtRowTotal="' + full.DebtTotal + '">';
                     } else {
-                        returnString = '<input type="checkbox" style="visibility:hidden" class="debtGroupItems" debtGroupDebtId="' + value + '" debtRowTotal="' + full.DebtTotal + '">';
+                        returnString = '<input data-toggle="tooltip" data-placement="right" title="Select record for grouping actions" type="checkbox" style="visibility:hidden" class="debtGroupItems" debtGroupDebtId="' + value + '" debtRowTotal="' + full.DebtTotal + '">';
                     }
                     return returnString;
                 },
@@ -264,7 +263,7 @@ function loadArrangementPaymentMethodList() {
     });
 }
 function loadActionStatuses() {
-    $('#recoveryActiveStatus').val('');
+    $('#recoveryActiveStatus').html('');
     $.ajax({
         type: "POST",
         url: "DataService.aspx/GetActionStatuses",
@@ -1000,6 +999,7 @@ function refreshDebtActionTabs(debtId) {
 }
 function refreshDebtActionItems(isActive, groupName, debtId) {
     var lineItem = '';
+    var active = '';
     $.ajax({
         type: "POST",
         async: false,
@@ -1012,11 +1012,8 @@ function refreshDebtActionItems(isActive, groupName, debtId) {
             $.each(result, function (index, value) {
                 lineItem = lineItem + '<p><a href="#" onclick="createAdHocDocument('+ value.Id +');">' + value.Name + '</a></p>';
             });
-            if (isActive) {
-                $("#debtActionTabPanels").append('<div class="tab-pane fade in active" id="debtRecoveryTab_' + groupName + '"><div style="padding-top:15px">' + lineItem + '</div></div>');
-            } else {
-                $("#debtActionTabPanels").append('<div class="tab-pane fade in" id="debtRecoveryTab_' + groupName + '"><div style="padding-top:15px">' + lineItem + '</div></div>');
-            }
+            if (isActive) { active = 'active'; } else { active = ''; }
+            $("#debtActionTabPanels").append('<div class="tab-pane fade in ' + active + '" id="debtRecoveryTab_' + groupName + '"><div style="padding-top:15px">' + lineItem + '</div></div>');
         }
     });
 }

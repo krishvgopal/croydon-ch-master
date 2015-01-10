@@ -791,4 +791,15 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public bool SaveDebtorNote(int noteId, int userId, int pin, int debtId, int categoryId, string theirRef, string reason, string content, string newLandLine, string newMobile, string newEmail)
+    {
+        var returnData = false;
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.SaveDebtorNote(noteId, userId, pin, debtId, categoryId, theirRef, reason, content, newLandLine, newMobile, newEmail);
+
+        return returnData;
+    }
 }

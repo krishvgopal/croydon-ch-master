@@ -2247,5 +2247,39 @@ namespace CollectionHubData
             return returnValue;
         }
 
+        public bool SaveDebtorNote(int noteId, int userId, int pin, int debtId, int categoryId, string theirRef, string reason, string content, string newLandLine, string newMobile, string newEmail)
+        {
+            var returnValue = false;
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CHP_ACTION_NOTES_UPDATE", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                sqlCommand.Parameters.Add(new SqlParameter("NoteID"     , noteId));
+                sqlCommand.Parameters.Add(new SqlParameter("UserID"     , userId));
+                sqlCommand.Parameters.Add(new SqlParameter("PIN"        , pin));
+                sqlCommand.Parameters.Add(new SqlParameter("DebtID"     , debtId));
+                sqlCommand.Parameters.Add(new SqlParameter("Category"   , categoryId));
+                sqlCommand.Parameters.Add(new SqlParameter("TheirRef"   , theirRef));
+                sqlCommand.Parameters.Add(new SqlParameter("Reason"     , reason));
+                sqlCommand.Parameters.Add(new SqlParameter("Content"    , content));
+                sqlCommand.Parameters.Add(new SqlParameter("NewFixed"   , newLandLine));
+                sqlCommand.Parameters.Add(new SqlParameter("NewMobile"  , newMobile));
+                sqlCommand.Parameters.Add(new SqlParameter("NewEMail"   , newEmail));
+
+                var rowsAffected = sqlCommand.ExecuteNonQuery();
+
+                if (rowsAffected>0)
+                {
+                    returnValue = true;
+                }
+            }
+
+            sqlDataConnection.Close();
+
+            return returnValue;
+        }
     }
 }

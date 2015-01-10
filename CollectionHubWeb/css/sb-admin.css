@@ -49,6 +49,14 @@ tbody tr .right {
         border-left: 1px solid #e7e7e7;
         z-index: 2;
     }
+    #page-wrapper-compact {
+        position: inherit;
+        margin: 0 0 0 0;
+        padding: 0 30px;
+        min-height: 1300px;
+        border-left: 1px solid #e7e7e7;
+        z-index: 2;
+    }
 }
 
 /* Navigation */
@@ -136,6 +144,7 @@ tbody tr .right {
         margin-top: 48px;
        
     }
+   
 
     .navbar-top-links .dropdown-messages,
     .navbar-top-links .dropdown-tasks,

@@ -19,8 +19,8 @@ public partial class Search : System.Web.UI.Page
         
         pageFullName.Text           = debtAddress.FullName;
         pageFullAddress.Text        = addressUrl;
-        pageTotalDebt.Text          = debtAddress.TotalDebt.ToString();
-        pageDebtOutstanding.Text    = debtAddress.DebtOS.ToString();
+        pageTotalDebt.Text          = debtAddress.TotalDebt.ToString("C");
+        pageDebtOutstanding.Text    = debtAddress.DebtOS.ToString("C");
 
         var thisTitle = String.Empty;
 

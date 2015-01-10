@@ -2,21 +2,22 @@
 
 
 
-function createNewNote(pin, uprn) {
+function createNewNote() {
+
 
 
 
 }
+
 function loadDebtsList(noteId) {
     $.ajax({
         type: "POST",
-        url: "DataService.aspx/GetNoteDebts",
+        url: "../DataService.aspx/GetNoteDebts",
         data: "{'noteId':'" + noteId + "'}",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
             $.each(result.d, function (i, item) {
-                console.log(item.ArrangementName);
                 $('#assignTo').append($('<option>', {
                     value: item.DebtId,
                     text: item.DebtSource + ', [' + item.DebtAccRef + '], £' + item.DebtOutstanding
@@ -33,13 +34,12 @@ function loadCategories() {
 
     $.ajax({
         type: "POST",
-        url: "DataService.aspx/GetDebtNoteCategories",
+        url: "../DataService.aspx/GetDebtNoteCategories",
         data: "{}",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
             $.each(result.d, function (i, item) {
-                console.log(item.ArrangementName);
                 $('#category').append($('<option>', {
                     value: item.Code,
                     text: item.Value
@@ -53,15 +53,20 @@ function loadCategories() {
     });
 
 }
-function loadDebtorNote(noteId) {
+function loadDebtorNote() {
 
+    $("#debtData").attr("noteId",   QueryString()["noteId"]);
+    $("#debtData").attr("debtId",   QueryString()["debtId"]);
+    $("#debtData").attr("pin",      QueryString()["pin"]);
+    $("#debtData").attr("uprn",     QueryString()["uprn"]);
+    
     loadCategories();
-    loadDebtsList(noteId);
+    loadDebtsList($("#debtData").attr("noteId"));
 
     $.ajax({
         type: "POST",
-        url: "DataService.aspx/GetDebtorNote",
-        data: "{'noteId':'" + noteId + "'}",
+        url: "../DataService.aspx/GetDebtorNote",
+        data: "{'noteId':'" + $("#debtData").attr("noteId") + "'}",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
@@ -80,5 +85,27 @@ function loadDebtorNote(noteId) {
             console.log(error);
         }
     });
+}
+
+function saveNote() {
+    
+    // noteId   pin     debtid
+
+    $.ajax({
+        type: "POST",
+        url: "../DataService.aspx/GetDebtorNote",
+        data: "{'noteId':'" + $("#debtData").attr("noteId") + "','userId':'" + $("#UserSessionToken").val() + "','pin':'" + $("#debtData").attr("pin") + "','debtId':'" + $("#debtData").attr("debtId") + "','categoryId':'" + $("#category").val() + "','theirRef':'" + $("#theirRef").val() + "','reason':'" + $("#reason").val() + "','content':'" + $("#noteText").val() + "','newLandLine':'" + $("#newPhone").val() + "','newMobile':'" + $("#newMobile").val() + "','newEmail':'" + $("#newEmail").val() + "'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+
+            // TODO : HANDLE RETURN
+        },
+        failure: function (error) {
+            // TODO: HANDLE ERROR
+            console.log(error);
+        }
+    });
+
 }
 

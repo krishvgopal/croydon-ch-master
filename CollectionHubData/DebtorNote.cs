@@ -39,7 +39,6 @@ namespace CollectionHubData
             EMail           = value["EMail"].ToString();
         }
     }
-
     public class DebtorNoteCategory
     {
         public string Code { get; set; }

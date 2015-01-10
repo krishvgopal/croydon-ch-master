@@ -32,20 +32,24 @@
                 <div class="col-lg-4" style="padding-left:0px !important; padding-bottom: 10px !important; width: 90px">
                     <asp:Image runat="server" ID="pageIcon" ClientIDMode="Static" CssClass="pageIcon"/>
                 </div> 
-                <div class="col-lg-2">
+                <div class="col-lg-2" style="width:245px">
                     <p class="form-control-compact-static">
                         <span id="pageFullNameField"><asp:Literal ID="pageFullName" runat="server"></asp:Literal></span>
                         <br/><br/>
                         <asp:Literal ID="pageFullAddress" runat="server"></asp:Literal>
                     </p>
                 </div>
-                <div class="col-lg-2">
+                <div class="col-lg-2" style="width:245px">
                     <div class="form-group">
-                        <label>Total Debt &pound;</label>
-                        <asp:Literal ID="pageTotalDebt" runat="server"></asp:Literal>
+                        <label>Total Initial Debt</label>
+                        <span style="float:right">
+                            <asp:Literal ID="pageTotalDebt" runat="server" ></asp:Literal>    
+                        </span>
                         <br/>
-                        <label>Total Debt Outstanding &pound;</label>
-                        <asp:Literal ID="pageDebtOutstanding" runat="server"></asp:Literal>
+                        <label>Total Outstanding</label>
+                        <span style="float:right">
+                            <asp:Literal ID="pageDebtOutstanding" runat="server"></asp:Literal>
+                        </span>
                         <br/>
                         <select id="showCleared" class="form-control-compact" style="width:100% !important;float:left;margin-top: 5px" onchange="refreshDebtsList();" >
                             <option value="1">Show Open Debts</option>
@@ -54,15 +58,15 @@
                         <img id="showClearedLoadingImage" src="img/gif-load.gif" alt="Loading Image" style="float:left;padding-left: 5px;padding-top: 3px;" />
                     </div>
                 </div>
-                 <div class="col-lg-3" style="float:left">
-                     
-                        <i class="fa fa-phone" style="font-size: 24px; line-height: 1.5em;"></i>
+                <div class="col-lg-3" style="float:left">
+                    <a href="#" onclick="openPage();">
+                        <i class="fa fa-bullhorn" style="font-size: 48px;"></i>
                         Record Contact Note
-
-                 </div>
+                    </a> 
+                </div>
             </div>
             <div class="table-responsive">
-               <br/>
+                <br/>
                 <table class="table compact table-striped table-bordered table-hover" id="dataTableMain">
                     <thead>
                         <tr>
@@ -85,14 +89,15 @@
             <div style="clear:both"><br /></div>
             <ul class="nav nav-tabs">
                 <li class="active"> 
-                    <a href="#recovery"     data-toggle="tab"  id="arefRecovery">           Recovery History    </a></li>
-                <li><a href="#payments"     data-toggle="tab"  id="arefPayments">           Payments            </a></li>
-                <li><a href="#parties"      data-toggle="tab"  id="arefParties">            Parties             </a></li>
-                <li><a href="#arrangements" data-toggle="tab"  id="arefArrangements">       Arrangements        </a></li>
-                <li><a href="#debt"         data-toggle="tab"  id="arefDebtAttributes">     Debt Attributes     </a></li>
-                <li><a href="#person"       data-toggle="tab"  id="arefPersonAttributes">   Person Attributes   </a></li>
-                <li><a href="#current"      data-toggle="tab"  id="arefCurrentAttributes">  Current Attributes  </a></li>
-                <li><a href="#matchTab1"    data-toggle="tab"  id="arefMatches">            Matches             </a></li>
+                    <a href="#recovery"     data-toggle="tab" id="arefRecovery">         Recovery History  </a></li>
+                <li><a href="#payments"     data-toggle="tab" id="arefPayments">         Payments          </a></li>
+                <li><a href="#parties"      data-toggle="tab" id="arefParties">          Liable Parties    </a></li>
+                <li><a href="#relParties"   data-toggle="tab" id="arefRelatedParties">   Related Parties   </a></li>
+                <li><a href="#arrangements" data-toggle="tab" id="arefArrangements">     Arrangements      </a></li>
+                <li><a href="#debt"         data-toggle="tab" id="arefDebtAttributes">   Debt Attributes   </a></li>
+                <li><a href="#person"       data-toggle="tab" id="arefPersonAttributes"> Person Attributes </a></li>
+                <li><a href="#current"      data-toggle="tab" id="arefCurrentAttributes">Current Attributes</a></li>
+                <li><a href="#matchTab1"    data-toggle="tab" id="arefMatches">          Matches           </a></li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane fade in active" id="recovery">
@@ -161,6 +166,21 @@
                         </table>
                     </div>
                 </div>
+                
+                <div class="tab-pane fade" id="relParties">
+                    <br />
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover" id="tableRelParties">
+                            <thead>
+                                <tr>
+                                    <th>?</th>
+                                    <th>?</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+
                 <div class="tab-pane fade" id="arrangements">
                     <br/>
                     <div class="table-responsive">
