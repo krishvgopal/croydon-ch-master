@@ -92,7 +92,7 @@
                     <a href="#recovery"     data-toggle="tab" id="arefRecovery">         Recovery History  </a></li>
                 <li><a href="#payments"     data-toggle="tab" id="arefPayments">         Payments          </a></li>
                 <li><a href="#parties"      data-toggle="tab" id="arefParties">          Liable Parties    </a></li>
-                <li><a href="#relParties"   data-toggle="tab" id="arefRelatedParties">   Related Parties   </a></li>
+                <%--<li><a href="#relParties"   data-toggle="tab" id="arefRelatedParties">   Related Parties   </a></li>--%>
                 <li><a href="#arrangements" data-toggle="tab" id="arefArrangements">     Arrangements      </a></li>
                 <li><a href="#debt"         data-toggle="tab" id="arefDebtAttributes">   Debt Attributes   </a></li>
                 <li><a href="#person"       data-toggle="tab" id="arefPersonAttributes"> Person Attributes </a></li>
@@ -167,7 +167,7 @@
                     </div>
                 </div>
                 
-                <div class="tab-pane fade" id="relParties">
+              <%--  <div class="tab-pane fade" id="relParties">
                     <br />
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered table-hover" id="tableRelParties">
@@ -179,7 +179,7 @@
                             </thead>
                         </table>
                     </div>
-                </div>
+                </div>--%>
 
                 <div class="tab-pane fade" id="arrangements">
                     <br/>

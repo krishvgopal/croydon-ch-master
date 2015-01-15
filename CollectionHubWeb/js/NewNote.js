@@ -5,8 +5,6 @@
 function createNewNote() {
 
 
-
-
 }
 
 function loadDebtsList(noteId) {

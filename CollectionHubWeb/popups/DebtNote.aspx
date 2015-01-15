@@ -3,18 +3,15 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="headerContent" Runat="Server">
     <script type="text/javascript" charset="utf8" src="../js/NewNote.js"></script>
     <style>
-        
-        .formLabel {width:175px;float:left}
-        .formLabelNarrow {width:125px;float:left}
-        .formContent {width:275px;float:left}
-        .formContentWide {width:550px;float:left}
-        .formContentMedium {width:425 px;float:left}
-        .formContentNarrow {width:125px;float:left}
-        .formClear {clear:both;}
-
+        .formLabel          {width:175px;float:left}
+        .formLabelNarrow    {width:125px;float:left}
+        .formContent        {width:275px;float:left}
+        .formContentWide    {width:550px;float:left}
+        .formContentMedium  {width:425px;float:left}
+        .formContentNarrow  {width:125px;float:left}
+        .formClear          {clear:both;}
     </style>
 </asp:Content>
-
 <asp:Content ID="pageContent" ContentPlaceHolderID="bodyContent" Runat="Server">
     
     <input type="hidden" id="debtData" debtId="" noteId="" pin="" uprn="">
@@ -51,10 +48,9 @@
                 <div class="formLabel"><label>Subject Address</label></div>
                 <div class="formContentWide"><div class="form-group"><input class="form-control-compact" id="subjectAddress"></div></div>
                 
-                <div class="formClear"></div>
-                
+                <%--<div class="formClear"></div>
                 <div class="formLabel"><label>Communicating With</label></div>
-                <div class="formContent"><div class="form-group"><input class="form-control-compact" id="comunicationLink"></div></div>
+                <div class="formContent"><div class="form-group"><input class="form-control-compact" id="comunicationLink"></div></div>--%>
                 
                 <div class="formClear"></div>
 
@@ -91,7 +87,7 @@
                     <div style="clear:both;padding-top:7px;padding-bottom:7px"></div>
 
                     <div class="formLabel"><label>New Email</label></div>
-                    <div style="width:425px;float:left"><input class="form-control-compact" id="newEmail"></div>
+                    <div style="width:125px;float:left"><input class="form-control-compact" id="newEmail"></div>
 
                 </div>
 
