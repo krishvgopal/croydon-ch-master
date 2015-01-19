@@ -21,6 +21,7 @@ $(function () {
     loadAttributeStatusTypes();
     refreshSingleDebtView();
     loadDebtActionButtons();
+    loadUsersForAssigning();
 });
 
 function selectRow(idValue, source, sourceAccRef) {
@@ -208,6 +209,35 @@ function loadAttributeStatusTypes() {
         }
     });
 }
+
+/*
+** This method handles loading the users list so we can assign
+** the case to a person.
+*/
+function loadUsersForAssigning() {
+
+    $('#assignedUserList').val('');
+    $('#assignedUserList').append($('<option>', {
+        value: 0,
+        text: "No one"
+    }));
+    $.ajax({
+        type: "POST",
+        url: "DataService.aspx/GetAttributesCurrentStatuses",
+        data: "{}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            $.each(result.d, function (i, item) {
+                $('#assignedUserList').append($('<option>', {
+                    value: item.AttributeTypeId,
+                    text: item.TypeName
+                }));
+            });
+        }
+    });
+}
+
 function loadRecoveryCycleList(debtId) {
     $.ajax({
         type: "POST",
@@ -1270,12 +1300,24 @@ function doSelect(e, id) {
         }
     );
 }
-
+function doAssignUser(e, id) {
+    var newDropdown = $("#assignedUserList").clone();
+    var newId = getUUID();
+    newDropdown.attr("id", newId);
+    newDropdown.css('visibility', '');
+    $(e).parent().html(newDropdown);
+    $('#' + newId).val(id);
+    $('#' + newId).change(
+        function (event) {
+            var s = $('#' + newId).val();
+            var v = id;
+            //setAttributeStatus(v, s);
+        }
+    );
+}
 function createAdHocDocument(actionItemId)  {
-
     var debtId = $("#selectedDebtId").val();
     $("#debtActionModal").modal("hide");
-
     $.ajax({
         type: "POST",
         url: "DataService.aspx/CreateAdHocItem",
@@ -1283,10 +1325,8 @@ function createAdHocDocument(actionItemId)  {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
-
             console.log('A-OK');
             refreshRecoveryCycles(debtId);
-            
         },
         failure: function (error) {
             //  TODO : LOG ERROR
@@ -1294,13 +1334,9 @@ function createAdHocDocument(actionItemId)  {
         }
     });
 }
-
 function processAction(itemId, groupId, status) {
-
     var statusValue = status.toLowerCase();
-
     console.log("itemid:" + itemId + ", groupId:" + groupId + "status:"+status);
-
     if (statusValue == 'pending') {
         doActionPending(itemId, groupId);
     }
@@ -1343,7 +1379,6 @@ function doActionSaved(itemId, groupId) {
         console.log('EDIT MODAL DESTROYED');
     });
     $('#debtActionEditModal').modal({ remote: 'modals/AmendDebtActionDocument.html', width: 925 });
-    
 }
 function doActionView(itemId, groupId) {
     //  TODO : USE UNIQUE ONE TIME HASH FOR FILE REFERENCE

@@ -12,6 +12,7 @@
     <asp:HiddenField    ID="uprn"              runat="server" ClientIDMode="Static" />
     <asp:HiddenField    ID="userId"            runat="server" ClientIDMode="Static" />
     <asp:HiddenField    ID="debtRowTotalValue" runat="server" ClientIDMode="Static" />
+    <asp:HiddenField    ID="assignedToUserId"  runat="server" ClientIDMode="Static" />
     <script src="Scripts/ckeditor/ckeditor.js"></script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="headInfo" Runat="Server">
@@ -35,8 +36,11 @@
                 <div class="col-lg-2" style="width:245px">
                     <p class="form-control-compact-static">
                         <span id="pageFullNameField"><asp:Literal ID="pageFullName" runat="server"></asp:Literal></span>
-                        <br/><br/>
+                        <br/>
                         <asp:Literal ID="pageFullAddress" runat="server"></asp:Literal>
+                        <br/><br/>
+                        <span>Assigned To:&nbsp;<a href="#" onclick="doAssignUser($(this), $('#assignedToUserId').val());">No one</a></span>
+                        <select id="assignedUserList" class="form-control-compact" style="visibility: hidden;"></select>
                     </p>
                 </div>
                 <div class="col-lg-2" style="width:245px">
@@ -59,10 +63,8 @@
                     </div>
                 </div>
                 <div class="col-lg-3" style="float:left">
-                    <a href="#" onclick="openPage();">
-                        <i class="fa fa-bullhorn" style="font-size: 48px;"></i>
-                        Record Contact Note
-                    </a> 
+                    <i class="fa fa-bullhorn" style="font-size: 18px;"></i>  
+                    <a href="#" onclick="createNote();">Record Contact Note</a>
                 </div>
             </div>
             <div class="table-responsive">
@@ -92,7 +94,6 @@
                     <a href="#recovery"     data-toggle="tab" id="arefRecovery">         Recovery History  </a></li>
                 <li><a href="#payments"     data-toggle="tab" id="arefPayments">         Payments          </a></li>
                 <li><a href="#parties"      data-toggle="tab" id="arefParties">          Liable Parties    </a></li>
-                <%--<li><a href="#relParties"   data-toggle="tab" id="arefRelatedParties">   Related Parties   </a></li>--%>
                 <li><a href="#arrangements" data-toggle="tab" id="arefArrangements">     Arrangements      </a></li>
                 <li><a href="#debt"         data-toggle="tab" id="arefDebtAttributes">   Debt Attributes   </a></li>
                 <li><a href="#person"       data-toggle="tab" id="arefPersonAttributes"> Person Attributes </a></li>

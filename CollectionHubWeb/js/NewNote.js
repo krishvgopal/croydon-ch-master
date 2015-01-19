@@ -7,6 +7,7 @@ function createNewNote() {
 
 }
 
+
 function loadDebtsList(noteId) {
     $.ajax({
         type: "POST",

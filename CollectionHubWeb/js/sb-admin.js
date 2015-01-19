@@ -150,7 +150,7 @@ window.formatCurrency = function (total) {
     return (neg ? "-&#163;" : '&#163;') + parseFloat(total, 10).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,").toString();
 }
 
-window.openPage = function()
+window.createNote = function()
 {
     window.open("../Popups/DebtNote.aspx?noteId=3&pin=478744&uprn=124288&debtId=311755", "_blank", "toolbar=yes, scrollbars=yes, resizable=yes, top=500, left=500, width=800, height=680");
 }
