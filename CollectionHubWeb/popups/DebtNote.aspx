@@ -14,7 +14,7 @@
 </asp:Content>
 <asp:Content ID="pageContent" ContentPlaceHolderID="bodyContent" Runat="Server">
     
-    <input type="hidden" id="debtData" debtId="" noteId="" pin="" uprn="">
+    <input type="hidden" id="debtData" debtId="" noteId="" pin="" uprn="" userId="">
 
     <div class="row">
         <div class="col-lg-12">
@@ -47,10 +47,6 @@
                 
                 <div class="formLabel"><label>Subject Address</label></div>
                 <div class="formContentWide"><div class="form-group"><input class="form-control-compact" id="subjectAddress"></div></div>
-                
-                <%--<div class="formClear"></div>
-                <div class="formLabel"><label>Communicating With</label></div>
-                <div class="formContent"><div class="form-group"><input class="form-control-compact" id="comunicationLink"></div></div>--%>
                 
                 <div class="formClear"></div>
 
@@ -86,21 +82,14 @@
 
                     <div style="clear:both;padding-top:7px;padding-bottom:7px"></div>
 
-                    <div class="formLabel"><label>New Email</label></div>
-                    <div style="width:125px;float:left"><input class="form-control-compact" id="newEmail"></div>
-
+                    <div class="formLabelNarrow"><label>New Email</label></div>
+                    <div style="width:400px;float:left"><input class="form-control-compact" id="newEmail"></div>
                 </div>
-
             </div>
-
         </div>
-
+        <a href="#" onClick="saveNote();" class="btn btn-primary">Save</a>
     </div>
-    
      <script>
-         
-         loadDebtorNote(3);
-
+         loadForm();
      </script>
-
 </asp:Content>

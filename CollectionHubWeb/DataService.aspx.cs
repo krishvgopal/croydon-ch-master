@@ -372,17 +372,17 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-    [WebMethod]
-    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
-    public static bool CreateNote(int debtId, int userId, string noteText)
-    {
-        var returnData = false;
-        var dataAccess = new CollectionHubData.DataAccess();
+    //[WebMethod]
+    //[ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    //public static bool CreateNote(int debtId, int userId, string noteText)
+    //{
+    //    var returnData = false;
+    //    var dataAccess = new CollectionHubData.DataAccess();
 
-        returnData = dataAccess.CreateNote(debtId, userId, noteText);
+    //    returnData = dataAccess.CreateNote(debtId, userId, noteText);
 
-        return returnData;
-    }
+    //    return returnData;
+    //}
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static bool RemoveDebtGroup(int debtId)
@@ -793,7 +793,7 @@ public partial class DataService : System.Web.UI.Page
     }
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
-    public bool SaveDebtorNote(int noteId, int userId, int pin, int debtId, int categoryId, string theirRef, string reason, string content, string newLandLine, string newMobile, string newEmail)
+    public static bool SaveDebtorNote(int noteId, int userId, int pin, int debtId, int categoryId, string theirRef, string reason, string content, string newLandLine, string newMobile, string newEmail)
     {
         var returnData = false;
         var dataAccess = new CollectionHubData.DataAccess();
@@ -802,4 +802,49 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public static int CreateContactNote(int userId, int pin, int uprn, int debtId)
+    {
+        int returnData = 0;
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.CreateDebtorNote(userId, pin, uprn, debtId);
+
+        return returnData;
+    }
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public static List<TreatmentCycle> GetTreatmentCyclesList()
+    {
+        var returnData = new List<TreatmentCycle>();
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.GetTreatmentCyclesList();
+
+        return returnData;
+    }
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public static bool SetDebtResponsibleUser(int userId, int debtId)
+    {
+        var returnData = false;
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.SetDebtResponsibleUser(debtId, userId);
+
+        return returnData;
+    }
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public static List<UserData> GetSystemUsers(bool showInvalid)
+    {
+        var returnData = new List<UserData>();
+        var dataAccess = new CollectionHubData.DataAccess();
+
+        returnData = dataAccess.GetSystemUsers(showInvalid);
+
+        return returnData;
+    }
+    //  List<UserData> AuthenticateUser()
 }

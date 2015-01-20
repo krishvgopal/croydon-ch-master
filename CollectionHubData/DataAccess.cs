@@ -73,6 +73,28 @@ namespace CollectionHubData
             }
             return returnvalue;
         }
+
+        public bool SetDebtResponsibleUser(int debtId, int userId)
+        {
+            var returnvalue = false;
+            using (var sqlDataConnection = new SqlConnection(GetConnectionString()))
+            {
+                sqlDataConnection.Open();
+                using (var sqlCommand = new SqlCommand("P_SET_DEBT_RESP_USER", sqlDataConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add(new SqlParameter("DebtId", debtId));
+                    sqlCommand.Parameters.Add(new SqlParameter("UserId", userId));
+
+                    var count = sqlCommand.ExecuteNonQuery();
+
+                    if (count > 0) returnvalue = true;
+                }
+                sqlDataConnection.Close();
+            }
+            return returnvalue;
+        }
+
         public bool CreateDebtGroup(string debtIdString, int userId, int partyPin)
         {
             var returnvalue = false;
@@ -2190,6 +2212,35 @@ namespace CollectionHubData
         }
 
 
+        public int CreateDebtorNote(int userId, int pin, int uprn, int debtId)
+        {
+            int returnValue = 0;
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CHP_ACTION_NOTES_INSERT", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                //sqlCommand.Parameters.Add(new SqlParameter("NoteID", noteId));
+
+                sqlCommand.Parameters.Add(new SqlParameter("USERID", userId));
+                sqlCommand.Parameters.Add(new SqlParameter("PIN", pin));
+                sqlCommand.Parameters.Add(new SqlParameter("UPRN", uprn));
+                sqlCommand.Parameters.Add(new SqlParameter("DebtID", debtId));
+
+                SqlParameter returnParameter = sqlCommand.Parameters.Add("RetVal", SqlDbType.Int);
+                returnParameter.Direction = ParameterDirection.ReturnValue;
+
+                var callReturn = sqlCommand.ExecuteScalar();
+
+                returnValue = (int)returnParameter.Value;
+            }
+
+            sqlDataConnection.Close();
+
+            return returnValue;
+        }
 
         public DebtorNote GetDebtorNote(int noteId)
         {
@@ -2218,8 +2269,32 @@ namespace CollectionHubData
             sqlDataConnection.Close();
 
             return returnValue;
-        }
+        } 
+        public List<TreatmentCycle> GetTreatmentCyclesList()
+        {
+            var returnValue = new List<TreatmentCycle>();
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
 
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("ch_treatment_cycles_list", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add(new TreatmentCycle(dataReader));
+                    }
+                }
+            }
+
+            sqlDataConnection.Close();
+
+            return returnValue;
+        }
         public List<DebtorNoteCategory> GetDebtNoteCategories()
         {
             var returnValue = new List<DebtorNoteCategory>();
@@ -2281,5 +2356,38 @@ namespace CollectionHubData
 
             return returnValue;
         }
+
+        // 
+        public List<UserData> GetSystemUsers(bool showInvalid)
+        {
+            List<UserData> returnValue = new List<UserData>();
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("P_GET_SYSTEM_USERS", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("ShowNonValid", showInvalid));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add( new UserData(dataReader) );
+                    }
+                }
+            }
+
+            sqlDataConnection.Close();
+
+            return returnValue;
+        }
+
+        //  P_GET_DETBS_BY_ASSIGNED_USER
+
+
+    
     }
 }

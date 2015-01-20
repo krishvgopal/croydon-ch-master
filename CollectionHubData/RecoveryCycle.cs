@@ -24,8 +24,16 @@ namespace CollectionHubData
         public TreatmentCycle() { }
         public TreatmentCycle(System.Data.SqlClient.SqlDataReader value)
         {
-            TreatmentCycleName = value["name"].ToString();
-            TreatmentCycleId = Convert.ToInt32(value["id"]);
+            if (value.HasColumn("cycle") && value.HasColumn("Id"))
+            {
+                TreatmentCycleName = value["cycle"].ToString();
+                TreatmentCycleId = Convert.ToInt32(value["id"]);
+            }
+            else
+            {
+                TreatmentCycleName = value["name"].ToString();
+                TreatmentCycleId = Convert.ToInt32(value["id"]);    
+            }
         }
     }
 

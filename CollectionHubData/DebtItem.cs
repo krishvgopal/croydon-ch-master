@@ -20,6 +20,8 @@ namespace CollectionHubData
         public string       GroupOrder          { get; set; }
         public bool         IsGroupRecord       { get; set; }
         public int?         GroupDebtId         { get; set; }
+        public int          ResponsibleUserId   { get; set; }
+        public string       ResponsibleUserName { get; set; }
 
         public DebtItem() { }
         public DebtItem(System.Data.SqlClient.SqlDataReader value)
@@ -35,6 +37,7 @@ namespace CollectionHubData
             Type                = value["cd_Type"].ToString();
             GroupOrder          = value["OrderId"].ToString();
             IsGroupRecord       = Convert.ToBoolean(value["UnGroupFlag"]);
+            
 
             object intCheck = value["cd_group_debt_id"];
             GroupDebtId = (intCheck == System.DBNull.Value)
@@ -58,8 +61,19 @@ namespace CollectionHubData
 
             object sqlDateTime2 = value["Last_Action_Date"];
             LastActionDate = (sqlDateTime2 == System.DBNull.Value)
-                ? (DateTime?)null
+                ? (DateTime?) null
                 : Convert.ToDateTime(sqlDateTime2);
+
+            
+            object intOfficer = value["cd_resp_user"];
+            ResponsibleUserId = (intOfficer == System.DBNull.Value)
+                ? 0
+                : Convert.ToInt32(intOfficer);
+
+            object strUserName = value["UserName"];
+            ResponsibleUserName = (strUserName == System.DBNull.Value)
+                ? null
+                : Convert.ToString(strUserName);
         }
     }
 }

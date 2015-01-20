@@ -3,11 +3,22 @@
 
 
 function createNewNote() {
-
-
+    $.ajax({
+        type: "POST",
+        url: "../DataService.aspx/CreateContactNote",
+        data: "{'userId':'" + $("#debtData").attr("userId") + "','pin':'" + $("#debtData").attr("pin") + "','uprn':'" + $("#debtData").attr("uprn") + "','debtId':'" + $("#debtData").attr("debtId") + "'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            $("#debtData").attr("noteId", result.d);
+            loadDebtorNote();
+        },
+        failure: function (error) {
+            // TODO: HANDLE ERROR
+            console.log(error);
+        }
+    });
 }
-
-
 function loadDebtsList(noteId) {
     $.ajax({
         type: "POST",
@@ -30,7 +41,6 @@ function loadDebtsList(noteId) {
     });
 }
 function loadCategories() {
-
     $.ajax({
         type: "POST",
         url: "../DataService.aspx/GetDebtNoteCategories",
@@ -53,15 +63,8 @@ function loadCategories() {
 
 }
 function loadDebtorNote() {
-
-    $("#debtData").attr("noteId",   QueryString()["noteId"]);
-    $("#debtData").attr("debtId",   QueryString()["debtId"]);
-    $("#debtData").attr("pin",      QueryString()["pin"]);
-    $("#debtData").attr("uprn",     QueryString()["uprn"]);
-    
     loadCategories();
     loadDebtsList($("#debtData").attr("noteId"));
-
     $.ajax({
         type: "POST",
         url: "../DataService.aspx/GetDebtorNote",
@@ -85,15 +88,14 @@ function loadDebtorNote() {
         }
     });
 }
-
 function saveNote() {
-    
-    // noteId   pin     debtid
+
+    //console.log("{'noteId':'" + $("#debtData").attr("noteId") + "','userId':'" + $("#debtData").attr("userId") + "','pin':'" + $("#debtData").attr("pin") + "','debtId':'" + $("#debtData").attr("debtId") + "','categoryId':'" + $("#category").val() + "','theirRef':'" + $("#theirRef").val() + "','reason':'" + $("#reason").val() + "','content':'" + $("#noteText").val() + "','newLandLine':'" + $("#newPhone").val() + "','newMobile':'" + $("#newMobile").val() + "','newEmail':'" + $("#newEmail").val() + "'}");
 
     $.ajax({
         type: "POST",
-        url: "../DataService.aspx/GetDebtorNote",
-        data: "{'noteId':'" + $("#debtData").attr("noteId") + "','userId':'" + $("#UserSessionToken").val() + "','pin':'" + $("#debtData").attr("pin") + "','debtId':'" + $("#debtData").attr("debtId") + "','categoryId':'" + $("#category").val() + "','theirRef':'" + $("#theirRef").val() + "','reason':'" + $("#reason").val() + "','content':'" + $("#noteText").val() + "','newLandLine':'" + $("#newPhone").val() + "','newMobile':'" + $("#newMobile").val() + "','newEmail':'" + $("#newEmail").val() + "'}",
+        url: "../DataService.aspx/SaveDebtorNote",
+        data: "{'noteId':'" + $("#debtData").attr("noteId") + "','userId':'" + $("#debtData").attr("userId") + "','pin':'" + $("#debtData").attr("pin") + "','debtId':'" + $("#debtData").attr("debtId") + "','categoryId':'" + $("#category").val() + "','theirRef':'" + $("#theirRef").val() + "','reason':'" + $("#reason").val() + "','content':'" + $("#noteText").val() + "','newLandLine':'" + $("#newPhone").val() + "','newMobile':'" + $("#newMobile").val() + "','newEmail':'" + $("#newEmail").val() + "'}",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
@@ -105,6 +107,18 @@ function saveNote() {
             console.log(error);
         }
     });
-
+}
+function loadForm() {
+    $("#debtData").attr("noteId",   QueryString()["noteId"]);
+    $("#debtData").attr("debtId",   QueryString()["debtId"]);
+    $("#debtData").attr("userId",   QueryString()["userId"]);
+    $("#debtData").attr("pin",      QueryString()["pin"]);
+    $("#debtData").attr("uprn",     QueryString()["uprn"]);
+    if (QueryString()["m"] == "n") { //m = mode, n = new
+        createNewNote();
+    }
+    if (QueryString()["m"] == "r") { //m = mode, r = read
+        loadDebtorNote();
+    }
 }
 

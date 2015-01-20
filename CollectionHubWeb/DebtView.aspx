@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/AppMain.master" AutoEventWireup="true" CodeFile="DebtView.aspx.cs" Inherits="Search" %>
-<%@ Register Src="~/Common/ActionMenu.ascx" TagName="ActionMenu" TagPrefix="am" %>
+<%@ Register Src="~/Common/ActionMenu.ascx"     TagName="ActionMenu" TagPrefix="am" %>
 <%@ Register Src="~/Common/MainNavigation.ascx" TagName="NavigationMenu" TagPrefix="nm" %>
-<%@ Register Src="~/Common/SiteHeader.ascx" TagName="SiteHeader" TagPrefix="sh" %>
+<%@ Register Src="~/Common/SiteHeader.ascx"     TagName="SiteHeader" TagPrefix="sh" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="headMenu" Runat="Server">
     <sh:SiteHeader      ID="SiteHeader"        runat="server" />
@@ -81,6 +81,7 @@
                             <th>Recovery Cycle</th>
                             <th>Status</th>
                             <th>Type</th>
+                            <th>Responsible User</th>
                             <th class="group_order">GroupOrder</th>
                         </tr>
                     </thead>
@@ -167,21 +168,6 @@
                         </table>
                     </div>
                 </div>
-                
-              <%--  <div class="tab-pane fade" id="relParties">
-                    <br />
-                    <div class="table-responsive">
-                        <table class="table table-striped table-bordered table-hover" id="tableRelParties">
-                            <thead>
-                                <tr>
-                                    <th>?</th>
-                                    <th>?</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                </div>--%>
-
                 <div class="tab-pane fade" id="arrangements">
                     <br/>
                     <div class="table-responsive">
@@ -363,21 +349,7 @@
                 </div>
             </div>
         </div>
-    
-<%--        <div class="modal fade" id="debtActionSavedModal" tabindex="-1" role="dialog" aria-labelledby="debtActionSavedModal" aria-hidden="true" >
-            <div class="modal-dialog" style="width:825px">
-                <div class="modal-content">
-                </div>
-            </div>
-        </div>
-    
-        <div class="modal fade" id="debtActionViewModal" tabindex="-1" role="dialog" aria-labelledby="debtActionViewModal" aria-hidden="true" >
-            <div class="modal-dialog" style="width:825px">
-                <div class="modal-content">
-                </div>
-            </div>
-        </div>--%>
-
+   
     <% if (System.Configuration.ConfigurationManager.AppSettings["UseMinifiedJs"] == "true") { %>
     <script type="text/javascript" charset="utf8" src="js/DebtView.js"></script><% } else { %>
     <script type="text/javascript" charset="utf8" src="js/DebtView.js"></script><% } %>

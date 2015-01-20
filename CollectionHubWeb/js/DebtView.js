@@ -60,6 +60,7 @@ function loadDebtsView(result) {
             { mData: 'RecoveryCycle' },
             { mData: 'Status' },
             { mData: 'Type' },
+            { mData: 'Responsible User'},
             { mData: 'GroupOrder' }
         ],
         "aoColumnDefs": [
@@ -410,6 +411,7 @@ function refreshDebtsList() {
 function refreshSingleDebtView() {
     var showCleared = 'true';
     if ($("#showCleared").val() == 2) { showCleared = 'true'; }
+    $('#selectedDebtId').val('0');
     $.ajax({
         type: "POST",
         url: "DataService.aspx/GetDebts",

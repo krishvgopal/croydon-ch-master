@@ -77,6 +77,7 @@
     <Compile Include="DataAccess.cs" />
     <Compile Include="DataMergeSource.cs" />
     <Compile Include="DataReaderExtensionMethods.cs" />
+    <Compile Include="DataRecordExtensions.cs" />
     <Compile Include="DebtAddress.cs" />
     <Compile Include="DebtAttribute.cs" />
     <Compile Include="DebtItem.cs" />
