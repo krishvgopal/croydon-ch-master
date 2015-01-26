@@ -81,7 +81,7 @@
                             <th>Recovery Cycle</th>
                             <th>Status</th>
                             <th>Type</th>
-                            <th>Responsible User</th>
+                            <%--<th>Responsible User</th>--%>
                             <th class="group_order">GroupOrder</th>
                         </tr>
                     </thead>

@@ -60,7 +60,7 @@ function loadDebtsView(result) {
             { mData: 'RecoveryCycle' },
             { mData: 'Status' },
             { mData: 'Type' },
-            { mData: 'Responsible User'},
+            //{ mData: 'Responsible User'},
             { mData: 'GroupOrder' }
         ],
         "aoColumnDefs": [

@@ -846,5 +846,17 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public static List<SearchWorkResult> SearchWorkCases(string sourceList, int? amountFrom, int? amountTo, int? cycleId, int? daysSinceIssued)
+    {
+        //var returnData = new List<SearchWorkResult>();
+        var dataAccess = new DataAccess();
+
+        var returnData = dataAccess.SearchWorkCases(sourceList, amountFrom, amountTo, cycleId, daysSinceIssued);
+
+        return returnData;
+    }
+    //  public List<SearchWorkResult> SearchWorkCases(string sourceList, int? amountFrom, int? amountTo, int? cycleId, int? daysSinceIssued)
     //  List<UserData> AuthenticateUser()
 }
