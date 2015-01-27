@@ -90,6 +90,7 @@
     <Compile Include="DocumentTemplates.cs" />
     <Compile Include="FullnameFullAddressSearchResults.cs" />
     <Compile Include="JavaScriptSerializer.cs" />
+    <Compile Include="KeyValuePair.cs" />
     <Compile Include="LinkedAddress.cs" />
     <Compile Include="MatchList.cs" />
     <Compile Include="MergeFieldItem.cs" />

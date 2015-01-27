@@ -21,7 +21,6 @@ function doSearch() {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
-            console.log(result.d);
             if (result.hasOwnProperty("d")) { result = result.d; }
             $("#searchTable").dataTable({
                 "destroy": true,
@@ -73,16 +72,23 @@ function doSearch() {
                 , { "width": "200", "targets": 6 }
                 ],
                 "initComplete": function(settings, json) {
-                    for (var i = 0; i < settings.aoData.length+1; i++) {
+                    for (var i = 0; i < settings.aoData.length + 1; i++) {
+
                         var newDropdown = $("#assignedUserList").clone();
                         var newId = getUUID();
+
                         newDropdown.attr("id", newId);
                         newDropdown.attr("rowId", i);
                         newDropdown.css('visibility', '');
+
                         $("tr:nth-child(" + i + ") td:nth-child(7)").append(newDropdown);
+
                         $('#' + newId).change(
                             function (event) {
-                                assignWork($(this), $(this).val(), $("tr:nth-child(" + $(this).attr('rowId') + ") td:nth-child(1)").find('input').val());
+                                assignWork( $(this),
+                                            $(this).val(),
+                                            $("tr:nth-child(" + $(this).attr('rowId') + ") td:nth-child(1)").find('input').val()
+                                          );
                             }
                         );
                     }

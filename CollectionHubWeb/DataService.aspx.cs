@@ -857,6 +857,13 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-    //  public List<SearchWorkResult> SearchWorkCases(string sourceList, int? amountFrom, int? amountTo, int? cycleId, int? daysSinceIssued)
-    //  List<UserData> AuthenticateUser()
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public static List<CollectionHubData.KeyValuePair<int, string>> GetAutomaticOutstandingGroups(int userId)
+    {
+        var dataAccess = new DataAccess();
+        var returnData = dataAccess.GetAutomaticOutstandingGroups(userId);
+
+        return returnData;
+    }
 }

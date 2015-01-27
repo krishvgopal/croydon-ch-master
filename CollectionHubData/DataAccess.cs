@@ -2389,5 +2389,62 @@ namespace CollectionHubData
 
             return returnValue;
         }
+
+
+        public List<KeyValuePair<int, string>> GetAutomaticOutstandingGroups(int userId)
+        {
+            var returnValue = new List<KeyValuePair<int, string>>();
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("P_GET_AUTOMATIC_OUTSTANDING_GROUPS_LIST", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("UserId", userId));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add(new KeyValuePair<int, string>(Convert.ToInt32(dataReader["AG_ID"]), dataReader["AG_NAME"].ToString()));
+                    }
+                }
+            }
+
+            sqlDataConnection.Close();
+
+            return returnValue;
+        }
+
+        public List<KeyValuePair<int, string>> GetAutomaticOutstandingGroups(int userId, int corresType, int processCode)
+        {
+            var returnValue = new List<KeyValuePair<int, string>>();
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("P_GET_AUTOMATIC_OUTSTANDING_ITEMS_LIST", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("UserId", userId));
+                sqlCommand.Parameters.Add(new SqlParameter("CorresType", corresType));
+                sqlCommand.Parameters.Add(new SqlParameter("ProcessCode", processCode));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add(new KeyValuePair<int, string>(Convert.ToInt32(dataReader["AG_ID"]), dataReader["AG_NAME"].ToString()));
+                    }
+                }
+            }
+
+            sqlDataConnection.Close();
+
+            return returnValue;
+        }
     }
 }
