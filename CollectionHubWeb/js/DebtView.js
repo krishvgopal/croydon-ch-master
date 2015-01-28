@@ -1020,8 +1020,11 @@ function refreshDebtActionTabs(debtId) {
                 refreshDebtActionItems(isActive, value, debtId);
                 activeHtml = '';                
             });
+            // ADD UPLOAD TAB
+            lineItem = lineItem + '<li> <a href="#debtRecoveryTab_Upload" data-toggle="tab">Upload Document(s)</a></li>';
             $("#debtActionTabMenu").append('<ul class="nav nav-tabs">' + lineItem + '</ul>');
 
+            $("#debtActionTabPanels").append('<div class="tab-pane fade in" id="debtRecoveryTab_Upload"><div style="padding-top:15px">Welcome</div></div>');
             // TODO : REMOVE THIS NASTY HACK
             var v = $("#debtActionTabPanels").html();
             $("#debtActionTabPanels").html('<div class="tab-content">' + v + '</div>');

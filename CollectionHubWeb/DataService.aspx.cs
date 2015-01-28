@@ -850,7 +850,6 @@ public partial class DataService : System.Web.UI.Page
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<SearchWorkResult> SearchWorkCases(string sourceList, int? amountFrom, int? amountTo, int? cycleId, int? daysSinceIssued)
     {
-        //var returnData = new List<SearchWorkResult>();
         var dataAccess = new DataAccess();
 
         var returnData = dataAccess.SearchWorkCases(sourceList, amountFrom, amountTo, cycleId, daysSinceIssued);
@@ -863,6 +862,15 @@ public partial class DataService : System.Web.UI.Page
     {
         var dataAccess = new DataAccess();
         var returnData = dataAccess.GetAutomaticOutstandingGroups(userId);
+
+        return returnData;
+    }
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public static List<AutomaticTrayItems> GetAutomaticOutstandingItems(int userId, int corresType, int processCode)
+    {
+        var dataAccess = new DataAccess();
+        var returnData = dataAccess.GetAutomaticOutstandingItems(userId, corresType, processCode);
 
         return returnData;
     }

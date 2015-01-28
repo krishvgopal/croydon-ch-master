@@ -2292,8 +2292,7 @@ namespace CollectionHubData
 
             return returnValue;
         }
-
-        public bool SaveDebtorNote(int noteId, int userId, int pin, int debtId, int categoryId, string theirRef, string reason, string content, string newLandLine, string newMobile, string newEmail)
+        public bool                     SaveDebtorNote(int noteId, int userId, int pin, int debtId, int categoryId, string theirRef, string reason, string content, string newLandLine, string newMobile, string newEmail)
         {
             var returnValue = false;
             var sqlDataConnection = new SqlConnection(GetConnectionString());
@@ -2327,9 +2326,7 @@ namespace CollectionHubData
 
             return returnValue;
         }
-
-
-        public List<UserData> GetSystemUsers(bool showInvalid)
+        public List<UserData>           GetSystemUsers(bool showInvalid)
         {
             List<UserData> returnValue = new List<UserData>();
             var sqlDataConnection = new SqlConnection(GetConnectionString());
@@ -2355,9 +2352,7 @@ namespace CollectionHubData
 
             return returnValue;
         }
-
-
-        public List<SearchWorkResult> SearchWorkCases(string sourceList, int? amountFrom, int? amountTo, int? cycleId, int? daysSinceIssued)
+        public List<SearchWorkResult>   SearchWorkCases(string sourceList, int? amountFrom, int? amountTo, int? cycleId, int? daysSinceIssued)
         {
             var returnValue         = new List<SearchWorkResult>();
             var sqlDataConnection   = new SqlConnection(GetConnectionString());
@@ -2389,8 +2384,6 @@ namespace CollectionHubData
 
             return returnValue;
         }
-
-
         public List<KeyValuePair<int, string>> GetAutomaticOutstandingGroups(int userId)
         {
             var returnValue = new List<KeyValuePair<int, string>>();
@@ -2418,10 +2411,10 @@ namespace CollectionHubData
             return returnValue;
         }
 
-        public List<KeyValuePair<int, string>> GetAutomaticOutstandingGroups(int userId, int corresType, int processCode)
+        public List<AutomaticTrayItems> GetAutomaticOutstandingItems(int userId, int corresType, int processCode)
         {
-            var returnValue = new List<KeyValuePair<int, string>>();
-            var sqlDataConnection = new SqlConnection(GetConnectionString());
+            var returnValue         = new List<AutomaticTrayItems>();
+            var sqlDataConnection   = new SqlConnection(GetConnectionString());
 
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("P_GET_AUTOMATIC_OUTSTANDING_ITEMS_LIST", sqlDataConnection))
@@ -2437,7 +2430,7 @@ namespace CollectionHubData
                 {
                     while (dataReader.Read())
                     {
-                        returnValue.Add(new KeyValuePair<int, string>(Convert.ToInt32(dataReader["AG_ID"]), dataReader["AG_NAME"].ToString()));
+                        returnValue.Add(new AutomaticTrayItems(dataReader));
                     }
                 }
             }

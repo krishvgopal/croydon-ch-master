@@ -66,6 +66,7 @@
     <Compile Include="ArrangementPaymentMethods.cs" />
     <Compile Include="AttributeCurrentStatusType.cs" />
     <Compile Include="AttributesItem.cs" />
+    <Compile Include="AutomaticTrayItems.cs" />
     <Compile Include="BatchJobHistory.cs" />
     <Compile Include="BatchJobs.cs" />
     <Compile Include="BatchProcess.cs" />

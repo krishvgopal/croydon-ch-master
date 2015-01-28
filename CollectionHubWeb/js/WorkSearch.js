@@ -157,10 +157,7 @@ function loadStreams() {
 }
 function loadUsersForAssigning() {
     $('#assignedUserList').val('');
-    $('#assignedUserList').append($('<option>', {
-        value: 0,
-        text: "No one"
-    }));
+    $('#assignedUserList').append($('<option>', { value: 0, text: "No one" }));
     $.ajax({
         type: "POST",
         url: "DataService.aspx/GetSystemUsers",
