@@ -1023,12 +1023,11 @@ function refreshDebtActionTabs(debtId) {
             // ADD UPLOAD TAB
             lineItem = lineItem + '<li> <a href="#debtRecoveryTab_Upload" data-toggle="tab">Upload Document(s)</a></li>';
             $("#debtActionTabMenu").append('<ul class="nav nav-tabs">' + lineItem + '</ul>');
+            $("#debtActionTabPanels").append('<div class="tab-pane fade in" id="debtRecoveryTab_Upload"><div style="padding-top:15px"><div class="form-group"><label>Select File</label><input type="file" name="fileToUpload" id="fileToUpload" onchange="fileSelected();"/><div id="progressNumber"></div></div><input type="button" class="btn btn-default" onclick="uploadFile()" value="Upload" /></div></div>');
 
-            $("#debtActionTabPanels").append('<div class="tab-pane fade in" id="debtRecoveryTab_Upload"><div style="padding-top:15px">Welcome</div></div>');
             // TODO : REMOVE THIS NASTY HACK
             var v = $("#debtActionTabPanels").html();
             $("#debtActionTabPanels").html('<div class="tab-content">' + v + '</div>');
-
         }
     });
 }
@@ -1478,4 +1477,46 @@ function getHeader() {
                             </tr>\
                         </table>';
     return returnValue;
+
+}
+function fileSelected() {
+    var file = document.getElementById('fileToUpload').files[0];
+    if (file) {
+        var fileSize = 0;
+        if (file.size > 1024 * 1024) {
+            fileSize = (Math.round(file.size * 100 / (1024 * 1024)) / 100).toString() + ' Mb';
+        } else {
+            fileSize = (Math.round(file.size * 100 / 1024) / 100).toString() + ' Kb';
+        }
+        document.getElementById('progressNumber').innerHTML = fileSize;
+    }
+}
+function uploadFile() {
+    var fd = new FormData();
+    var xhr = new XMLHttpRequest();
+
+    fd.append("fileToUpload", document.getElementById('fileToUpload').files[0]);
+    xhr.upload.addEventListener("progress", uploadProgress, false);
+    //xhr.addEventListener("load", uploadComplete, false);
+    //xhr.addEventListener("error", uploadFailed, false);
+    //xhr.addEventListener("abort", uploadCanceled, false);
+    xhr.open("POST", "FileUpload.aspx");
+    xhr.send(fd);
+}
+function uploadProgress(evt) {
+    if (evt.lengthComputable)
+    {
+        var percentComplete = Math.round(evt.loaded * 100 / evt.total);
+        console.log(percentComplete.toString());
+        document.getElementById('progressNumber').innerHTML = percentComplete.toString() + '%';
+    }
+    else
+    {
+        console.log("failing");
+        document.getElementById('progressNumber').innerHTML = 'unable to compute';
+    }
+}
+function uploadComplete(evt) {
+    //alert(evt.target.responseText);
+    document.getElementById('progressNumber').innerHTML = 'Upload Complete';
 }
