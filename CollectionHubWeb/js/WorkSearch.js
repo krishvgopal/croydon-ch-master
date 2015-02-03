@@ -110,7 +110,9 @@ function assignWork(parent, userId, debtId) {
         async: false,
         success: function(result) {
             if (result.d == true) {
-                $(parent).closest("tr").remove();
+                // $(parent).closest("tr").remove();
+                var cellName = $(parent).find('option:selected').text();
+                $(parent).closest("tr").find("td:nth-child(7)").html(cellName);
             }
         }
     });

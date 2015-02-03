@@ -5,7 +5,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Upload Files using XMLHttpRequest - Minimal</title>
+    <title>File Upload</title>
+</head>
+
+  <%--  <title>Upload Files using XMLHttpRequest - Minimal</title>
 
     <script type="text/javascript">
         
@@ -76,5 +79,5 @@
     </div>
     <div id="progressNumber"></div>
   </form>
-</body>
+</body>--%>
 </html>

@@ -39,8 +39,8 @@
                         <br/>
                         <asp:Literal ID="pageFullAddress" runat="server"></asp:Literal>
                         <br/><br/>
-                        <span>Assigned To:&nbsp;<a href="#" onclick="doAssignUser($(this), $('#assignedToUserId').val());">No one</a></span>
-                        <select id="assignedUserList" class="form-control-compact" style="visibility: hidden;"></select>
+<%--                        <span>Assigned To:&nbsp;<a href="#" onclick="doAssignUser($(this), $('#assignedToUserId').val());">No one</a></span>
+                        --%>
                     </p>
                 </div>
                 <div class="col-lg-2" style="width:245px">
@@ -78,14 +78,18 @@
                             <th>Debt Reference</th>
                             <th class="debt_initial">Initial Debt1</th>
                             <th class="debt_outstanding">Outstanding2</th>
-                            <th>Recovery Cycle</th>
-                            <th>Status</th>
-                            <th>Type</th>
-                            <%--<th>Responsible User</th>--%>
+                            <th class="recoveryCycle">Recovery Cycle</th>
+                            <th class="respUserId">Responsible Id</th>
+                            <th class="respUserName">Responsible User</th>
+                            <th class="type">Type</th>
+                            <th class="status">Status</th>
+                            
                             <th class="group_order">GroupOrder</th>
                         </tr>
                     </thead>
                 </table>
+                <select id="recoveryCycleQuickSet" class="form-control-compact" style="visibility: hidden;"></select>
+                <select id="assignedUserList" class="form-control-compact" style="visibility: hidden;"></select>
                 <a data-toggle="modal" href="modals/CreateDebtGroup.html" data-target="#myModal"  id="debtGroupCreate">Create Group</a>
                 <a data-toggle="modal" href="modals/RemoveDebtGroup.html" data-target="#ungroupDebtModal" id="debtGroupRemove">Remove Group</a>
             </div>
