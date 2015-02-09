@@ -7,7 +7,8 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="headMenu" Runat="Server">
 	<sh:SiteHeader ID="SiteHeader" runat="server" />
 	<input type="hidden" runat="server" id="selectedTemplateId" />
-	<script src="Scripts/ckeditor/ckeditor.js"></script>
+	<script type="text/javascript" src="Scripts/ckeditor/ckeditor.js"></script>
+	<script type="text/javascript" src="Scripts/ckfinder/ckfinder.js"></script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="headInfo" Runat="Server">
 	<am:ActionMenu ID="pageActionMenu" runat="server" />

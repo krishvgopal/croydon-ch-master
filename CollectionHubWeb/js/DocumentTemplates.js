@@ -10,6 +10,10 @@ var editor = CKEDITOR.inline('templateName', {
     removePlugins: 'toolbar'
 });
 
+//CKFinder.setupCKEditor(editor, '../Scripts/ckfinder/');
+
+
+
 refreshBatchProcessJobs();
 
 function refreshBatchProcessJobs() {
@@ -111,7 +115,7 @@ function createNewTemplate() {
     $.ajax({
         type: "POST",
         url: "DataService.aspx/CreateNewDocumentTemplate",
-        data: "{'userId':'" + $("#UserSessionToken").val() + "','documentName':'" + $("#newDocumentTemplateName").val() + "','viewName':'" + $("#newDocumentTemplateView").val() + "'}",
+        data: "{'userId':'" + $("#UserSessionToken").val() + "','documentName':'" + $("#newDocumentTemplateName").val() + "','viewName':'" + $("#newDocumentTemplateView").val() + "','debtTypeId':'" + $('#debtTypes').val() + "'}",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
@@ -127,10 +131,11 @@ function createNewTemplate() {
     });
 }
 function refreshMergeDataSources() {
+    $("#dataSources").html('');
     $.ajax({
         type: "POST",
-        url: "DataService.aspx/GetDataMergeOptions",
-        data: "{}",
+        url: "DataService.aspx/GetDataMergeOptionsByDebtType",
+        data: "{'debtTypeId':'" + $('#debtTypes').val() + "'}",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (result) {
@@ -139,6 +144,25 @@ function refreshMergeDataSources() {
                 var htmlValue = '<div name="divGroup" id="' + value.ViewName + '" style="border: 1px solid #E4E5FC; padding: 10px;"><p><strong>' + value.ViewUserName + '</strong></p><p><i>' + value.ViewDescription + '</i></p><p><a href="#" onclick="selectView(\'' + value.ViewName + '\');">Select This Source</a></p></div>';
                 $("#dataSources").append(htmlValue);
             });
+        }
+    });
+}
+function refreshDebtTypes() {
+    $.ajax({
+        type: "POST",
+        url: "DataService.aspx/GetDebtTypes",
+        data: "{}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            if (result.hasOwnProperty("d")) { result = result.d; }
+            $.each(result, function (i, item) {
+                $('#debtTypes').append($('<option>', {
+                    value: item.Key,
+                    text: item.Value
+                }));
+            });
+            refreshMergeDataSources();
         }
     });
 }

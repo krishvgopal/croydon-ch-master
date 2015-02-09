@@ -3,7 +3,8 @@
 
 $("#showClearedLoadingImage").hide();
 
-var selectedDebtRecord = null;
+var selectedDebtRecord  = null;
+var cancelRowSelect     = false;
 
 $('#pageBody_pageIcon').click(function (e) {
     e.preventDefault();
@@ -171,15 +172,26 @@ function loadDebtsView(result) {
                 newDropdownQuickSet.css('visibility', '');
                 
                 $("tr:nth-child(" + i + ") td:nth-child(7)").append(newDropdownQuickSet);
-                //var thisRecoveryCycle = $("tr:nth-child(" + i + ") td:nth-child(7)").find('input').attr("data-recoveryCycle");
-
                 $("tr:nth-child(" + i + ") td:nth-child(8)").append(newDropdown);
                 var thisUser = $("tr:nth-child(" + i + ") td:nth-child(8)").find('input').attr("data-userid");
+
+                $('#' + newIdQuickSet).focus(
+                    function (event) {
+                        cancelRowSelect = true;
+                        console.log('A:1');
+                    });
+
+                $('#' + newId).focus(
+                    function (event) {
+                        cancelRowSelect = true;
+                        console.log('A:2');
+                    });
 
                 //$('#' + newIdQuickSet).val(thisUser);
                 $('#' + newIdQuickSet).change(
                     function (event) {
-                        console.log($(this));
+                        cancelRowSelect = true;
+                        console.log('A:3');
                         //assignDebtToUser($(this),
                         //                 $(this).val(),
                         //                 $("tr:nth-child(" + $(this).attr('rowId') + ") td:nth-child(8)").find('input').val()
@@ -187,10 +199,11 @@ function loadDebtsView(result) {
                     }
                 );
 
-
                 $('#' + newId).val(thisUser);
                 $('#' + newId).change(
                     function (event) {
+                        cancelRowSelect = true;
+                        console.log('A:4');
                         assignDebtToUser($(this),
                                          $(this).val(),
                                          $("tr:nth-child(" + $(this).attr('rowId') + ") td:nth-child(8)").find('input').val()
@@ -226,6 +239,15 @@ function loadDebtsView(result) {
                 $(".debtGroupItems").prop('checked', $(this).prop('checked'));
             });
             $('#dataTableMain tbody').on('click', 'tr', function (ee) {
+
+                if (cancelRowSelect) {
+                    console.log('CANCEL');
+                    cancelRowSelect = false;
+                    return;
+                }
+
+                console.log('RUNN');
+
                 var selectedRowHtml     = $(ee.currentTarget.cells[0]);
                 var selectedRowValue = selectedRowHtml.find('input:checkbox');
 

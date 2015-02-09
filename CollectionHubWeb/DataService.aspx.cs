@@ -692,12 +692,12 @@ public partial class DataService : System.Web.UI.Page
     }
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
-    public static int CreateNewDocumentTemplate(int userId, string documentName, string viewName)
+    public static int CreateNewDocumentTemplate(int userId, string documentName, string viewName, int debtTypeId)
     {
         var returnData = -1;
         var dataAccess = new CollectionHubData.DataAccess();
 
-        returnData = dataAccess.CreateNewDocumentTemplate(userId, documentName, viewName);
+        returnData = dataAccess.CreateNewDocumentTemplate(userId, documentName, viewName, debtTypeId);
 
         return returnData;
     }
@@ -871,6 +871,25 @@ public partial class DataService : System.Web.UI.Page
     {
         var dataAccess = new DataAccess();
         var returnData = dataAccess.GetAutomaticOutstandingItems(userId, corresType, processCode);
+
+        return returnData;
+    }
+
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public static List<CollectionHubData.KeyValuePair<int, string>> GetDebtTypes()
+    {
+        var dataAccess = new DataAccess();
+        var returnData = dataAccess.GetDebtTypes();
+
+        return returnData;
+    }
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public static List<DataMergeSource> GetDataMergeOptionsByDebtType(int debtTypeId)
+    {
+        var dataAccess = new DataAccess();
+        var returnData = dataAccess.GetDataMergeOptionsByDebtType(debtTypeId);
 
         return returnData;
     }

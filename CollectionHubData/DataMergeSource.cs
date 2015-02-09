@@ -11,13 +11,15 @@ namespace CollectionHubData
 		public string ViewUserName      { get; set; }
 		public string ViewDescription   { get; set; }
 		public string ViewName          { get; set; }
+		public int    DebtTypeId        { get; set; }
 
 		public DataMergeSource() { }
 		public DataMergeSource(System.Data.SqlClient.SqlDataReader value)
 		{
 			ViewUserName        = Convert.ToString(value["ViewUserName"]);
 			ViewDescription     = Convert.ToString(value["ViewDescription"]);
-			ViewName            = Convert.ToString(value["ViewName"]);   
+			ViewName            = Convert.ToString(value["ViewName"]);
+			DebtTypeId          = Convert.ToInt32(value["CH_DEBT_TYPE_ID"]);  
 		}
 	}
 	public class DataMergeFields

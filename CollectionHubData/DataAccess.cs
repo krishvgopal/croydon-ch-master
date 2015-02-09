@@ -1723,7 +1723,7 @@ namespace CollectionHubData
             sqlDataConnection.Close();
             return returnValue;
         }
-        public int CreateNewDocumentTemplate(int userId, string documentName, string viewName)
+        public int CreateNewDocumentTemplate(int userId, string documentName, string viewName, int debtTypeId)
         {
             var returnValue = -1;
             var sqlDataConnection = new SqlConnection(GetConnectionString());
@@ -1735,6 +1735,8 @@ namespace CollectionHubData
                 sqlCommand.Parameters.Add(new SqlParameter("UserId", userId));
                 sqlCommand.Parameters.Add(new SqlParameter("Name", documentName));
                 sqlCommand.Parameters.Add(new SqlParameter("viewName", viewName));
+                sqlCommand.Parameters.Add(new SqlParameter("debtTypeId", debtTypeId));
+                // 
 
                 SqlParameter returnParameter = sqlCommand.Parameters.Add("RetVal", SqlDbType.Int);
                 returnParameter.Direction = ParameterDirection.ReturnValue;
@@ -1859,6 +1861,30 @@ namespace CollectionHubData
             {
                 sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
 
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add(new DataMergeSource(dataReader));
+                    }
+                }
+            }
+            sqlDataConnection.Close();
+            return returnValue;
+        }
+        public List<DataMergeSource> GetDataMergeOptionsByDebtType(int debtTypeId)
+        {
+            var returnValue = new List<DataMergeSource>();
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CH_CORRES_VIEWS_LIST_BY_DEBT_TYPE", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("CH_DEBT_TYPE_ID", debtTypeId));
+                
                 var dataReader = sqlCommand.ExecuteReader();
 
                 if (dataReader.HasRows)
@@ -2439,5 +2465,32 @@ namespace CollectionHubData
 
             return returnValue;
         }
+          
+        public List<KeyValuePair<int, string>> GetDebtTypes()
+        {
+            var returnValue = new List<KeyValuePair<int, string>>();
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("P_GET_DEBT_TYPES", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add(new KeyValuePair<int, string>(Convert.ToInt32(dataReader["CH_DEBT_TYPE_ID"]), dataReader["CH_DEBT_TYPE_DESC"].ToString()));
+                    }
+                }
+            }
+
+            sqlDataConnection.Close();
+
+            return returnValue;
+        }
+
     }
 }

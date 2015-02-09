@@ -64,7 +64,6 @@ namespace CollectionHubData
                 ? (DateTime?) null
                 : Convert.ToDateTime(sqlDateTime2);
 
-            
             object intOfficer = value["cd_resp_user"];
             ResponsibleUserId = (intOfficer == System.DBNull.Value)
                 ? 0
