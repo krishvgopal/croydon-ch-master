@@ -8,17 +8,12 @@ function showAutoProcess() {
     } else {
         $("#autoComplete").css("visibility", "hidden");
     }
-    //if ($("#intrayStatus").val() == "1" && $("#actionStatus").val() == "1") {
-    //    $("#autoComplete").css("visibility", "");
-    //} else {
-    //    $("#autoComplete").css("visibility", "hidden");
-    //}
     doTypeSearch();  // Load All
     doItemSearch(0); // Load All for All
 }
 
 function doTypeSearch() {
-    console.log("{'userId':'" + $("#userList").val() + "'}");
+    //console.log("{'userId':'" + $("#userList").val() + "'}");
     $.ajax({
         type: "POST",
         url: "DataService.aspx/GetAutomaticOutstandingGroups",
@@ -39,7 +34,7 @@ function doTypeSearch() {
     });
 }
 function doItemSearch(typeId) {
-    console.log("{'userId':'" + $("#userList").val() + "','corresType':'" + typeId + "','processCode':'" + $("#intrayStatus").val() + "'}");
+    //console.log("{'userId':'" + $("#userList").val() + "','corresType':'" + typeId + "','processCode':'" + $("#intrayStatus").val() + "'}");
     $.ajax({
         type: "POST",
         url: "DataService.aspx/GetAutomaticOutstandingItems",
@@ -64,7 +59,7 @@ function doItemSearch(typeId) {
                                 { mData: 'DebtOnDate' },
                                 { mData: 'Pin' },
                                 { mData: 'Uprn' }
-                             ],
+                           ],
                 "aoColumnDefs": [
                     {
                         "sTitle": "<input data-toggle=\"tooltip\" data-placement=\"right\" title=\"Select all for processing\" id=\"selectAll\" type=\"checkbox\" class=\"selectAll\" onClick=\"checkAllItems();\">",
@@ -120,13 +115,36 @@ function doItemSearch(typeId) {
     });
 }
 function doProcess() {
+    var processList = [];
     $('input:checkbox.selectItem').each(function () {
         if (this.checked) {
-            console.log(this.id);
+            var attrib = $(this).attr("actionid");
+            processList.push(attrib);
+        }
+    });
+    doProcessPost(processList);
+}
+function doProcessPost(processList) {
+
+    console.log("{'actionItems': " + JSON.stringify(processList) + ",'userId':'1', 'pin':'1', 'uprn':'1', 'debtId':'1'}");
+
+    $.ajax({
+        type: "POST",
+        url: "DocumentService.aspx/ProcessAutomaticItems",
+        data: "{'actionItems': " + JSON.stringify(processList) + ",'userId':'1', 'pin':'1', 'uprn':'1', 'debtId':'1'}", 
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            $("#DisplayPDF").html(
+                $('<iframe>', {
+                    src: "DocumentService.aspx?sessionDocument=" + result.d,
+                    width: '0px',
+                    height: "0px"
+                })
+            );
         }
     });
 }
-
 function checkAllItems() {
     $('.selectItem').each(function () {
         this.checked = $(".selectAll").is(':checked');
@@ -152,3 +170,5 @@ function loadUsersForAssigning() {
         }
     });
 }
+
+

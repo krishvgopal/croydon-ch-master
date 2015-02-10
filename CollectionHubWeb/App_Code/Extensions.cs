@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Web;
 
 /* 
@@ -57,7 +58,14 @@ public static class Extensions
         return HttpUtility.UrlPathEncode(url);
     }
 
-
+    public static byte[] ReadFully(Stream input)
+    {
+        using (MemoryStream ms = new MemoryStream())
+        {
+            input.CopyTo(ms);
+            return ms.ToArray();
+        }
+    }
 
     //public static IDataReader GetDateTime(this object value)
     //{

@@ -22,6 +22,7 @@ namespace CollectionHubData
         public int?         GroupDebtId         { get; set; }
         public int          ResponsibleUserId   { get; set; }
         public string       ResponsibleUserName { get; set; }
+        public string       DebtAddress         { get; set; }
 
         public DebtItem() { }
         public DebtItem(System.Data.SqlClient.SqlDataReader value)
@@ -37,6 +38,7 @@ namespace CollectionHubData
             Type                = value["cd_Type"].ToString();
             GroupOrder          = value["OrderId"].ToString();
             IsGroupRecord       = Convert.ToBoolean(value["UnGroupFlag"]);
+            this.DebtAddress    = value["DebtAddress"].ToString();
             
 
             object intCheck = value["cd_group_debt_id"];

@@ -2482,7 +2482,61 @@ namespace CollectionHubData
                 {
                     while (dataReader.Read())
                     {
-                        returnValue.Add(new KeyValuePair<int, string>(Convert.ToInt32(dataReader["CH_DEBT_TYPE_ID"]), dataReader["CH_DEBT_TYPE_DESC"].ToString()));
+                        returnValue.Add(new KeyValuePair<int, string>(Convert.ToInt32(dataReader["LK_CODE"]), dataReader["LK_VALUE"].ToString()));
+                    }
+                }
+            }
+
+            sqlDataConnection.Close();
+
+            return returnValue;
+        }
+
+        public KeyValuePair<int, string> GetTemplateForActionItem(int actionItemId)
+        {
+            var returnValue = new KeyValuePair<int, string>();
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("P_GET_CONTENT_FOR_ACTION_ITEM", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("AID", actionItemId));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue= new KeyValuePair<int, string>(Convert.ToInt32(dataReader["A_ITEM_ID"]), dataReader["CHT_CONTENT"].ToString());
+                    }
+                }
+            }
+
+            sqlDataConnection.Close();
+
+            return returnValue;
+        }
+
+        public KeyValuePair<int, string> GetViewForActionItem(int actionItemId)
+        {
+            var returnValue = new KeyValuePair<int, string>();
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("P_GET_VIEW_FOR_ACTION_ITEM", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("AID", actionItemId));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue = new KeyValuePair<int, string>(Convert.ToInt32(dataReader["CHT_DEBT_TYPE_ID"]), dataReader["LK_OBJECTNAME"].ToString());
                     }
                 }
             }

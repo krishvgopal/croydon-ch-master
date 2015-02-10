@@ -74,6 +74,7 @@
                         <tr>
                             <th class="select_id">Select</th>
                             <th>Debt Source</th>
+                            <th class="debtAddress">Debt Address</th>
                             <th>Acc Ref</th>
                             <th>Debt Reference</th>
                             <th class="debt_initial">Initial Debt1</th>
@@ -85,6 +86,7 @@
                             <th class="status">Status</th>
                             
                             <th class="group_order">GroupOrder</th>
+                            
                         </tr>
                     </thead>
                 </table>

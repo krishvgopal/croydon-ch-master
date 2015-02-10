@@ -56,6 +56,7 @@ function loadDebtsView(result) {
 
             { mData: 'DebtId' },
             { mData: 'DebtSource' },
+            { mData: 'DebtAddress'},
             { mData: 'DebtAccRef' },
             { mData: 'DebtReference' },
             { mData: 'DebtTotal' },
@@ -67,6 +68,7 @@ function loadDebtsView(result) {
             { mData: 'GroupOrder' },
             { mData: 'ResponsibleUserId' },
             { mData: 'ResponsibleUserName' }
+           
             //{ mData: 'DebtId' },
             //{ mData: 'DebtSource' },
             //{ mData: 'DebtAccRef' },
@@ -149,6 +151,9 @@ function loadDebtsView(result) {
             }, {
                 "aTargets": ["type"],
                 "bVisible": false,
+            }, {
+                "aTargets": ["debtAddress"],
+                "bVisible": true,
             }
         ],
         "initComplete": function (settings, json) {
@@ -171,9 +176,9 @@ function loadDebtsView(result) {
                 newDropdownQuickSet.attr("rowId", i);
                 newDropdownQuickSet.css('visibility', '');
                 
-                $("tr:nth-child(" + i + ") td:nth-child(7)").append(newDropdownQuickSet);
-                $("tr:nth-child(" + i + ") td:nth-child(8)").append(newDropdown);
-                var thisUser = $("tr:nth-child(" + i + ") td:nth-child(8)").find('input').attr("data-userid");
+                $("tr:nth-child(" + i + ") td:nth-child(8)").append(newDropdownQuickSet);
+                $("tr:nth-child(" + i + ") td:nth-child(9)").append(newDropdown);
+                var thisUser = $("tr:nth-child(" + i + ") td:nth-child(9)").find('input').attr("data-userid");
 
                 $('#' + newIdQuickSet).focus(
                     function (event) {
