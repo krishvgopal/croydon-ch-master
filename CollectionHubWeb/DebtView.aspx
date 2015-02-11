@@ -86,8 +86,8 @@
                         </tr>
                     </thead>
                 </table>
-                <select id="recoveryCycleQuickSet" class="form-control-compact" style="visibility: hidden;"></select>
-                <select id="assignedUserList" class="form-control-compact" style="visibility: hidden;"></select>
+                <select id="recoveryCycleQuickSet" class="form-control-compact" style="visibility: hidden;display:none;"></select>
+                <select id="assignedUserList" class="form-control-compact" style="visibility: hidden;display:none;"></select>
                 <a data-toggle="modal" href="modals/CreateDebtGroup.html" data-target="#myModal"  id="debtGroupCreate">Create Group</a>
                 <a data-toggle="modal" href="modals/RemoveDebtGroup.html" data-target="#ungroupDebtModal" id="debtGroupRemove">Remove Group</a>
             </div>

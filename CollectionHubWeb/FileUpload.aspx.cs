@@ -12,8 +12,7 @@ public partial class Upload : System.Web.UI.Page
     {
         if (Request.Files.Count > 0)
         {
-            string debtId = Request.Form["DebtId"];
-
+            string debtId   = Request.Form["DebtId"];
             string fileName = Page.Request.Files[0].FileName;
 
             Request.Files[0].SaveAs(@"C:\Temp\" + debtId + "_" + fileName);

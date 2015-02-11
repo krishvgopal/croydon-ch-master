@@ -48,7 +48,7 @@ function loadDebtsView(result) {
         "bSort": false,
         "order": [[2, "desc"]],
         "aaData": result,
-        "scrollY": "250px",
+        "scrollY": "250",
         "scrollCollapse": true,
         "paging": false,
         "bFilter": false,
@@ -68,17 +68,6 @@ function loadDebtsView(result) {
             { mData: 'GroupOrder' },
             { mData: 'ResponsibleUserId' },
             { mData: 'ResponsibleUserName' }
-           
-            //{ mData: 'DebtId' },
-            //{ mData: 'DebtSource' },
-            //{ mData: 'DebtAccRef' },
-            //{ mData: 'DebtReference' },
-            //{ mData: 'DebtTotal' },
-            //{ mData: 'DebtOutstanding' },
-            //{ mData: 'RecoveryCycle' },
-            //{ mData: 'Status' },
-            //{ mData: 'Type' },
-            //{ mData: 'GroupOrder' }
         ],
         "aoColumnDefs": [
             {
@@ -164,32 +153,24 @@ function loadDebtsView(result) {
                 newDropdown.attr("id", newId);
                 newDropdown.attr("rowId", i);
                 newDropdown.css('visibility', '');
+                newDropdown.css('display', '');
 
                 newDropdownQuickSet.attr("id", newIdQuickSet);
                 newDropdownQuickSet.attr("rowId", i);
                 newDropdownQuickSet.css('visibility', '');
+                newDropdownQuickSet.css('display', '');
                 
                 $("tr:nth-child(" + i + ") td:nth-child(8)").append(newDropdownQuickSet);
                 $("tr:nth-child(" + i + ") td:nth-child(9)").append(newDropdown);
                 var thisUser = $("tr:nth-child(" + i + ") td:nth-child(9)").find('input').attr("data-userid");
 
-                $('#' + newIdQuickSet).focus(
-                    function (event) {
-                        cancelRowSelect = true;
-                        console.log('A:1');
-                    });
-
-                $('#' + newId).focus(
-                    function (event) {
-                        cancelRowSelect = true;
-                        console.log('A:2');
-                    });
+                $('#' + newIdQuickSet).focus( function (event) { cancelRowSelect = true; });
+                $('#' + newId).focus( function (event) { cancelRowSelect = true; });
 
                 //$('#' + newIdQuickSet).val(thisUser);
                 $('#' + newIdQuickSet).change(
                     function (event) {
                         cancelRowSelect = true;
-                        console.log('A:3');
                         //assignDebtToUser($(this),
                         //                 $(this).val(),
                         //                 $("tr:nth-child(" + $(this).attr('rowId') + ") td:nth-child(8)").find('input').val()
@@ -201,7 +182,6 @@ function loadDebtsView(result) {
                 $('#' + newId).change(
                     function (event) {
                         cancelRowSelect = true;
-                        console.log('A:4');
                         assignDebtToUser($(this),
                                          $(this).val(),
                                          $("tr:nth-child(" + $(this).attr('rowId') + ") td:nth-child(8)").find('input').val()
@@ -244,7 +224,7 @@ function loadDebtsView(result) {
                 }
 
                 var selectedRowHtml     = $(ee.currentTarget.cells[0]);
-                var selectedRowValue = selectedRowHtml.find('input:checkbox');
+                var selectedRowValue    = selectedRowHtml.find('input:checkbox');
 
                 selectedDebtRecord = ee.currentTarget.cells;
 
@@ -266,6 +246,9 @@ function loadDebtsView(result) {
                     $(this).addClass('active');
                 }
             });
+
+
+            //$(".dataTables_scrollBody").css('height', '250px');
         }
     });
 }
