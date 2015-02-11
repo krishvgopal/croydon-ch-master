@@ -40,7 +40,6 @@ namespace CollectionHubData
             IsGroupRecord       = Convert.ToBoolean(value["UnGroupFlag"]);
             this.DebtAddress    = value["DebtAddress"].ToString();
             
-
             object intCheck = value["cd_group_debt_id"];
             GroupDebtId = (intCheck == System.DBNull.Value)
                 ? (int)-1

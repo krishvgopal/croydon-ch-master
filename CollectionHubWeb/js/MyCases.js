@@ -13,7 +13,6 @@ function showAutoProcess() {
 }
 
 function doTypeSearch() {
-    //console.log("{'userId':'" + $("#userList").val() + "'}");
     $.ajax({
         type: "POST",
         url: "DataService.aspx/GetAutomaticOutstandingGroups",
@@ -125,9 +124,6 @@ function doProcess() {
     doProcessPost(processList);
 }
 function doProcessPost(processList) {
-
-    console.log("{'actionItems': " + JSON.stringify(processList) + ",'userId':'1', 'pin':'1', 'uprn':'1', 'debtId':'1'}");
-
     $.ajax({
         type: "POST",
         url: "DocumentService.aspx/ProcessAutomaticItems",
@@ -145,6 +141,7 @@ function doProcessPost(processList) {
         }
     });
 }
+
 function checkAllItems() {
     $('.selectItem').each(function () {
         this.checked = $(".selectAll").is(':checked');

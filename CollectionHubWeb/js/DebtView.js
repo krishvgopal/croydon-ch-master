@@ -113,24 +113,24 @@ function loadDebtsView(result) {
                     return formatCurrency(value);
                 }
             }, {
-                "sTitle": "O/S Debt"
-                , "aTargets": ["debt_outstanding"]
-                , "sClass": "right"
-                , "mRender": function (value, type, full) {
-                    return formatCurrency(value);
-                }
+                    "sTitle": "O/S Debt",
+                    "aTargets": ["debt_outstanding"],
+                    "sClass": "right",
+                    "mRender": function (value, type, full) {
+                            return formatCurrency(value);
+                        }
             }, {
-                "sTitle": "Debt ID",
-                "aTargets": ["debt_id"],
-                "mRender": function(value, type, full) {
-                    return '<a href="#" onclick="selectRow(' + value + ')">' + value + '</a>';
-                }
+                    "sTitle": "Debt ID",
+                    "aTargets": ["debt_id"],
+                    "mRender": function(value, type, full) {
+                            return '<a href="#" onclick="selectRow(' + value + ')">' + value + '</a>';
+                        }
             }, {
-                "sTitle": "<input data-toggle=\"tooltip\" data-placement=\"right\" title=\"Select record for grouping\" id=\"debtGroupAll\" type=\"checkbox\" class=\"debtGroupAll\">",
-                "bSortable": false,
-                "bSearchable": false,
-                "aTargets": ["select_id"],
-                "mRender": function (value, type, full) {
+                    "sTitle": "<input data-toggle=\"tooltip\" data-placement=\"right\" title=\"Select record for grouping\" id=\"debtGroupAll\" type=\"checkbox\" class=\"debtGroupAll\">",
+                    "bSortable": false,
+                    "bSearchable": false,
+                    "aTargets": ["select_id"],
+                    "mRender": function (value, type, full) {
                     var returnString = '';
                     if (full.GroupDebtId < 0) {
                         returnString = '<input data-toggle="tooltip" data-placement="right" title="Select record for grouping actions" type="checkbox" class="debtGroupItems" debtGroupDebtId="' + value + '" debtRowTotal="' + full.DebtTotal + '">';
@@ -139,22 +139,15 @@ function loadDebtsView(result) {
                     }
                     return returnString;
                 },
-            },{
-                "aTargets": ["group_order"],
-                "bVisible": false,
             }, {
-                  "width": "10px"
-                , "targets": 0
-            } , {
-                "aTargets": ["status"],
-                "bVisible": false,
+                    "aTargets": ["group_order"],
+                    "bVisible": false,
             }, {
-                "aTargets": ["type"],
-                "bVisible": false,
-            }, {
-                "aTargets": ["debtAddress"],
-                "bVisible": true,
-            }
+                "width": "10px", "targets": 0
+            },
+            { "aTargets": ["status"]        , "bVisible": false },
+            { "aTargets": ["type"]          , "bVisible": false },
+            { "aTargets": ["debtAddress"]   , "bVisible": true }
         ],
         "initComplete": function (settings, json) {
 
@@ -246,12 +239,9 @@ function loadDebtsView(result) {
             $('#dataTableMain tbody').on('click', 'tr', function (ee) {
 
                 if (cancelRowSelect) {
-                    console.log('CANCEL');
                     cancelRowSelect = false;
                     return;
                 }
-
-                console.log('RUNN');
 
                 var selectedRowHtml     = $(ee.currentTarget.cells[0]);
                 var selectedRowValue = selectedRowHtml.find('input:checkbox');
@@ -259,7 +249,6 @@ function loadDebtsView(result) {
                 selectedDebtRecord = ee.currentTarget.cells;
 
                 $('#debtRowTotalValue').val(selectedRowValue.attr('debtRowTotal'));
-
                 if ($('#agmTotalDebtAmount') != 'undefined') {
                     $('#agmTotalDebtAmount').val(selectedRowValue.attr('debtRowTotal'));
                     $('#agmAgreedAmount').val(selectedRowValue.attr('debtRowTotal'));
@@ -467,7 +456,6 @@ function loadActionStatuses() {
 }
 
 function updateRecoveryHistory() {
-    //console.log($("#recoveryActiveStatus").val());
     $.ajax({
         type: "POST",
         url: "DataService.aspx/GetRecoveryCycleHistory",
@@ -492,7 +480,7 @@ function updateRecoveryHistory() {
                     { mData: 'ID' },
                     { mData: 'DebtID' },
                     { mData: 'DebtReference' },
-                    { mData: 'ActionStatus' } // 
+                    { mData: 'ActionStatus' }
                 ],
                 "aoColumnDefs": [
                     {

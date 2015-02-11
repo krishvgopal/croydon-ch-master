@@ -517,7 +517,7 @@ namespace CollectionHubData
             }
             return returnValue;
         }
-        public List<FullNameFullAddressSearchResults>   SearchAddress(string firstName, string lastName, string nino, string dob, string address, string street, string postcode, bool currentAddressOnly, string streamSource)
+        public List<FullNameFullAddressSearchResults> SearchAddress(string organisationName, string firstName, string lastName, string nino, string dob, string address, string street, string postcode, bool currentAddressOnly, string streamSource)
         {
             var returnValue = new List<FullNameFullAddressSearchResults>();
             var sqlDataConnection = new SqlConnection(GetConnectionString());
@@ -525,20 +525,21 @@ namespace CollectionHubData
             sqlDataConnection.Open();
             using (var sqlCommand = new SqlCommand("FULLNAME_FULLADDRESS_SEARCH", sqlDataConnection))
             {
-                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                var searchCurrent = currentAddressOnly ? "YES" : "NO";
 
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("OrgName", organisationName));
                 sqlCommand.Parameters.Add(new SqlParameter("FIRSTNAME", firstName));
                 sqlCommand.Parameters.Add(new SqlParameter("LASTNAME", lastName));
-                //sqlCommand.Parameters.Add(new SqlParameter("MIDNAME", DBNull.Value));
-                //sqlCommand.Parameters.Add(new SqlParameter("ORGNAME", DBNull.Value));
                 sqlCommand.Parameters.Add(new SqlParameter("DOB", dob));
                 sqlCommand.Parameters.Add(new SqlParameter("NINO", nino));
                 sqlCommand.Parameters.Add(new SqlParameter("ADDRNUMBER", address));
                 sqlCommand.Parameters.Add(new SqlParameter("ADDRNAME", street));
                 sqlCommand.Parameters.Add(new SqlParameter("ADDRPOSTCODE", postcode));
-
                 sqlCommand.Parameters.Add(new SqlParameter("SOURCECODE", streamSource));
-                sqlCommand.Parameters.Add(new SqlParameter("CURRENT", currentAddressOnly));
+                sqlCommand.Parameters.Add(new SqlParameter("CURRENT", searchCurrent));
+                //sqlCommand.Parameters.Add(new SqlParameter("MIDNAME", DBNull.Value));
+                //sqlCommand.Parameters.Add(new SqlParameter("ORGNAME", DBNull.Value));
 
                 var dataReader = sqlCommand.ExecuteReader();
 
@@ -580,7 +581,7 @@ namespace CollectionHubData
             sqlDataConnection.Close();
             return returnValue;
         }
-        public List<RecoveryCycleItem> GetRecoveryCycleHistory(int debtId, int statusId)
+        public List<RecoveryCycleItem>  GetRecoveryCycleHistory(int debtId, int statusId)
         {
             var returnValue = new List<RecoveryCycleItem>();
             var sqlDataConnection = new SqlConnection(GetConnectionString());
@@ -605,7 +606,7 @@ namespace CollectionHubData
             sqlDataConnection.Close();
             return returnValue;
         }
-        public List<RecoveryCycleItem> GetRecoveryCycleHistory(int debtId, int statusId, int nextStep)
+        public List<RecoveryCycleItem>  GetRecoveryCycleHistory(int debtId, int statusId, int nextStep)
         {
             var returnValue = new List<RecoveryCycleItem>();
             var sqlDataConnection = new SqlConnection(GetConnectionString());
@@ -631,7 +632,7 @@ namespace CollectionHubData
             sqlDataConnection.Close();
             return returnValue;
         }
-        public List<TreatmentCycle> GetTreatmentCycles(int debtId)
+        public List<TreatmentCycle>     GetTreatmentCycles(int debtId)
         {
             var returnValue = new List<TreatmentCycle>();
             var sqlDataConnection = new SqlConnection(GetConnectionString());
@@ -657,7 +658,6 @@ namespace CollectionHubData
 
             return returnValue;
         }
-        
         public List<DebtItem>           GetFrequencyListGetDebts(int pin)
         {
             var returnValue = new List<DebtItem>();

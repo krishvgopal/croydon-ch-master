@@ -159,8 +159,16 @@ window.formatCurrency = function (total) {
     }
     return (neg ? "-&#163;" : '&#163;') + parseFloat(total, 10).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,").toString();
 }
-
-window.createNote = function()
+window.formatDate = function (value) {
+    if (value != null) {
+        var dtStart = new Date(parseInt(value.substr(6)));
+        var dtStartWrapper = moment(dtStart);
+        return dtStartWrapper.format('DD/MM/YYYY');
+    } else {
+        return '';
+    }
+}
+window.createNote = function ()
 {
     //noteId=3& - cnpin // pin=478744&uprn=124288&debtId=311755 // cnpin
     window.open("../Popups/DebtNote.aspx?m=n&pin=" + $('#cnpin').val() + "&uprn=" + $('#uprn').val() + "&debtId=" + $('#selectedDebtId').val() + "&userId=" + $('#UserSessionToken').val(), "_blank", "toolbar=yes, scrollbars=yes, resizable=yes, top=500, left=500, width=800, height=680");

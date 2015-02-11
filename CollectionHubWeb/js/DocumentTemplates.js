@@ -1,18 +1,7 @@
 ﻿$("#documentDetails").hide();
 
-CKEDITOR.replace('templateDocumentContent',
-    {
-        height: 550,
-        width: 900
-    });
-
-var editor = CKEDITOR.inline('templateName', {
-    removePlugins: 'toolbar'
-});
-
-//CKFinder.setupCKEditor(editor, '../Scripts/ckfinder/');
-
-
+CKEDITOR.replace('templateDocumentContent', { height: 550, width: 900 });
+var editor = CKEDITOR.inline('templateName', { removePlugins: 'toolbar' });
 
 refreshBatchProcessJobs();
 
@@ -94,7 +83,6 @@ function saveTemplate() {
     var htmlNotes = $("#templateDescription").text();
     if (htmlNotes.toLowerCase() == 'click to edit') { htmlNotes = '';}
 
-    //console.log("{'chtId':'" + $("#templateName").attr('templateId') + "','userId':'" + $("#UserSessionToken").val() + "','content':'" + htmlValue + "','notes':'" + htmlNotes + "'}");
     $.ajax({
         type: "POST",
         url: "DataService.aspx/SaveTemplateContent",

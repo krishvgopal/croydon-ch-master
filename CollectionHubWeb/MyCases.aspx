@@ -6,13 +6,6 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="headMenu" Runat="Server">
     <sh:SiteHeader   ID="SiteHeader"        runat="server" />
-<%--    <asp:HiddenField ID="sourceValue"       runat="server" ClientIDMode="Static" />
-    <asp:HiddenField ID="sourceRefValue"    runat="server" ClientIDMode="Static" />
-    <asp:HiddenField ID="selectedDebtId"    runat="server" ClientIDMode="Static" />
-    <asp:HiddenField ID="cnpin"             runat="server" ClientIDMode="Static" />
-    <asp:HiddenField ID="debtRowTotalValue" runat="server" ClientIDMode="Static" />
-    <asp:HiddenField ID="BatchRunId"        runat="server" ClientIDMode="Static" />--%>
-
     <asp:HiddenField ID="ParentId"          runat="server" ClientIDMode="Static" />
     <asp:HiddenField ID="ThisId"            runat="server" ClientIDMode="Static" />
 </asp:Content>
@@ -40,16 +33,6 @@
                     </select>
                 </div>
             </div>
-            <%--<div class="col-lg-3">
-                <div class="form-group">
-                    <label>Action Status</label>
-                    <select class="form-control-compact" id="actionStatus" onClick="showAutoProcess();">
-                        <option value="0">All</option>
-                        <option value="1">Outstanding</option>
-                        <option value="2">Completed</option>
-                    </select>
-                </div>
-            </div>--%>
             <div class="col-lg-3">
                 <div class="form-group">
                     <label>Select User</label>

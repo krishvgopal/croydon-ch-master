@@ -27,7 +27,7 @@ public partial class DocumentService : System.Web.UI.Page
         if (Request.QueryString["sessionDocument"] != null)
         {
             var documentId = Request.QueryString["sessionDocument"].ToString();
-            var returnByte = ReadFile("C:\\Temp\\Process_Batch_" + documentId + ".doc");
+            var returnByte = openFileAsBytes("C:\\Temp\\Process_Batch_" + documentId + ".doc");
 
             Response.Clear();
             Response.ContentType = "application/msword";
@@ -41,17 +41,17 @@ public partial class DocumentService : System.Web.UI.Page
             Response.Redirect(@"~/Default.aspx");
         }
     }
-
-    private static byte[] ReadFile(string filePath)
+    private static byte[] openFileAsBytes(string filePath)
     {
-        FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-        int length = Convert.ToInt32(fs.Length);
-        byte[] data = new byte[length];
+        var fs      = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+        var length  = Convert.ToInt32(fs.Length);
+        var data    = new byte[length];
+
         fs.Read(data, 0, length);
         fs.Close();
+        
         return data;
     }
-
     //public string ExecuteBatchDocuments(int templateId, int userId, string pin, string uprn)
     //{
     //    var da = new DataAccess();
@@ -95,7 +95,6 @@ public partial class DocumentService : System.Web.UI.Page
     //    //  return returnValue;
 
     //}
-
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static string ProcessAdd(int itemId, int groupId, int userId, string pin, string uprn, int debtId)
@@ -115,7 +114,6 @@ public partial class DocumentService : System.Web.UI.Page
 
         return html;
     }
-
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static string MergeDocument(int documentTemplateId, int templateId, int userId, string pin, string uprn, int debtId)
@@ -134,7 +132,6 @@ public partial class DocumentService : System.Web.UI.Page
 
         return html;
     }
-
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static bool SaveDocument(string documentContent, string documentName, int documentTemplateId, int actionId, int userId, string pin, string uprn, int debtId)
@@ -165,7 +162,6 @@ public partial class DocumentService : System.Web.UI.Page
 
         return returnValue;
     }
-
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static bool ProcessSave(string documentContent, int actionId, int userId, string pin, string uprn)
@@ -241,7 +237,6 @@ public partial class DocumentService : System.Web.UI.Page
         CorrespondenceItem returnValue = da.GetActionCorrespondenceItem(itemId);
         return returnValue.ContentArray;
     }
-
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static string ProcessAutomaticItems(string[] actionItems, int userId, int pin, int uprn, int debtId)
@@ -331,5 +326,4 @@ public partial class DocumentService : System.Web.UI.Page
         // Return batch to user
         return parentDocumentId;
     }
-
 }

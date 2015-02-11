@@ -243,12 +243,12 @@ public partial class DataService : System.Web.UI.Page
     }
     [WebMethod(CacheDuration = 60)]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
-    public static List<FullNameFullAddressSearchResults> SearchFullNameFullAddress(string firstName, string lastName, string nino, string dob, string address, string street, string postCode, bool currentAddressOnly, string sourceCode)
+    public static List<FullNameFullAddressSearchResults> SearchFullNameFullAddress(string organisationName, string firstName, string lastName, string nino, string dob, string address, string street, string postCode, bool currentAddressOnly, string sourceCode)
     {
         var returnData = new List<FullNameFullAddressSearchResults>();
         var dataAccess = new CollectionHubData.DataAccess();
 
-        returnData = dataAccess.SearchAddress(firstName, lastName, nino, dob, address, street, postCode, currentAddressOnly, sourceCode);
+        returnData = dataAccess.SearchAddress(organisationName, firstName, lastName, nino, dob, address, street, postCode, currentAddressOnly, sourceCode);
 
         return returnData;
     }

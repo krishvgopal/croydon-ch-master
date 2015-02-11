@@ -39,8 +39,6 @@
                         <br/>
                         <asp:Literal ID="pageFullAddress" runat="server"></asp:Literal>
                         <br/><br/>
-<%--                        <span>Assigned To:&nbsp;<a href="#" onclick="doAssignUser($(this), $('#assignedToUserId').val());">No one</a></span>
-                        --%>
                     </p>
                 </div>
                 <div class="col-lg-2" style="width:245px">
@@ -84,9 +82,7 @@
                             <th class="respUserName">Responsible User</th>
                             <th class="type">Type</th>
                             <th class="status">Status</th>
-                            
                             <th class="group_order">GroupOrder</th>
-                            
                         </tr>
                     </thead>
                 </table>
@@ -340,23 +336,19 @@
                 </div>
             </div>
         </div>
-    
         <div class="modal fade" id="debtActionCreateModal" tabindex="-1" role="dialog" aria-labelledby="debtActionCreateModal" aria-hidden="true" >
             <div class="modal-dialog" style="width:825px">
                 <div class="modal-content">
                 </div>
             </div>
         </div>
-    
-
         <div class="modal fade" id="debtActionEditModal" tabindex="-1" role="dialog" aria-labelledby="debtActionEditModal" aria-hidden="true" >
             <div class="modal-dialog" style="width:825px">
                 <div class="modal-content">
                 </div>
             </div>
         </div>
-   
-    <% if (System.Configuration.ConfigurationManager.AppSettings["UseMinifiedJs"] == "true") { %>
+    <%if (System.Configuration.ConfigurationManager.AppSettings["UseMinifiedJs"] == "true") { %>
     <script type="text/javascript" charset="utf8" src="js/DebtView.js"></script><% } else { %>
     <script type="text/javascript" charset="utf8" src="js/DebtView.js"></script><% } %>
 </asp:Content>
