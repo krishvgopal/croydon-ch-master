@@ -90,6 +90,7 @@
                 <select id="assignedUserList" class="form-control-compact" style="visibility: hidden;display:none;"></select>
                 <a data-toggle="modal" href="modals/CreateDebtGroup.html" data-target="#myModal"  id="debtGroupCreate">Create Group</a>
                 <a data-toggle="modal" href="modals/RemoveDebtGroup.html" data-target="#ungroupDebtModal" id="debtGroupRemove">Remove Group</a>
+                <a href="#" onclick="doExportDebtList();" id="debtListExport"> | Export Debt List</a>
             </div>
             <div style="clear:both"><br /></div>
             <ul class="nav nav-tabs">
@@ -222,6 +223,7 @@
                         <select id="attributeCurrentStatuses" class="form-control-compact"style="visibility: hidden;"></select>
                     </div>
                     <a data-toggle="modal" href="modals/CreatePersonAttributes.html" data-target="#personAttributeModal" class="btn btn-primary">Create Person Attribute</a>
+                    <a data-toggle="modal" href="modals/CreatePersonAddress.html" data-target="#personAddressModal" class="btn btn-primary">Create Address Record</a>
                 </div>
                 <div class="tab-pane fade" id="current">
                     <br />
@@ -289,67 +291,43 @@
             </div>
         </div>
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                </div>
-            </div>
+            <div class="modal-dialog"><div class="modal-content"></div></div>
         </div>
         <div class="modal fade" id="createRecoveryCycleModal" tabindex="-1" role="dialog" aria-labelledby="createRecoveryCycleModal" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                </div>
-            </div>
+            <div class="modal-dialog"><div class="modal-content"></div></div>
         </div>
         <div class="modal fade" id="debtAttributeModal" tabindex="-1" role="dialog" aria-labelledby="debtAttributeModal" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                </div>
-            </div>
+            <div class="modal-dialog"><div class="modal-content"></div></div>
         </div>
         <div class="modal fade" id="personAttributeModal" tabindex="-1" role="dialog" aria-labelledby="personAttributeModal" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                </div>
-            </div>
+            <div class="modal-dialog"><div class="modal-content"></div></div>
+        </div>
+        <div class="modal fade" id="personAddressModal" tabindex="-1" role="dialog" aria-labelledby="personAddressModal" aria-hidden="true">
+           <div class="modal-dialog" style="width:825px"><div class="modal-content"></div></div>
         </div>
         <div class="modal fade" id="noteModal" tabindex="-1" role="dialog" aria-labelledby="noteModal" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                </div>
-            </div>
+            <div class="modal-dialog"><div class="modal-content"></div></div>
         </div>
         <div class="modal fade" id="tableArrangementsModal" tabindex="-1" role="dialog" aria-labelledby="tableArrangementsModal" aria-hidden="true" >
-            <div class="modal-dialog" style="width:825px">
-                <div class="modal-content">
-                </div>
-            </div>
+            <div class="modal-dialog" style="width:825px"><div class="modal-content"></div></div>
         </div>
         <div class="modal fade" id="ungroupDebtModal" tabindex="-1" role="dialog" aria-labelledby="ungroupDebtModal" aria-hidden="true" >
-            <div class="modal-dialog">
-                <div class="modal-content">
-                </div>
-            </div>
+            <div class="modal-dialog"><div class="modal-content"></div></div>
         </div>
         <div class="modal fade" id="debtActionModal" tabindex="-1" role="dialog" aria-labelledby="debtActionModal" aria-hidden="true" >
-            <div class="modal-dialog" style="width:825px">
-                <div class="modal-content">
-                </div>
-            </div>
+            <div class="modal-dialog" style="width:825px"><div class="modal-content"></div></div>
         </div>
         <div class="modal fade" id="debtActionCreateModal" tabindex="-1" role="dialog" aria-labelledby="debtActionCreateModal" aria-hidden="true" >
-            <div class="modal-dialog" style="width:825px">
-                <div class="modal-content">
-                </div>
-            </div>
+            <div class="modal-dialog" style="width:825px"><div class="modal-content"></div></div>
         </div>
         <div class="modal fade" id="debtActionEditModal" tabindex="-1" role="dialog" aria-labelledby="debtActionEditModal" aria-hidden="true" >
-            <div class="modal-dialog" style="width:825px">
-                <div class="modal-content">
-                </div>
-            </div>
+            <div class="modal-dialog" style="width:825px"><div class="modal-content"></div></div>
         </div>
-    <%if (System.Configuration.ConfigurationManager.AppSettings["UseMinifiedJs"] == "true") { %>
-    <script type="text/javascript" charset="utf8" src="js/DebtView.js"></script><% } else { %>
-    <script type="text/javascript" charset="utf8" src="js/DebtView.js"></script><% } %>
+        <div id="exportFrame"></div>
+
+        <%if (System.Configuration.ConfigurationManager.AppSettings["UseMinifiedJs"] == "true") { %>
+        <script type="text/javascript" charset="utf8" src="js/DebtView.js"></script><% } else { %>
+        <script type="text/javascript" charset="utf8" src="js/DebtView.js"></script><% } %>
+
 </asp:Content>
 

@@ -107,6 +107,7 @@
     <Compile Include="SampleData.cs" />
     <Compile Include="SearchWorkResult.cs" />
     <Compile Include="TreatmentItems.cs" />
+    <Compile Include="UprnAddress.cs" />
     <Compile Include="UserData.cs" />
   </ItemGroup>
   <ItemGroup>

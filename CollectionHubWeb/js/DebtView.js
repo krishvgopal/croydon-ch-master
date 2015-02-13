@@ -24,6 +24,12 @@ $(function () {
     loadAttributeStatusTypes();
     refreshSingleDebtView();
     loadDebtActionButtons();
+
+    //$('#personAddressModal').on('hidden', function () {
+    //    console.log('cleared');
+    //    $('#personAddressModal').removeData('bs.modal');
+    //});
+
 });
 
 function selectRow(idValue, source, sourceAccRef) {
@@ -1363,6 +1369,9 @@ function setAttributeStatus(personAttributeId, statusId) {
     });
 }
 
+/*
+** Should be renamed doDebtGroup
+*/
 function groupDebts() {
     var debtIdString = '';
     $(".debtGroupItems:checked").each(function () { debtIdString = debtIdString + $(this).attr("debtGroupDebtId") + ','; });
@@ -1386,6 +1395,9 @@ function groupDebts() {
     });
     $('#myModal').modal('hide');
 }
+/*
+** Should be renamed doDebtUngroup
+*/
 function ungroupDebts() {
     var debtIdString = '';
     $(".debtGroupItems:checked").each(function () { debtIdString = debtIdString + $(this).attr("debtGroupDebtId"); });
@@ -1410,6 +1422,20 @@ function ungroupDebts() {
     $('#ungroupDebtModal').modal('hide');
 }
 
+function doExportDebtList() {
+    /*
+    ** Creates an IFRAME we can point to the page that 
+    ** looks at the query string and returns the right
+    ** document.
+    */
+    $("#exportFrame").html(
+        $('<iframe>', {
+            src: "Services/Export.aspx?debtExport=" + $("#cnpin").val(),
+            width: '0px',
+            height: "0px"
+        })
+    );
+}
 function doSelect(e, id) {
     var newDropdown = $("#attributeCurrentStatuses").clone();
     var newId = getUUID();
@@ -1480,7 +1506,6 @@ function doActionPending(itemId, groupId) {
 
     $('#debtActionCreateModal').on('hidden', function () {
         $('#debtActionCreateModal').removeData('bs.modal');
-        console.log('CREATE MODAL DESTROYED');
     });
 
     $.ajax({
@@ -1501,7 +1526,6 @@ function doActionSaved(itemId, groupId) {
     $('#debtActionEditModal').attr('itemId', itemId);
     $('#debtActionEditModal').on('hidden.bs.modal', function () {
         $('#debtActionEditModal').removeData('bs.modal');
-        console.log('EDIT MODAL DESTROYED');
     });
     $('#debtActionEditModal').modal({ remote: 'modals/AmendDebtActionDocument.html', width: 925 });
 }

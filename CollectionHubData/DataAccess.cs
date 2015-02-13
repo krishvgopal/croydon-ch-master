@@ -2545,6 +2545,93 @@ namespace CollectionHubData
 
             return returnValue;
         }
+        public List<UprnAddress> SearchAddresses(string flatNumber, string building, string house, string street, string place, string postcode)
+        {
+            var returnValue         = new List<UprnAddress>();
+            var sqlDataConnection   = new SqlConnection(GetConnectionString());
 
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("PERSON_ATTRIBUTE_ADDRESS_SEARCH", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("FlatNum",   flatNumber));
+                sqlCommand.Parameters.Add(new SqlParameter("Building",  building));
+                sqlCommand.Parameters.Add(new SqlParameter("HouseNum",  house));
+                sqlCommand.Parameters.Add(new SqlParameter("Street",    street));
+                sqlCommand.Parameters.Add(new SqlParameter("Place",     place));
+                sqlCommand.Parameters.Add(new SqlParameter("PostCode",  postcode));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        returnValue.Add(new UprnAddress(dataReader));
+                    }
+                }
+            }
+
+            sqlDataConnection.Close();
+
+            return returnValue;
+        }
+        public bool SetAddress(int pin, int uprn, int userId)
+        {
+            var returnValue = false;
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("PERSON_ATTRIBUTE_ADDRESS_SELECT_INSERT", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("PIN", pin));
+                sqlCommand.Parameters.Add(new SqlParameter("UPRN", uprn));
+                sqlCommand.Parameters.Add(new SqlParameter("USERID", userId));
+
+                var rowsAffected = sqlCommand.ExecuteNonQuery();
+
+                if (rowsAffected > 0)
+                {
+                    returnValue = true;
+                }
+            }
+
+            sqlDataConnection.Close();
+
+            return returnValue;
+        }
+        public bool SaveNewAddress(int pin, int userId, string careOf, string description, string flatNo, string houseNo, string building, string streetName, string placeName, string postcode)
+        {
+            var returnValue = false;
+            var sqlDataConnection = new SqlConnection(GetConnectionString());
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("PERSON_ATTRIBUTE_NEW_ADDRESS_INSERT", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add(new SqlParameter("PIN", pin));
+                sqlCommand.Parameters.Add(new SqlParameter("USERID", userId));
+                sqlCommand.Parameters.Add(new SqlParameter("CareOf", careOf));
+                sqlCommand.Parameters.Add(new SqlParameter("AddrInfo", description));
+                sqlCommand.Parameters.Add(new SqlParameter("FlatNum", flatNo));
+                sqlCommand.Parameters.Add(new SqlParameter("Building", building));
+                sqlCommand.Parameters.Add(new SqlParameter("HouseNum", houseNo));
+                sqlCommand.Parameters.Add(new SqlParameter("Street", streetName));
+                sqlCommand.Parameters.Add(new SqlParameter("Place", placeName));
+                sqlCommand.Parameters.Add(new SqlParameter("PostCode", postcode));
+
+                var rowsAffected = sqlCommand.ExecuteNonQuery();
+
+                if (rowsAffected > 0)
+                {
+                    returnValue = true;
+                }
+            }
+
+            sqlDataConnection.Close();
+
+            return returnValue;
+        }
     }
 }

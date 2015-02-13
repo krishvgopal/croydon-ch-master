@@ -1,0 +1,173 @@
+﻿﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Add Related Address</title>
+</head>
+<body>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Create Arrangement</h4>
+    </div>
+    <div id="headerTag"></div>
+    <div class="modal-body" style="height:580px;">
+        <div id="searchAddressScreen" style="display:block;height:100%">
+            <p>Fill in the below to search for an address</p>
+            <br />
+            <div style="width:45%;margin-left:10px;float:left;height:auto">
+                <div class="form-group">
+                    <label>Flat No.</label>
+                    <input type="text" id="flatNo" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label>House No.</label>
+                    <input type="text" id="houseNo" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label>Place</label>
+                    <input type="text" id="placeName" class="form-control" />
+                </div>
+            </div>
+            <div style="width:45%;margin-right:10px;float:right;height:auto">
+                <div class="form-group">
+                    <label>Building</label>
+                    <input type="text" id="buildingName" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label>Street</label>
+                    <input type="text" id="streetName" class="form-control" />
+                </div>
+                <div class="form-group" style="width:200px;float:left">
+                    <label>Postcode</label>
+                    <input type="text" id="postCode" class="form-control" />
+                </div>
+                <div class="form-group" style="width:125px;float:right;padding-top:20px">
+                    <button type="button" class="btn btn-primary" onclick="doSearchAddress();" id="formCreate" style="float: right">Search</button>
+                </div>
+                <div style="width:765px;float:right;height:auto;" >
+                    <div class="form-group">
+                        <label>Results</label>
+                        <select id="matches" class="form-control"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="width:100%;clear:both;margin-top:300px">
+                <button type="button" class="btn btn-default" onclick="closeAddressSearch();">Cancel</button>
+                <button type="button" class="btn btn-default" disabled="disabled" onclick="doAddNewAddress();" id="formAddNew">Add New Address</button>
+                <button type="button" class="btn btn-primary" disabled="disabled" onclick="setAddress();" id="selectAddress">Select Address</button>
+            </div>
+        </div>
+        <div id="newAddressScreen" style="display:none;height:100%">
+            <p>Fill in the below to create a new address</p>
+            <br />
+            <div style="width:765px;margin-right:10px;float:right;height:auto;">
+                <div class="form-group">
+                    <label>Care Off</label>
+                    <input type="text" id="careOf" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label>Address Notes</label>
+                    <input type="text" id="note" class="form-control" />
+                </div>
+            </div>
+            <div style="width:45%;margin-left:10px;float:left;height:auto">
+                <div class="form-group">
+                    <label>Flat No.</label>
+                    <input type="text" id="flatNoNew" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label>House No.</label>
+                    <input type="text" id="houseNoNew" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label>Place</label>
+                    <input type="text" id="placeNameNew" class="form-control" />
+                </div>
+            </div>
+            <div style="width:45%;margin-right:10px;float:right;height:auto">
+                <div class="form-group">
+                    <label>Building</label>
+                    <input type="text" id="buildingNameNew" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label>Street</label>
+                    <input type="text" id="streetNameNew" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label>Postcode</label>
+                    <input type="text" id="postCodeNew" class="form-control" />
+                </div>
+            </div>
+            <div class="modal-footer" style="width:100%;clear:both;margin-top:45px">
+                <button type="button" class="btn btn-default" onclick="closeAddressSearch();">Cancel</button>
+                <button type="button" class="btn btn-default" onclick="doShowSearchAddresses();">Back</button>
+                <button type="button" class="btn btn-primary" onclick="doSaveNewAddress();" id="formCreate">Create Address</button>
+            </div>
+        </div>
+    </div>
+   
+        <script>
+        function doAddNewAddress() {
+            $("#searchAddressScreen").css("display", "none");
+            $("#newAddressScreen").css("display", "");
+        }
+        function doShowSearchAddresses() {
+            $("#searchAddressScreen").css("display", "");
+            $("#newAddressScreen").css("display", "none");
+        }
+        function doSearchAddress() {
+            $('#matches').html('');
+            $.ajax({
+                type: "POST",
+                url: "DataService.aspx/SearchAddresses",
+                data: "{'flatNumber':'" + $("#flatNo").val() + "', 'building':'" + $("#buildingName").val() + "','house':'" + $("#houseNo").val() + "', 'street':'" + $("#streetName").val() + "', 'place':'" + $("#placeName").val() + "', 'postcode':'" + $("#postCode").val() + "'}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    $.each(result.d, function (i, item) {
+                        $('#matches').append($('<option>', {
+                            value: item.UprnId,
+                            text: item.LineAddress
+                        }));
+                    });
+                    $('#selectAddress').removeAttr("disabled");
+                    $('#formAddNew').removeAttr("disabled");
+                }
+            });
+        }
+        function doSaveNewAddress() {
+            //console.log("{'pin':'" + $("#cnpin").val() + "', 'userId':'" + $("#UserSessionToken").val() + "','careOf':'" + $("#careOf").val() + "','description':'" + $("#note").val() + "','flatNo':'" + $("#flatNoNew").val() + "','houseNo':'" + $("#houseNoNew").val() + "','building':'" + $("#buildingNameNew").val() + "','streetName':'" + $("#streetNameNew").val() + "','placeName':'" + $("#placeNameNew").val() + "','postcode':'" + $("#postCodeNew").val() + "'}");
+            $.ajax({
+                type: "POST",
+                url: "DataService.aspx/SaveNewAddress",
+                data: "{'pin':'" + $("#cnpin").val() + "', 'userId':'" + $("#UserSessionToken").val() + "','careOf':'" + $("#careOf").val() + "','description':'" + $("#note").val() + "','flatNo':'" + $("#flatNoNew").val() + "','houseNo':'" + $("#houseNoNew").val() + "','building':'" + $("#buildingNameNew").val() + "','streetName':'" + $("#streetNameNew").val() + "','placeName':'" + $("#placeNameNew").val() + "','postcode':'" + $("#postCodeNew").val() + "'}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function(result) {
+                    $('#personAddressModal').modal("hide");
+                    $('#personAddressModal').removeData('bs.modal');
+                }
+            });
+        }    
+        function setAddress() {
+            //console.log("{'pin':'" + $("#cnpin").val() + "', 'uprn':'" + $('#matches').val() + "','userId':'" + $("#UserSessionToken").val() + "'}");
+            $.ajax({
+                type: "POST",
+                url: "DataService.aspx/SetAddress",
+                data: "{'pin':'" + $("#cnpin").val() + "', 'uprn':'" + $('#matches').val() + "','userId':'" + $("#UserSessionToken").val() + "'}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function(result) {
+                    $('#personAddressModal').modal("hide");
+                    $('#personAddressModal').removeData('bs.modal');
+                }
+            });
+        }
+        function closeAddressSearch() {
+            $('#personAddressModal').modal("hide");
+            $('#personAddressModal').removeData('bs.modal');
+        }
+    </script>
+</body>
+</html>
+

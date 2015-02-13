@@ -893,4 +893,31 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public static List<UprnAddress> SearchAddresses(string flatNumber, string building, string house, string street, string place, string postcode)
+    {
+        var dataAccess = new DataAccess();
+        var returnData = dataAccess.SearchAddresses(flatNumber, building, house, street, place, postcode);
+
+        return returnData;
+    }
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public static bool SetAddress(int pin, int uprn, int userId)
+    {
+        var dataAccess = new DataAccess();
+        var returnData = dataAccess.SetAddress(pin, uprn, userId);
+
+        return returnData;
+    }
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public static bool SaveNewAddress(int pin, int userId, string careOf, string description, string flatNo, string houseNo, string building, string streetName, string placeName, string postcode)
+    {
+        var dataAccess = new DataAccess();
+        var returnData = dataAccess.SaveNewAddress(pin, userId, careOf, description, flatNo, houseNo, building, streetName, placeName, postcode);
+
+        return returnData;
+    } 
 }
