@@ -1132,6 +1132,36 @@ namespace CollectionHubData
             return returnValue;
         }
 
+        public PersonHeaderRecord GetPersonHeader(string pin, string uprn)
+        {
+            var returnValue         = new PersonHeaderRecord();
+            var sqlDataConnection   = new SqlConnection(GetConnectionString());
+
+            sqlDataConnection.Open();
+            using (var sqlCommand = new SqlCommand("CHP_GetNameAddress_byPIN", sqlDataConnection))
+            {
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                sqlCommand.Parameters.Add(new SqlParameter("pin", pin));
+                sqlCommand.Parameters.Add(new SqlParameter("uprn", uprn));
+
+                var dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        var newResult = new PersonHeaderRecord(dataReader);
+                        returnValue = newResult;
+                    }
+                }
+            }
+
+            sqlDataConnection.Close();
+
+            return returnValue;
+        }
+
         #endregion
 
         #region AUTHENTICATION

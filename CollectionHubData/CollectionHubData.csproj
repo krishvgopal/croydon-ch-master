@@ -99,6 +99,7 @@
     <Compile Include="Payment.cs" />
     <Compile Include="PersonAttribute.cs" />
     <Compile Include="PersonDetails.cs" />
+    <Compile Include="PersonHeaderRecord.cs" />
     <Compile Include="PreviousName.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RecoveryCycle.cs" />

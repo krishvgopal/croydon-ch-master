@@ -30,9 +30,14 @@
         </div>
         <script>
             
-            var todayFull = new Date();
-            var todayPretty = (todayFull.getDate() + 1) + '/' + todayFull.getMonth() + '/' + todayFull.getFullYear();
+            var todayFull   = new Date();
+            var monthValue = todayFull.getMonth();
 
+            console.log(monthValue);
+
+            if (monthValue.toString.length == 1) { monthValue = "0" + monthValue; }
+            var todayPretty = todayFull.getDate() + '/' + monthValue + '/' + todayFull.getFullYear();
+            
             $("#headerTag").html(getHeader());
             $("#recoveryStartDate").datepicker();
             $("#recoveryStartDate").val(todayPretty);

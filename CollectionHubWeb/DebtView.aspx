@@ -29,42 +29,63 @@
 <asp:Content ID="Content5" ContentPlaceHolderID="pageBody" Runat="Server">
     <div class="row">
         <div class="col-lg-12">
-            <div style="border-bottom: 1px solid rgb(215,229,223); height:90px" > 
-                <div class="col-lg-4" style="padding-left:0px !important; padding-bottom: 10px !important; width: 90px">
-                    <asp:Image runat="server" ID="pageIcon" ClientIDMode="Static" CssClass="pageIcon"/>
-                </div> 
-                <div class="col-lg-2" style="width:245px">
-                    <p class="form-control-compact-static">
-                        <span id="pageFullNameField"><asp:Literal ID="pageFullName" runat="server"></asp:Literal></span>
-                        <br/>
-                        <asp:Literal ID="pageFullAddress" runat="server"></asp:Literal>
-                        <br/><br/>
-                    </p>
+            <div style="border-bottom: 1px solid rgb(215,229,223); height:120px" >
+                 
+                <div style="padding-left:0px !important; padding-bottom: 10px !important; width: 90px; float:left">
+                    <img ID="pageIcon" CssClass="pageIcon" src="img/person_misc.png" alt="Page Icon"/>
                 </div>
-                <div class="col-lg-2" style="width:245px">
+                
+                <div style="width:220px;float:left">
                     <div class="form-group">
                         <label>Total Initial Debt</label>
-                        <span style="float:right">
-                            <asp:Literal ID="pageTotalDebt" runat="server" ></asp:Literal>    
-                        </span>
+                        <div style="float:right">
+                            <div ID="pageTotalDebt"></div>
+                        </div>
                         <br/>
-                        <label>Total Outstanding</label>
-                        <span style="float:right">
-                            <asp:Literal ID="pageDebtOutstanding" runat="server"></asp:Literal>
-                        </span>
+                        <label>Total Debt O/S</label>
+                        <div style="float:right">
+                            <div ID="pageDebtOutstanding"></div>
+                        </div>
                         <br/>
-                        <select id="showCleared" class="form-control-compact" style="width:100% !important;float:left;margin-top: 5px" onchange="refreshDebtsList();" >
-                            <option value="1">Show Open Debts</option>
-                            <option value="2" selected>Show All Debts</option>
-                        </select>
+                        
+                        <label>Total Credit Debt</label>
+                        <div style="float:right">
+                            <div ID="pageTotalCredit"></div>
+                        </div>
+                        <br/>
+                        <label>Total Balance O/S</label>
+                        <div style="float:right">
+                            <div ID="pageTotalBalance"></div>
+                        </div>
+                        <br/>
                         <img id="showClearedLoadingImage" src="img/gif-load.gif" alt="Loading Image" style="float:left;padding-left: 5px;padding-top: 3px;" />
                     </div>
                 </div>
+                 
+                <div style="width:*%;float:left;padding-left:10px">
+                    
+                    <div class="form-control-compact-static">
+                        <div ID="pageFullName"></div>
+                        <hr style="margin:5px 0px 5px 0px"/>
+                        <div ID="pageFullAddress"></div>
+                        
+                         <select id="showCleared" class="form-control-compact" style="width:100% !important;float:left;margin-top: 5px" onchange="refreshDebtsList();" >
+                            <option value="1">Show Open Debts</option>
+                            <option value="2" selected>Show All Debts</option>
+                        </select>
+                    </div>
+                </div>
+
+              
+            </div>
+            
+              
                 <div class="col-lg-3" style="float:left">
                     <i class="fa fa-bullhorn" style="font-size: 18px;"></i>  
                     <a href="#" onclick="createNote();">Record Contact Note</a>
+                    
                 </div>
-            </div>
+
             <div class="table-responsive">
                 <br/>
                 <table class="table compact table-striped table-bordered table-hover" id="dataTableMain">
@@ -178,10 +199,10 @@
                             <thead>
                                 <tr>
                                     <th>Created Date</th>
-                                    <th>Aggreed Amount</th>
+                                    <th>Agreed Amount</th>
                                     <th>Frequency</th>
                                     <th>Frequency Description</th>
-                                    <th>Installment Amount</th>
+                                    <th>Instalment Amount</th>
                                     <th>No. Installments</th>
                                     <th>Agm Status</th>
                                 </tr>
@@ -213,8 +234,8 @@
                                     <th>Type</th>
                                     <th>Information</th>
                                     <th>From Streams</th>
-                                    <th class="to_date">Date To</th>
                                     <th class="from_date">Date From</th>
+                                    <th class="to_date">Date To</th>
                                     <th class="set_current">StatusText</th>
                                     <th class="person_attribute_id"></th>
                                 </tr>

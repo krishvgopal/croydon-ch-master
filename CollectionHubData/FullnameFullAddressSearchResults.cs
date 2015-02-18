@@ -44,7 +44,7 @@ namespace CollectionHubData
             DebtOutstanding     = value["DEBTOS"] != DBNull.Value ? Convert.ToDecimal(value["DEBTOS"]) : 0;
             TotalDebt           = value["TOTALDEBT"] != DBNull.Value ? Convert.ToDecimal(value["TOTALDEBT"]) : 0;
             DebtorAge           = Convert.ToString(value["DOBAGE"]);
-            ResponsibleOfficer  = value["RESPOFFICER"].ToString();
+            //ResponsibleOfficer  = value["RESPOFFICER"].ToString();
             LastName            = value["LASTNAME"].ToString();
             CN_Pin              = value["CN_PIN"].ToString();
             DebtAddresses       = value["DebtAddresses"].ToString();

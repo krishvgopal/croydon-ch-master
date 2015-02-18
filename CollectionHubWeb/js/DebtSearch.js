@@ -67,16 +67,6 @@ function doSearch() {
                 }
                 ,{ "width": "100", "targets": 2 }
                 ,{ "width": "100", "targets": 3 }
-                //,
-                //{
-                //    "sTitle": "Latest Debt"
-                //        , "aTargets": ["latest_debt"]
-                //        , "mRender": function (value, type, full) {
-                //            var dtStart = new Date(parseInt(value.substr(6)));
-                //            var dtStartWrapper = moment(dtStart);
-                //            return dtStartWrapper.format('DD/MM/YYYY');
-                //        }
-                //}
                 ]
             });
             $("#searchResults").show();
@@ -85,6 +75,10 @@ function doSearch() {
     });
 }
 function loadStreams() {
+    $('#debtStreamCode').append($('<option>', {
+        value: 0,
+        text: "All"
+    }));
     $.ajax({
         type: "POST",
         url: "DataService.aspx/GetDebtStreams",

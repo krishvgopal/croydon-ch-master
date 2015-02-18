@@ -105,8 +105,7 @@
             </div>
         </div>
     </div>
-   
-        <script>
+    <script>
         function doAddNewAddress() {
             $("#searchAddressScreen").css("display", "none");
             $("#newAddressScreen").css("display", "");
@@ -136,7 +135,6 @@
             });
         }
         function doSaveNewAddress() {
-            //console.log("{'pin':'" + $("#cnpin").val() + "', 'userId':'" + $("#UserSessionToken").val() + "','careOf':'" + $("#careOf").val() + "','description':'" + $("#note").val() + "','flatNo':'" + $("#flatNoNew").val() + "','houseNo':'" + $("#houseNoNew").val() + "','building':'" + $("#buildingNameNew").val() + "','streetName':'" + $("#streetNameNew").val() + "','placeName':'" + $("#placeNameNew").val() + "','postcode':'" + $("#postCodeNew").val() + "'}");
             $.ajax({
                 type: "POST",
                 url: "DataService.aspx/SaveNewAddress",
@@ -150,7 +148,6 @@
             });
         }    
         function setAddress() {
-            //console.log("{'pin':'" + $("#cnpin").val() + "', 'uprn':'" + $('#matches').val() + "','userId':'" + $("#UserSessionToken").val() + "'}");
             $.ajax({
                 type: "POST",
                 url: "DataService.aspx/SetAddress",
@@ -170,4 +167,3 @@
     </script>
 </body>
 </html>
-

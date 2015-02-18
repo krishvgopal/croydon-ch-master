@@ -407,12 +407,12 @@ public partial class DataService : System.Web.UI.Page
     }
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
-    public static bool SetRecoveryCycle(int debtId, int recoveryCycleId, int userId, DateTime recoveryDateTime)
+    public static bool SetRecoveryCycle(int debtId, int recoveryCycleId, int userId, string recoveryDateTime)
     {
         var returnData = false;
         var dataAccess = new CollectionHubData.DataAccess();
 
-        returnData = dataAccess.SetRecoveryCycle(debtId, recoveryCycleId, userId, recoveryDateTime);
+        returnData = dataAccess.SetRecoveryCycle(debtId, recoveryCycleId, userId, Convert.ToDateTime(recoveryDateTime));
 
         return returnData;
     }
@@ -919,5 +919,16 @@ public partial class DataService : System.Web.UI.Page
         var returnData = dataAccess.SaveNewAddress(pin, userId, careOf, description, flatNo, houseNo, building, streetName, placeName, postcode);
 
         return returnData;
-    } 
+    }
+
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public static PersonHeaderRecord GetPersonHeader(string pin, string uprn)
+    {
+        var dataAccess = new DataAccess();
+        var returnData = dataAccess.GetPersonHeader(pin, uprn);
+
+        return returnData;
+    }
+    
 }
