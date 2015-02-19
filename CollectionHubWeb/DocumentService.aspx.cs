@@ -109,7 +109,7 @@ public partial class DocumentService : System.Web.UI.Page
         foreach (MergeValue m in mv)
         {
             // TODO: THIS SHOULD BE LOOKING FOR ALL [] MATCHES TO REMOVE UNUSED MARKERS
-            html = html.Replace(m.FieldName, m.FieldValue);
+            html = html.Replace(m.FieldName, m.FieldValue.Replace("\r","<br/>") );
         }
 
         return html;

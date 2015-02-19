@@ -9,7 +9,7 @@ namespace CollectionHubData
     public class DebtorNote
     {
         public int NoteId               { get; set; }
-        public int DebtId               { get; set; }
+        //public int DebtId               { get; set; }
         public string Subject           { get; set; }
         public string SubjectAddress    { get; set; }
         public string Category          { get; set; }
@@ -24,8 +24,8 @@ namespace CollectionHubData
         public DebtorNote() { }
         public DebtorNote(IDataReader value)
         {
-            NoteId = Convert.ToInt32(value["N_ID"]);
-            DebtId = Convert.ToInt32(value["DebtId"]);
+            NoteId = Convert.ToInt32(value["PN_ID"]);
+            //DebtId = Convert.ToInt32(value["DebtId"]);
 
             Subject         = value["Subject Name"].ToString();
             SubjectAddress  = value["SubjectAddress"].ToString();

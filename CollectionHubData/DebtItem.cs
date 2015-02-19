@@ -27,7 +27,7 @@ namespace CollectionHubData
         public DebtItem() { }
         public DebtItem(System.Data.SqlClient.SqlDataReader value)
         {
-            DebtId              = Convert.ToInt32( value["cd_id"].ToString());
+            DebtId              = Convert.ToInt32( value["cd_id"].ToString() );
             DebtSource          = value["cd_source"].ToString().Trim();
             DebtAccRef          = value["cd_source_accref"].ToString().Trim();
             DebtReference       = value["cd_debt_ref"].ToString().Trim();

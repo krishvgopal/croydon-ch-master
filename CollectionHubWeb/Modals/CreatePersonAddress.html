@@ -141,7 +141,8 @@
                 data: "{'pin':'" + $("#cnpin").val() + "', 'userId':'" + $("#UserSessionToken").val() + "','careOf':'" + $("#careOf").val() + "','description':'" + $("#note").val() + "','flatNo':'" + $("#flatNoNew").val() + "','houseNo':'" + $("#houseNoNew").val() + "','building':'" + $("#buildingNameNew").val() + "','streetName':'" + $("#streetNameNew").val() + "','placeName':'" + $("#placeNameNew").val() + "','postcode':'" + $("#postCodeNew").val() + "'}",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-                success: function(result) {
+                success: function (result) {
+                    refreshPersonAttributes($("#cnpin").val());
                     $('#personAddressModal').modal("hide");
                     $('#personAddressModal').removeData('bs.modal');
                 }
@@ -154,7 +155,8 @@
                 data: "{'pin':'" + $("#cnpin").val() + "', 'uprn':'" + $('#matches').val() + "','userId':'" + $("#UserSessionToken").val() + "'}",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-                success: function(result) {
+                success: function (result) {
+                    refreshPersonAttributes($("#cnpin").val());
                     $('#personAddressModal').modal("hide");
                     $('#personAddressModal').removeData('bs.modal');
                 }

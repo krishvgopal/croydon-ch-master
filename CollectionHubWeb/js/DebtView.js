@@ -3,6 +3,12 @@
 
 $("#showClearedLoadingImage").hide();
 
+window.addEventListener
+("message", function (e) {
+    console.log(e);
+    if (e.data == "REFRESH_PERSON_NOTES_TAB") { refreshPersonContactNotes($("#cnpin").val()); }
+}, true);
+
 var selectedDebtRecord  = null;
 var cancelRowSelect     = false;
 
@@ -511,12 +517,10 @@ function updateRecoveryHistory() {
 }
 
 function refreshDebtsList() {
-    var showCleared = 'false';
-    if ($("#showCleared").val() == 2) { showCleared = 'true'; }
     $.ajax({
         type: "POST",
         url: "DataService.aspx/GetDebts",
-        data: "{'pin':'" + $("#cnpin").val() + "', 'showCleared':'" + showCleared + "'}",
+        data: "{'pin':'" + $("#cnpin").val() + "', 'showFilter':'" + $("#showCleared").val() + "'}",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (data) {
@@ -525,13 +529,11 @@ function refreshDebtsList() {
     });
 }
 function refreshSingleDebtView() {
-    var showCleared = 'true';
-    if ($("#showCleared").val() == 2) { showCleared = 'true'; }
     $('#selectedDebtId').val('0');
     $.ajax({
         type: "POST",
         url: "DataService.aspx/GetDebts",
-        data: "{'pin':'" + $("#cnpin").val() + "', 'showCleared':'" + showCleared + "'}",
+        data: "{'pin':'" + $("#cnpin").val() + "', 'showFilter':'" + $("#showCleared").val() + "'}",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (data) {
@@ -539,22 +541,19 @@ function refreshSingleDebtView() {
             var uprn  = $("#uprn").val();
             loadDebtsView(data);
             refreshPersonOverview(pin, uprn);
-            //$(".dataTables_scrollBody").removeAttr("overflow"); // overflow: hidden
-            //console.log('refreshing sdv');
-           // $(".dataTables_scrollBody").css('min-width', '200px');
-            //$(".dataTables_scrollHead").css('width', '100%');
         }
     });
 }
 function refreshPersonOverview(sourcePin, uprn) {
     //100% / BY NUMBER OF UNITS
-    progressInterval = 100/7;
+    progressInterval = 100/8;
     progressValue = 0;
     refreshPersonAttributes(sourcePin);
     refreshCurrentAttributes(sourcePin);
     refresMatchList(sourcePin);
     refresMisMisMatchList(sourcePin);
     refreshPersonDetails(sourcePin, uprn);
+    refreshPersonContactNotes(sourcePin);
     refreshPaymentHistoryByPin(sourcePin);
     refreshPartiesByPin(sourcePin);
     refreshArrangementsByPin(sourcePin);
@@ -680,6 +679,57 @@ function refreshPaymentHistoryByPin(pin) {
         }
     });
 }
+function refreshPersonContactNotes(pin) {
+    $.ajax({
+        type: "POST",
+        url: "DataService.aspx/GetPersonContactNotes",
+        data: "{'pin':'" + pin + "'}",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+
+            doProgress(result.d.length, 'arefPersonNotes');
+            if (result.hasOwnProperty("d")) { result = result.d; }
+
+            $("#tablePersonNotes").dataTable({
+                "destroy": true,
+                "aaData": result,
+                aoColumns: [
+                    { mData: 'PersonNoteId' },
+                    { mData: 'CreatedDate' },
+                    { mData: 'ReasonText' },
+                    { mData: 'Content' },
+                    { mData: 'CreatedBy' }
+                ],
+                "aoColumnDefs": [
+                {
+                    "sTitle": "NoteId",
+                    "aTargets": ["PersonNoteId"],
+                    "bVisible": false,
+
+                }, {
+                    "sTitle": "Created Date",
+                    "aTargets": ["created_Date"],
+                    "mRender": function (value, type, full) {
+                        var dtStart = new Date(parseInt(value.substr(6)));
+                        var dtStartWrapper = moment(dtStart);
+                        return dtStartWrapper.format('DD/MM/YYYY');
+                    }
+                }, {
+                    "sTitle": "Reason",
+                    "aTargets": ["note_Reason"]
+                }, {
+                    "sTitle": "Content",
+                    "aTargets": ["note_Content"]
+                }, {
+                    "sTitle": "Created By",
+                    "aTargets": ["created_By"]
+                }]
+            });
+        }
+    });
+}
+
 function refreshPaymentHistory(debtId, source, sourceAccRef) {
     $.ajax({
         type: "POST",
@@ -1670,6 +1720,9 @@ function refreshPageHeader() {
 
             $("#pageTotalCredit").text("£" + result.DebtCredit);
             $("#pageTotalBalance").text("£" + result.TotalDebt);
+
+            $("#pageCreditScore").text(result.CreditScore);
+            $("#pageCreditDate").text(result.CreditScoreDate);
 
             //  
         },

@@ -36,7 +36,11 @@ namespace CollectionHubData
             DebtBal     = value["DebtBal"].ToString();
             DebtCredit  = value["DebtCredit"].ToString();
             CreditScore = value["CreditScore"].ToString();
-            CreditScoreDate = value["CreditScoreDate"].ToString();
+
+            if (value["CreditScoreDate"] != DBNull.Value)
+            {
+                CreditScoreDate = Convert.ToDateTime(value["CreditScoreDate"]).ToShortDateString() ;    
+            }
         }
     }
 }

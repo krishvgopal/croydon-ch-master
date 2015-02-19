@@ -138,19 +138,15 @@ public partial class DataService : System.Web.UI.Page
         return returnData;
     }
 
-    [WebMethod]
-    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
-    public static List<DebtItem> GetNoteDebts(int noteId)
-    {
-        var returnData = new List<DebtItem>();
-        var dataAccess = new CollectionHubData.DataAccess();
-
-        returnData = dataAccess.GetNoteDebts(noteId);
-
-        return returnData;
-    }
-
-    //  public List<DebtItem> GetNoteDebts(int noteId)
+    //[WebMethod]
+    //[ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    //public static List<DebtItem> GetNoteDebts(int noteId)
+    //{
+    //    var returnData = new List<DebtItem>();
+    //    var dataAccess = new CollectionHubData.DataAccess();
+    //    returnData = dataAccess.GetNoteDebts(noteId);
+    //    return returnData;
+    //}
 
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
@@ -220,14 +216,20 @@ public partial class DataService : System.Web.UI.Page
     }
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
-    public static List<DebtItem> GetDebts(int pin, bool showCleared)
+    public static List<DebtItem> GetDebts(int pin, int showFilter)
     {
         var returnData = new List<DebtItem>();
-        var dataAccess = new CollectionHubData.DataAccess();
+        var dataAccess = new DataAccess();
 
         returnData = dataAccess.GetDebts(pin);
-        if (!showCleared) { returnData.RemoveAll(o => o.DebtOutstanding.Equals(0)); }
-       
+
+        //<option value="0">Show Open Credits</option>
+        //<option value="1">Show Open Debts</option>
+        //<option value="2">Show All Debts</option>
+
+        if (showFilter == 1) { returnData.RemoveAll(o => o.DebtOutstanding.Equals(0)); } // Remove all with 0 balance
+        if (showFilter == 0) { returnData.RemoveAll(o => o.DebtOutstanding >= 0); }      // Remove all above and equal to 0 leaving only negative
+
         return returnData;
     }
     [WebMethod]
@@ -793,23 +795,23 @@ public partial class DataService : System.Web.UI.Page
     }
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
-    public static bool SaveDebtorNote(int noteId, int userId, int pin, int debtId, int categoryId, string theirRef, string reason, string content, string newLandLine, string newMobile, string newEmail)
+    public static bool SaveDebtorNote(int noteId, int userId, int pin, string theirRef, string reason, string content, string newLandLine, string newMobile, string newEmail)
     {
         var returnData = false;
         var dataAccess = new CollectionHubData.DataAccess();
 
-        returnData = dataAccess.SaveDebtorNote(noteId, userId, pin, debtId, categoryId, theirRef, reason, content, newLandLine, newMobile, newEmail);
+        returnData = dataAccess.SaveDebtorNote(noteId, userId, pin, theirRef, reason, content, newLandLine, newMobile, newEmail);
 
         return returnData;
     }
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
-    public static int CreateContactNote(int userId, int pin, int uprn, int debtId)
+    public static int CreateContactNote(int userId, int pin, int uprn)
     {
         int returnData = 0;
         var dataAccess = new CollectionHubData.DataAccess();
 
-        returnData = dataAccess.CreateDebtorNote(userId, pin, uprn, debtId);
+        returnData = dataAccess.CreateDebtorNote(userId, pin, uprn);
 
         return returnData;
     }
@@ -874,7 +876,6 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static List<CollectionHubData.KeyValuePair<int, string>> GetDebtTypes()
@@ -920,7 +921,6 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static PersonHeaderRecord GetPersonHeader(string pin, string uprn)
@@ -930,5 +930,13 @@ public partial class DataService : System.Web.UI.Page
 
         return returnData;
     }
-    
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public static List<PersonContactNote> GetPersonContactNotes(int pin)
+    {
+        var dataAccess = new DataAccess();
+        var returnData = dataAccess.GetPersonContactNotes(pin);
+
+        return returnData;
+    }
 }

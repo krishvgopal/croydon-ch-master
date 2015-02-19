@@ -8,7 +8,7 @@ public partial class Search : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         cnpin.Value = Request["cn_pin"].ToString();
-        uprn.Value  = Request["uprn"].ToString();
+        uprn.Value = Request["uprn"].ToString();
 
         //var da          = new DataAccess();
         //var debtAddress = da.GetAddressForDebt(Request["cn_pin"].ToString(), Request["uprn"].ToString());

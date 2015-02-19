@@ -170,8 +170,7 @@ window.formatDate = function (value) {
 }
 window.createNote = function ()
 {
-    //noteId=3& - cnpin // pin=478744&uprn=124288&debtId=311755 // cnpin
-    window.open("../Popups/DebtNote.aspx?m=n&pin=" + $('#cnpin').val() + "&uprn=" + $('#uprn').val() + "&debtId=" + $('#selectedDebtId').val() + "&userId=" + $('#UserSessionToken').val(), "_blank", "toolbar=yes, scrollbars=yes, resizable=yes, top=500, left=500, width=800, height=680");
+    var noteWinow = window.open("../Popups/DebtNote.aspx?m=n&pin=" + $('#cnpin').val() + "&uprn=" + $('#uprn').val() + "&userId=" + $('#UserSessionToken').val(), "_blank", "toolbar=yes, scrollbars=yes, resizable=yes, top=500, left=500, width=800, height=680");
 }
 
 var alertFallback = true;

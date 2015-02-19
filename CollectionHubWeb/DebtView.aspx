@@ -29,63 +29,61 @@
 <asp:Content ID="Content5" ContentPlaceHolderID="pageBody" Runat="Server">
     <div class="row">
         <div class="col-lg-12">
-            <div style="border-bottom: 1px solid rgb(215,229,223); height:120px" >
-                 
+            <div style="border-bottom: 1px solid rgb(215,229,223); height:100px" >
                 <div style="padding-left:0px !important; padding-bottom: 10px !important; width: 90px; float:left">
                     <img ID="pageIcon" CssClass="pageIcon" src="img/person_misc.png" alt="Page Icon"/>
                 </div>
-                
                 <div style="width:220px;float:left">
                     <div class="form-group">
                         <label>Total Initial Debt</label>
                         <div style="float:right">
                             <div ID="pageTotalDebt"></div>
-                        </div>
-                        <br/>
+                        </div><br/>
                         <label>Total Debt O/S</label>
                         <div style="float:right">
                             <div ID="pageDebtOutstanding"></div>
-                        </div>
-                        <br/>
-                        
+                        </div><br/>
                         <label>Total Credit Debt</label>
                         <div style="float:right">
                             <div ID="pageTotalCredit"></div>
-                        </div>
-                        <br/>
+                        </div><br/>
                         <label>Total Balance O/S</label>
                         <div style="float:right">
                             <div ID="pageTotalBalance"></div>
-                        </div>
-                        <br/>
+                        </div><br/>
                         <img id="showClearedLoadingImage" src="img/gif-load.gif" alt="Loading Image" style="float:left;padding-left: 5px;padding-top: 3px;" />
                     </div>
                 </div>
-                 
-                <div style="width:*%;float:left;padding-left:10px">
-                    
+                <div style="width:600px;float:left;padding-left:10px">
                     <div class="form-control-compact-static">
                         <div ID="pageFullName"></div>
-                        <hr style="margin:5px 0px 5px 0px"/>
-                        <div ID="pageFullAddress"></div>
-                        
-                         <select id="showCleared" class="form-control-compact" style="width:100% !important;float:left;margin-top: 5px" onchange="refreshDebtsList();" >
+                        <hr style="margin:5px 0px 5px 0px" />
+                        <div ID="pageFullAddress"></div>  
+                        <select id="showCleared" class="form-control-compact" style="width:100% !important;float:left;margin-top: 5px" onchange="refreshDebtsList();" >
+                            <option value="0">Show Open Credits</option>
                             <option value="1">Show Open Debts</option>
                             <option value="2" selected>Show All Debts</option>
                         </select>
                     </div>
                 </div>
-
-              
-            </div>
-            
-              
-                <div class="col-lg-3" style="float:left">
-                    <i class="fa fa-bullhorn" style="font-size: 18px;"></i>  
-                    <a href="#" onclick="createNote();">Record Contact Note</a>
-                    
+                 <div style="width:220px;float:left;padding-left:10px">
+                    <div class="form-group">
+                        <label>Credit Score</label>
+                        <div style="float:right">
+                            <div ID="pageCreditScore"></div>
+                        </div><br/>
+                        <label>Score Date</label>
+                        <div style="float:right">
+                            <div ID="pageCreditDate"></div>
+                        </div>
+                    </div>
                 </div>
 
+                <div style="float:right">
+                    <i class="fa fa-bullhorn" style="font-size: 18px;"></i>  
+                    <a href="#" onclick="createNote();">Record Contact Note</a>
+                </div>
+            </div>
             <div class="table-responsive">
                 <br/>
                 <table class="table compact table-striped table-bordered table-hover" id="dataTableMain">
@@ -122,6 +120,7 @@
                 <li><a href="#arrangements" data-toggle="tab" id="arefArrangements">     Arrangements      </a></li>
                 <li><a href="#debt"         data-toggle="tab" id="arefDebtAttributes">   Debt Attributes   </a></li>
                 <li><a href="#person"       data-toggle="tab" id="arefPersonAttributes"> Person Attributes </a></li>
+                <li><a href="#personNotes"  data-toggle="tab" id="arefPersonNotes">      Person Notes      </a></li>
                 <li><a href="#current"      data-toggle="tab" id="arefCurrentAttributes">Current Attributes</a></li>
                 <li><a href="#matchTab1"    data-toggle="tab" id="arefMatches">          Matches           </a></li>
             </ul>
@@ -246,6 +245,24 @@
                     <a data-toggle="modal" href="modals/CreatePersonAttributes.html" data-target="#personAttributeModal" class="btn btn-primary">Create Person Attribute</a>
                     <a data-toggle="modal" href="modals/CreatePersonAddress.html" data-target="#personAddressModal" class="btn btn-primary">Create Address Record</a>
                 </div>
+                
+                <div class="tab-pane fade" id="personNotes">
+                    <br />
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover" id="tablePersonNotes">
+                            <thead>
+                                <tr>
+                                    <th class="note_Id">Note Id</th>
+                                    <th class="created_Date">Created Date</th>
+                                    <th class="note_Reason">Note Reason</th>
+                                    <th class="note_Content">Content</th>
+                                    <th class="created_By">Created By</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+
                 <div class="tab-pane fade" id="current">
                     <br />
                     <div class="table-responsive">
